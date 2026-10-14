@@ -38,6 +38,7 @@ def ready_generate():
    fill('age-day','01');fill('age-month','01');fill('age-year','1990');hide_keyboard();tap('age-continue')
   elif find('new-connection',t) is not None:tap('new-connection')
   elif find('chat-back',t) is not None:tap('chat-back')
+  elif find('Go back',t) is not None:tap('Go back')
   elif find('cancel-code',t) is not None:tap('cancel-code')
   elif find('Back to chats',t) is not None:tap('Back to chats')
   elif find('Back to start',t) is not None:tap('Back to start')
@@ -49,7 +50,7 @@ def login(uid,phone,audit=False):
  until=time.monotonic()+90
  while time.monotonic()<until:
   t=dump()
-  if any(find(k,t) is not None for k in ['welcome-next','phone-input','new-connection','generate','age-day']):break
+  if any(find(k,t) is not None for k in ['welcome-next','phone-input','new-connection','generate','age-day','code-box-0','message-input','cancel-code']):break
   time.sleep(2)
  else:raise RuntimeError('Native cold-start timeout')
  if find('phone-input',t) is None and find('welcome-next',t) is None:
