@@ -19,7 +19,12 @@ def probe(selector=None,action=None,value=''):
  if not m or (action and 'action_result=performed' not in out):raise RuntimeError('Native probe failed at '+str(selector)+': '+out[:1200])
  raw=base64.b64decode(m.group(1)).decode();return ET.fromstring(raw),raw
 def dump(label='current'):
- tree,raw=probe();(ROOT/'xml'/f'{label}.xml').write_text(raw);return tree
+ for attempt in range(5):
+  tree,raw=probe()
+  if len(list(tree.iter('node')))>2:
+   (ROOT/'xml'/f'{label}.xml').write_text(raw);return tree
+  time.sleep(.4)
+ raise RuntimeError('Native UI tree remained empty after five fresh inspections')
 def nodes(t):return [dict(n.attrib) for n in t.iter('node')]
 def match(n,s):return n.get('resource-id')==s or n.get('resource-id','').endswith(':id/'+s) or n.get('text')==s or n.get('content-desc')==s
 def find(s,tree=None):
@@ -34,11 +39,14 @@ def tap(s,scroll=True):
   if scroll:shell('input','swipe','270','970','270','380','450');time.sleep(.7)
  raise RuntimeError('Visible actionable control not found: '+s)
 def fill(s,value):
- tap(s);probe(s,'setText',value);time.sleep(.5);t=dump();n=find(s,t)
- if s=='code-box-0':
-  actual=''.join((find('code-box-'+str(i),t) or {}).get('text','') for i in range(4))
- else:actual=(n or {}).get('text','')
- if actual!=value:raise RuntimeError('Native input readback mismatch at '+s)
+ tap(s);probe(s,'setText',value);time.sleep(.5)
+ for attempt in range(4):
+  t=dump();n=find(s,t)
+  if s=='code-box-0':actual=''.join((find('code-box-'+str(i),t) or {}).get('text','') for i in range(4))
+  else:actual=(n or {}).get('text','')
+  if actual==value:return
+  time.sleep(.5)
+ raise RuntimeError('Native input readback mismatch at '+s+' after four fresh snapshots')
 def back():shell('input','keyevent','KEYCODE_BACK');time.sleep(.7)
 def shot(name):
  p=ROOT/'screens'/f'{name}.png';r=subprocess.run([A,'exec-out','screencap','-p'],capture_output=True,timeout=30)
