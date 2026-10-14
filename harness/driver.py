@@ -16,7 +16,7 @@ def probe(selector=None,action=None,value=''):
  t=time.monotonic();out=adb(*args,'com.passway.nativeprobe/.Probe',timeout=45)
  with (ROOT/'probe-timing.jsonl').open('a') as f:f.write(json.dumps({'action':action or 'read','selector':selector,'seconds':round(time.monotonic()-t,2)})+'\n')
  m=re.search(r'INSTRUMENTATION_RESULT: hierarchy=([^\r\n]+)',out)
- if not m or (action and 'action_result=performed' not in out):raise RuntimeError('Native probe failed: '+out[:1200])
+ if not m or (action and 'action_result=performed' not in out):raise RuntimeError('Native probe failed at '+str(selector)+': '+out[:1200])
  raw=base64.b64decode(m.group(1)).decode();return ET.fromstring(raw),raw
 def dump(label='current'):
  tree,raw=probe();(ROOT/'xml'/f'{label}.xml').write_text(raw);return tree
