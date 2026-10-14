@@ -21,7 +21,7 @@ def user(uid):
  shell('settings','--user',uid,'put','secure','show_ime_with_hard_keyboard','1')
  shell('cmd','location','set-location-enabled','true','--user',uid)
  shell('settings','--user',uid,'put','system','screen_off_timeout','1800000')
- shell('input','keyevent','KEYCODE_WAKEUP');shell('wm','dismiss-keyguard')
+ shell('input','keyevent','KEYCODE_WAKEUP');shell('wm','dismiss-keyguard');shell('cmd','statusbar','collapse')
  shell('am','start','-W','--user',uid,'-n',PKG+'/.MainActivity');time.sleep(3)
 
 def ready_generate():
@@ -53,7 +53,9 @@ def login(uid,phone,audit=False):
   if audit:
    for i in range(2,5):tap('welcome-next');waitfor(f'0{i} / 04');snap(f'user{uid}-onboarding-{i}')
    tap('get-started');record('Native onboarding all four pages','PASS')
-  else:tap('welcome-skip');waitfor('get-started');tap('get-started')
+  else:
+   for i in range(2,5):tap('welcome-next');waitfor(f'0{i} / 04',20)
+   tap('get-started')
  waitfor('phone-input',90)
  if audit:
   fill('phone-input','111');hide_keyboard();tap('send-code');t=snap('invalid-phone')
@@ -67,16 +69,17 @@ def login(uid,phone,audit=False):
  ready_generate();snap('user'+str(uid)+'-signed-in');record('Native Firebase sign-in user'+str(uid),'PASS')
 
 try:
+ shell('dumpsys','battery','set','ac','1');shell('dumpsys','battery','set','level','100');shell('cmd','statusbar','collapse')
  shell('settings','put','secure','show_ime_with_hard_keyboard','1')
  shell('settings','put','system','screen_off_timeout','1800000')
  shell('settings','put','global','window_animation_scale','0');shell('settings','put','global','transition_animation_scale','0');shell('settings','put','global','animator_duration_scale','0')
  shell('pm','grant',PKG,'android.permission.ACCESS_FINE_LOCATION');shell('pm','grant',PKG,'android.permission.ACCESS_COARSE_LOCATION')
  if int(shell('getprop','ro.build.version.sdk').strip())>=33:shell('pm','grant',PKG,'android.permission.POST_NOTIFICATIONS')
  adb('emu','geo','fix','77.2090','28.6139')
- existing=shell('pm','list','users');m=re.search(r'UserInfo\{(\d+):Passway synthetic peer:',existing)
+ existing=shell('pm','list','users');m=re.search(r'UserInfo\{(\d+):Passway(?: synthetic peer)?:',existing)
  if m:peer=int(m.group(1));record('Existing isolated peer reused','PASS')
  else:
-  out=shell('pm','create-user','Passway synthetic peer');m=re.search(r'id (\d+)',out);check('Second isolated Android user created',m is not None,out);peer=int(m.group(1))
+  out=shell('pm','create-user','"Passway synthetic peer"');m=re.search(r'id (\d+)',out);check('Second isolated Android user created',m is not None,out);peer=int(m.group(1))
  for pkg in [PKG,'com.passway.nativeprobe']:shell('cmd','package','install-existing','--user',peer,pkg)
  for uid in [0,peer]:
   for perm in (['android.permission.ACCESS_FINE_LOCATION','android.permission.ACCESS_COARSE_LOCATION']+(['android.permission.POST_NOTIFICATIONS'] if int(shell('getprop','ro.build.version.sdk').strip())>=33 else [])):shell('pm','grant','--user',uid,PKG,perm)
