@@ -47,8 +47,9 @@ def shot(name):
 def waitfor(s,seconds=90):
  until=time.monotonic()+seconds
  while time.monotonic()<until:
-  n=find(s)
+  tree=dump();n=find(s,tree)
   if n is not None:return n
+  if s=='code-text' and find('Something went wrong. Try again.',tree) is not None:raise RuntimeError('Native generation returned app error: Something went wrong. Try again.')
   time.sleep(2)
  shot('timeout-'+re.sub('[^a-zA-Z0-9]','-',s));raise RuntimeError('Timed out waiting for '+s)
 def record(name,status,detail=''):

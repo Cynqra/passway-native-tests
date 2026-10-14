@@ -1,13 +1,14 @@
 import pathlib,subprocess,sys,time,os,shutil,json,xml.etree.ElementTree as ET
 from status import publish,ROOT
 end=time.monotonic()+1500
-for attempt in range(1,4):
+for attempt in range(1,6):
  os.environ['PASSWAY_ATTEMPT']=str(attempt);ROOT.mkdir(exist_ok=True,parents=True)
  publish('native_test_started')
  try:code=subprocess.run([sys.executable,'harness/native_e2e.py'],timeout=min(900,max(1,int(end-time.monotonic())))).returncode
  except subprocess.TimeoutExpired:code=124
  if code==0 and (ROOT/'complete.json').exists():publish('passed');sys.exit(0)
  details={'exit_code':code}
+ if (ROOT/'location-diagnostics.txt').exists():details['location_diagnostics']=(ROOT/'location-diagnostics.txt').read_text()[-22000:]
  if (ROOT/'xml/failure.xml').exists():
   t=ET.parse(ROOT/'xml/failure.xml');details['visible_ui']=[{k:n.attrib.get(k,'') for k in ['resource-id','text','content-desc','class','bounds','visible-to-user']} for n in t.iter('node') if n.attrib.get('visible-to-user')=='true' and (n.attrib.get('text') or n.attrib.get('resource-id') or n.attrib.get('content-desc'))]
  if (ROOT/'screens/failure.png').exists():

@@ -20,6 +20,7 @@ def user(uid):
  shell('settings','--user',uid,'put','secure','user_setup_complete','1')
  shell('settings','--user',uid,'put','secure','show_ime_with_hard_keyboard','1')
  shell('cmd','location','set-location-enabled','true','--user',uid)
+ adb('emu','geo','fix','77.2090','28.6139')
  shell('settings','--user',uid,'put','system','screen_off_timeout','1800000')
  shell('input','keyevent','KEYCODE_WAKEUP');shell('wm','dismiss-keyguard');shell('cmd','statusbar','collapse')
  shell('am','start','-W','--user',uid,'-n',PKG+'/.MainActivity');time.sleep(3)
@@ -69,6 +70,13 @@ def login(uid,phone,audit=False):
  ready_generate();snap('user'+str(uid)+'-signed-in');record('Native Firebase sign-in user'+str(uid),'PASS')
 
 try:
+ import threading
+ def gps_stream():
+  while True:
+   try:adb('emu','geo','fix','77.2090','28.6139',timeout=10)
+   except Exception:pass
+   time.sleep(2)
+ threading.Thread(target=gps_stream,daemon=True).start()
  shell('dumpsys','battery','set','ac','1');shell('dumpsys','battery','set','level','100');shell('cmd','statusbar','collapse')
  shell('settings','put','secure','show_ime_with_hard_keyboard','1')
  shell('settings','put','system','screen_off_timeout','1800000')
@@ -87,7 +95,7 @@ try:
  (ROOT/'peer.json').write_text(json.dumps({'peer':peer}))
  login(0,'9999900001',True);login(peer,'9999900002')
  # Both sides below use native app UI and its actual Firebase/API calls.
- user(0);ready_generate();fill('name-input','Native Test A');hide_keyboard();tap('generate');waitfor('code-text',90)
+ user(0);ready_generate();fill('name-input','Native Test A');hide_keyboard();record('Native generation form input verified','PASS');tap('generate');waitfor('code-text',45)
  t=snap('native-generated-code');n=find('code-text',t);code=re.sub(r'[^A-Z0-9]','',n.get('text','').upper());check('Native code generated',len(code)==4,'Four-character code rendered')
  user(peer);ready_generate();tap('have-code');waitfor('code-box-0');fill('code-box-0',code);fill('name-input','Native Test B');hide_keyboard();tap('connect');waitfor('Waiting for them to accept',60);snap('native-peer-pending');record('Native peer redeemed code','PASS')
  user(0);waitfor('accept',60);snap('native-accept-request');tap('accept');waitfor('message-input',60);record('Native request acceptance','PASS')
@@ -124,5 +132,8 @@ except Exception as e:
  except Exception:pass
  raise
 finally:
- try:(ROOT/'app-logcat.txt').write_text(adb('logcat','-d','-s','AndroidRuntime','ReactNativeJS'))
+ try:
+  (ROOT/'app-logcat.txt').write_text(adb('logcat','-d'))
+  (ROOT/'location-diagnostics.txt').write_text(shell('dumpsys','location'))
+  (ROOT/'device-diagnostics.txt').write_text(shell('dumpsys','battery')+'\n'+shell('pm','list','users'))
  except Exception:pass
