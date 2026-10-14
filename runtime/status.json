@@ -1,1 +1,1 @@
-{"stage": "native_test_started", "at": "2026-10-14T20:56:08Z", "attempt": "1"}
+{"stage": "Second isolated Android user created", "at": "2026-10-14T20:56:13Z", "attempt": "1", "status": "PASS", "checks": [{"test": "Second isolated Android user created", "status": "PASS", "detail": "Success: created user id 10\n", "at": "2026-10-14T20:56:13Z"}]}
