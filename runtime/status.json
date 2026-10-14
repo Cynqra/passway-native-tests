@@ -1,1 +1,1 @@
-{"stage": "native_test_started", "at": "2026-10-14T21:03:57Z", "attempt": "3"}
+{"stage": "Existing isolated peer reused", "at": "2026-10-14T21:04:00Z", "attempt": "3", "status": "PASS", "checks": [{"test": "Existing isolated peer reused", "status": "PASS", "detail": "", "at": "2026-10-14T21:03:59Z"}]}
