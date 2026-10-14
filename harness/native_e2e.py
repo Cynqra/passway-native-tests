@@ -6,9 +6,31 @@ def check(name,condition,detail=''):
  if not condition:raise AssertionError(name+': '+detail)
  record(name,'PASS',detail)
 def texts(t=None):return ' '.join(n.get('text','')+' '+n.get('content-desc','') for n in nodes(t if t is not None else dump()))
+def rect(bounds):return [int(x) for x in re.findall(r'-?\d+',bounds)]
+def ime_top(t):
+ tops=[rect(w.get('bounds',''))[1] for w in t.iter('window') if w.get('type')=='2' and len(rect(w.get('bounds','')))==4]
+ return min(tops) if tops else None
+def composer_above_keyboard(label):
+ until=time.monotonic()+15
+ while time.monotonic()<until:
+  t=dump();top=ime_top(t)
+  field=find('message-input',t);send=find('send-message',t)
+  if top is not None and top>0 and field and send:
+   a=rect(field['bounds']);b=rect(send['bounds'])
+   if a[3]<=top+2 and b[3]<=top+2:
+    snap(label);record('Native composer and send button above keyboard '+label,'PASS','Input bottom '+str(a[3])+', send bottom '+str(b[3])+', IME top '+str(top));return
+  time.sleep(.5)
+ snap(label+'-overlap')
+ raise AssertionError('Composer/send controls overlap keyboard: '+str({'ime_top':top,'input':field,'send':send}))
 def hide_keyboard():
- s=shell('dumpsys','input_method')
- if re.search(r'mInputShown=true|isInputViewShown=true',s):back()
+ t=dump()
+ if ime_top(t) is not None:
+  back()
+  until=time.monotonic()+10
+  while time.monotonic()<until:
+   if ime_top(dump()) is None:return
+   time.sleep(.3)
+  raise AssertionError('Keyboard remained visible after Back')
 def snap(name):
  shot(name);tree=dump(name);return tree
 
@@ -111,14 +133,14 @@ try:
  t=snap('native-generated-code');n=find('code-text',t);code=re.sub(r'[^A-Z0-9]','',n.get('text','').upper());check('Native code generated',len(code)==4,'Four-character code rendered')
  user(peer);ready_generate();tap('have-code');waitfor('code-box-0');fill('code-box-0',code);fill('name-input','Native Test B');hide_keyboard();tap('connect');waitfor('Waiting for them to accept',60);snap('native-peer-pending');record('Native peer redeemed code','PASS')
  user(0);waitfor('accept',60);snap('native-accept-request');tap('accept');waitfor('message-input',60);record('Native request acceptance','PASS')
- fill('message-input','Native E2E hello from A');hide_keyboard();tap('send-message');waitfor('Native E2E hello from A');snap('native-A-message-sent')
+ fill('message-input','Native E2E hello from A');composer_above_keyboard('native-composer-keyboard');tap('send-message');waitfor('Native E2E hello from A');hide_keyboard();snap('native-A-message-sent')
  user(peer);waitfor('message-input',60);waitfor('Native E2E hello from A');record('Native A to native B delivery','PASS')
  fill('message-input','Native E2E reply from B');hide_keyboard();tap('send-message');waitfor('Native E2E reply from B')
  user(0);waitfor('Native E2E reply from B');record('Native B to native A delivery','PASS');snap('native-bidirectional-chat')
  # Exercise a real keyboard; test functional input, not emulator speed claims.
  fill('message-input','Keyboard edit one');ime=shell('dumpsys','input_method');check('Native soft keyboard visible',bool(re.search(r'mInputShown=true|isInputViewShown=true',ime)))
  for i in range(3):
-  value='Keyboard edit '+str(i);fill('message-input',value);shell('input','text','z');time.sleep(1)
+  value='Keyboard edit '+str(i);fill('message-input',value);composer_above_keyboard('keyboard-cycle-'+str(i));shell('input','text','z');time.sleep(1)
   check('Native keyboard typed character '+str(i),(find('message-input') or {}).get('text')==value+'z')
   hide_keyboard()
  record('Native keyboard edit and dismissal cycles','PASS','Three cycles; emulator results do not certify Oppo keyboard behavior')
@@ -145,14 +167,23 @@ try:
   time.sleep(1)
  else:raise AssertionError('Native relaunch did not reach authenticated UI within 30 seconds')
  snap('native-relaunch');record('Native session survives relaunch','PASS','Authenticated screen ready after '+str(round(time.monotonic()-start,2))+' seconds; no fixed three-second assumption')
+ # Functional navigation with Android animations enabled, not a physical FPS benchmark.
+ for key in ['window_animation_scale','transition_animation_scale','animator_duration_scale']:shell('settings','put','global',key,'1')
+ check('Android animations enabled for navigation smoke',all(shell('settings','get','global',key).strip() in ['1','1.0'] for key in ['window_animation_scale','transition_animation_scale','animator_duration_scale']))
+ shell('dumpsys','gfxinfo',PKG,'reset')
+ for cycle in range(2):
+  tap('open-chats');waitfor('new-connection');tap('You');waitfor('settings-name');snap('motion-settings-'+str(cycle));tap('Connect');waitfor('name-input')
+ (ROOT/'animations-enabled-gfxinfo.txt').write_text(shell('dumpsys','gfxinfo',PKG))
+ record('Native animations-enabled navigation smoke','PASS','Two chats/settings/connect cycles with scales at 1; no physical-device animation quality or FPS certification')
  logs=adb('logcat','-d');(ROOT/'app-logcat.txt').write_text(logs)
  app_uids=[]
  for uid in [0,peer]:
   app_uids+=re.findall(r'uid:(\d+)',shell('pm','list','packages','-U','--user',uid,PKG))
  permission_launches=sum('ActivityTaskManager: START u' in line and 'REQUEST_PERMISSIONS' in line and any('from uid '+uid+' ' in line for uid in app_uids) for line in logs.splitlines())
  check('Native permission requests remain bounded',permission_launches<=10,'Permission activity launches captured: '+str(permission_launches)+'; prior build captured hundreds')
+ check('No Passway Java fatal exception captured',re.search(r'AndroidRuntime.*Process: com\.passway\.app[,\s]',logs) is None,'Captured-log check, not a long-duration or physical-device certification')
  check('No Passway ANR captured during this flow','ANR in com.passway.app' not in logs,'Not an Oppo physical-device or long-duration stability certification')
- (ROOT/'complete.json').write_text(json.dumps({'status':'passed','coverage':'Push-loop-fix JavaScript candidate on build-4 native base, two isolated Android users, one Android 14 KVM emulator; real backend; fictional Firebase OTP; no real 2Factor SMS; not an Oppo physical-device certification'},indent=2))
+ (ROOT/'complete.json').write_text(json.dumps({'status':'passed','android_sdk':shell('getprop','ro.build.version.sdk').strip(),'coverage':'Push-loop and Android keyboard-layout JavaScript candidate on build-4 native base, two isolated Android users, one KVM emulator; real backend; fictional Firebase OTP; keyboard and send-button occlusion checked from native window bounds; no real 2Factor SMS; not an Oppo physical-device certification'},indent=2))
 except Exception as e:
  record('Native end-to-end run','FAIL',str(e));traceback.print_exc()
  try:snap('failure')

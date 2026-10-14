@@ -17,7 +17,7 @@ public class Probe extends Instrumentation {
   for(int i=0;i<n.getChildCount();i++)walk(x,n.getChild(i),depth+1);x.endTag("","node");
  }
  public void onStart(){Bundle result=new Bundle();try{
-  UiAutomation a=getUiAutomation();AccessibilityServiceInfo info=a.getServiceInfo();info.flags|=AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS|AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS;a.setServiceInfo(info);
+  UiAutomation a=getUiAutomation();AccessibilityServiceInfo info=a.getServiceInfo();info.flags|=AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS|AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS|AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS;a.setServiceInfo(info);
   AccessibilityNodeInfo root=null;for(int i=0;i<20&&root==null;i++){root=a.getRootInActiveWindow();if(root==null)Thread.sleep(200);}if(root==null)throw new Exception("No active native accessibility root");root.refresh();
   String action=options.getString("action","");
   if(!action.isEmpty()){
@@ -26,6 +26,8 @@ public class Probe extends Instrumentation {
    else if(action.equals("touch")){Rect r=new Rect();target.getBoundsInScreen(r);if(r.width()<=0||r.height()<=0)throw new Exception("Target outside visible viewport");float px=r.exactCenterX(),py=r.exactCenterY();long t=SystemClock.uptimeMillis();MotionEvent d=MotionEvent.obtain(t,t,MotionEvent.ACTION_DOWN,px,py,0);d.setSource(InputDevice.SOURCE_TOUCHSCREEN);if(!a.injectInputEvent(d,true))throw new Exception("Touch down rejected");Thread.sleep(100);MotionEvent u=MotionEvent.obtain(t,SystemClock.uptimeMillis(),MotionEvent.ACTION_UP,px,py,0);u.setSource(InputDevice.SOURCE_TOUCHSCREEN);if(!a.injectInputEvent(u,true))throw new Exception("Touch up rejected");d.recycle();u.recycle();}
    else throw new Exception("Unknown native action");result.putString("action_result","performed");Thread.sleep(500);root=a.getRootInActiveWindow();
   }
-  StringWriter writer=new StringWriter();XmlSerializer x=Xml.newSerializer();x.setOutput(writer);x.startDocument("UTF-8",true);x.startTag("","hierarchy");walk(x,root,0);x.endTag("","hierarchy");x.endDocument();result.putString("hierarchy",Base64.encodeToString(writer.toString().getBytes("UTF-8"),Base64.NO_WRAP));finish(0,result);
+  StringWriter writer=new StringWriter();XmlSerializer x=Xml.newSerializer();x.setOutput(writer);x.startDocument("UTF-8",true);x.startTag("","hierarchy");walk(x,root,0);
+  for(android.view.accessibility.AccessibilityWindowInfo w:a.getWindows()){Rect r=new Rect();w.getBoundsInScreen(r);x.startTag("","window");x.attribute("","type",String.valueOf(w.getType()));x.attribute("","layer",String.valueOf(w.getLayer()));x.attribute("","bounds","["+r.left+","+r.top+"]["+r.right+","+r.bottom+"]");x.endTag("","window");}
+  x.endTag("","hierarchy");x.endDocument();result.putString("hierarchy",Base64.encodeToString(writer.toString().getBytes("UTF-8"),Base64.NO_WRAP));finish(0,result);
  }catch(Throwable e){result.putString("probe_error",e.toString());finish(1,result);}}
 }
