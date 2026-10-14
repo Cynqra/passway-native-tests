@@ -137,7 +137,14 @@ try:
  else:tap('Back to start')
  waitfor('name-input');record('Native return after ending connection','PASS')
  shell('am','force-stop',PKG);shell('am','start','-n',PKG+'/.MainActivity');time.sleep(3);t=snap('native-relaunch');check('Native session survives relaunch',find('phone-input',t) is None and (find('name-input',t) is not None or find('new-connection',t) is not None))
- (ROOT/'complete.json').write_text(json.dumps({'status':'passed','coverage':'Native UI on two isolated Android users, one hardware-accelerated Android 14 emulator; real backend; fictional Firebase OTP; no real 2Factor SMS; not an Oppo physical-device certification'},indent=2))
+ logs=adb('logcat','-d');(ROOT/'app-logcat.txt').write_text(logs)
+ app_uids=[]
+ for uid in [0,peer]:
+  app_uids+=re.findall(r'uid:(\d+)',shell('pm','list','packages','-U','--user',uid,PKG))
+ permission_launches=sum('ActivityTaskManager: START u' in line and 'REQUEST_PERMISSIONS' in line and any('from uid '+uid+' ' in line for uid in app_uids) for line in logs.splitlines())
+ check('Native permission requests remain bounded',permission_launches<=10,'Permission activity launches captured: '+str(permission_launches)+'; prior build captured hundreds')
+ check('No Passway ANR captured during this flow','ANR in com.passway.app' not in logs,'Not an Oppo physical-device or long-duration stability certification')
+ (ROOT/'complete.json').write_text(json.dumps({'status':'passed','coverage':'Push-loop-fix JavaScript candidate on build-4 native base, two isolated Android users, one Android 14 KVM emulator; real backend; fictional Firebase OTP; no real 2Factor SMS; not an Oppo physical-device certification'},indent=2))
 except Exception as e:
  record('Native end-to-end run','FAIL',str(e));traceback.print_exc()
  try:snap('failure')

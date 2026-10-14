@@ -1,4 +1,4 @@
-name: Passway native Android E2E
+name: Passway push-loop-fix native E2E
 on:
   push:
     branches: [main]
@@ -37,7 +37,7 @@ jobs:
         with:
           path: native-cache
           key: passway-aab-061364fa-bundletool-1.18.3
-      - name: Prepare verified build 4 and native test probe
+      - name: Prepare verified native base and regression-tested JavaScript candidate
         run: |
           set -eu
           mkdir -p native-cache
@@ -50,6 +50,10 @@ jobs:
           keytool -genkeypair -keystore debug.keystore -storepass android -keypass android -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 30 -dname 'CN=Passway Native CI,O=Internal Test,C=IN'
           java -Xmx512m -jar native-cache/bundletool.jar build-apks --bundle=native-cache/passway-v4.aab --output=passway.apks --mode=universal --ks=debug.keystore --ks-key-alias=androiddebugkey --ks-pass=pass:android --key-pass=pass:android
           unzip passway.apks universal.apk
+          python3 harness/assemble_candidate.py
+          TOOLS=$(find "$ANDROID_HOME/build-tools" -name apksigner -printf '%h\n' | sort -V | tail -1)
+          "$TOOLS/apksigner" sign --ks debug.keystore --ks-key-alias androiddebugkey --ks-pass pass:android --key-pass pass:android --out universal.apk candidate-unsigned.apk
+          "$TOOLS/apksigner" verify universal.apk
           bash harness/probe/build.sh
           python3 harness/status.py emulator_setup
       - name: Native Android connection and chat test
@@ -85,7 +89,7 @@ jobs:
           import pathlib,json,os
           p=pathlib.Path('native-results/results.json');rows=json.loads(p.read_text()) if p.exists() else []
           with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
-            f.write('# Passway native Android E2E\n\nExact build-4 AAB, debug re-signed test APK, Android 14 KVM emulator, two isolated Android users, real backend and fictional Firebase OTP. System animations disabled. No real 2Factor SMS or Oppo certification.\n\n')
+            f.write('# Passway native Android E2E\n\nBuild-4 native base with regression-tested push-loop JavaScript candidate, debug re-signed test APK, Android 14 KVM emulator, two isolated Android users, real backend and fictional Firebase OTP. System animations disabled. No real 2Factor SMS or Oppo certification.\n\n')
             for row in rows:f.write('- **'+row['status']+'** '+row['test']+': '+row.get('detail','')+'\n')
             f.write('\n**Native critical flow PASSED**\n' if pathlib.Path('native-results/complete.json').exists() else '\n**Native E2E NOT PASSED**\n')
           PY
@@ -96,5 +100,6 @@ jobs:
           path: |
             native-results/
             native-attempts/
+            candidate-provenance.json
           retention-days: 1
           if-no-files-found: warn
