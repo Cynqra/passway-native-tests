@@ -136,7 +136,15 @@ try:
  if find('back-to-chats',t) is not None:tap('back-to-chats');waitfor('new-connection');tap('new-connection')
  else:tap('Back to start')
  waitfor('name-input');record('Native return after ending connection','PASS')
- shell('am','force-stop',PKG);shell('am','start','-n',PKG+'/.MainActivity');time.sleep(3);t=snap('native-relaunch');check('Native session survives relaunch',find('phone-input',t) is None and (find('name-input',t) is not None or find('new-connection',t) is not None))
+ shell('am','force-stop',PKG);start=time.monotonic();shell('am','start','-W','-n',PKG+'/.MainActivity')
+ until=time.monotonic()+30
+ while time.monotonic()<until:
+  t=dump()
+  if find('phone-input',t) is not None:raise AssertionError('Native relaunch lost authenticated session')
+  if find('name-input',t) is not None or find('new-connection',t) is not None:break
+  time.sleep(1)
+ else:raise AssertionError('Native relaunch did not reach authenticated UI within 30 seconds')
+ snap('native-relaunch');record('Native session survives relaunch','PASS','Authenticated screen ready after '+str(round(time.monotonic()-start,2))+' seconds; no fixed three-second assumption')
  logs=adb('logcat','-d');(ROOT/'app-logcat.txt').write_text(logs)
  app_uids=[]
  for uid in [0,peer]:
