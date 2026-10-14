@@ -1,0 +1,1 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.passway.nativeprobe"><uses-sdk android:minSdkVersion="23" android:targetSdkVersion="28"/><application android:debuggable="true" android:label="Passway test probe"/><instrumentation android:name=".Probe" android:targetPackage="com.passway.nativeprobe" android:functionalTest="true"/></manifest>

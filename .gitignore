@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.keystore
+native-cache/
+native-results/
+native-attempts/
+*.apks
+universal.apk
+harness/probe/classes/
+harness/probe/dex/
+harness/probe/*.apk
