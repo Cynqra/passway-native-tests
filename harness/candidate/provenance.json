@@ -1,7 +1,7 @@
 {
   "candidate": "push-loop-and-android-keyboard-layout-fix",
   "base_aab_sha256": "061364fabf74c8b4433b16a85f81aa3146fc46e7f447d98224f87be302d41088",
-  "bundle_sha256": "124a2f56cb0e372db7e98cf831e255dbecba6b2200059cbe5b4d5454660e29a5",
+  "bundle_sha256": "66fa0c07aa758bff13bdbea8c58c131293a0dfbe9d4a0067e5f5750f8dc870c5",
   "hermes_version": 98,
   "source_base_git": "13d49546e90822c71471db4808e1ff290b9b5441",
   "source_provenance": "Clean ui/android-modernization source branch plus reviewed push-loop and Android keyboard-layout fixes; source_fix_git records exact source. Original build-4 native libraries/manifest retained. Test JavaScript replaced and APK debug re-signed; not an EAS/Play production release.",
@@ -18,7 +18,7 @@
     "src/components/BottomNav.tsx": "c9a833abe2f8b5d6c4e11e501dca3a63bbc660ca3223a962a488b793ccd33af5",
     "src/components/Brand.tsx": "b8c22ed0a46b5c10a8f9e7617a499e92bb6d46f6c281d2ba88da4baf8fd83758",
     "src/components/Button.tsx": "91dec8cd17d8fedc22a5c125eb3257eaffb9367c7917352bfa8f24cbe8e181b7",
-    "src/components/FormScreen.tsx": "2f97e06b9dc911fa3dc9149300191c41afeec096dd4e4bae0bbd1a76c50950dd",
+    "src/components/FormScreen.tsx": "d97295ed913ed5be409616a84c9d93f528579788f89c74d33c6bdb340137755c",
     "src/components/HeroIllustration.tsx": "f85e315c928354e0962fea679df615cf80a49577a16d959b04f9daff5481b3a3",
     "src/components/Icon.tsx": "e7aaf02fa7c7280603b9124519ec223bfbb0098fc57d64feaa9ae81c2af0fcf3",
     "src/components/IconBadge.tsx": "4d996af60be353e54445f9b321f0428c2748734e921bddd20321e9f39c8a200c",
@@ -34,7 +34,7 @@
     "src/features/chat/api/messages.ts": "53c77549d4eb107e0f55405f48b4fd454b4434bf3542f7fec13b1263f7acb3d9",
     "src/features/chat/components/SwipeToReply.tsx": "9084c58ba64323545d49a2d482012d74a3ae997343c94194194fad3d3a5b5b07",
     "src/features/chat/identity.ts": "30c794e74328ad18c79c9d58c22556a6213fdebca36eb12914bafa7c05e00416",
-    "src/features/chat/screens/ChatScreen.tsx": "42de76f9164f874e8724ade14d14451edbc68cb96d5cd912fe7a81e215094901",
+    "src/features/chat/screens/ChatScreen.tsx": "bbda197e2c6221970dc9165153c34b626a72e5f76ad8cc4f8f948f4d0f57b80b",
     "src/features/chat/screens/ChatsScreen.tsx": "41f5ac453390750555967c6d3f79ac839aee6c1b43b834d863337434531329f7",
     "src/features/connections/api/activeConnection.ts": "e3fc6e6584c87563dc57629f0427241286372d337ba331401bd5f81f7bc25123",
     "src/features/connections/api/connections.ts": "afe29ac6f847408e0d448b471999897332acd5f4e110ce7aa249d581384e1834",
@@ -77,5 +77,5 @@
     "metro.config.js": "c49f96b6c772e408b8754240125e05f1123cebb4625d8f482093aaa9beeb4f0b"
   },
   "build_cache": "Metro cleared; diagnostic no-SMS branch inspected in compiled Hermes bytecode",
-  "source_fix_git": "fd63c4f113661a466b6455953ab9e622bff17c3a"
+  "source_fix_git": "9b4cd30f6ce283566fd5f750ea254958d6caee5c"
 }
