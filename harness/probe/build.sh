@@ -17,3 +17,5 @@ if [ "${PASSWAY_ATTEMPT:-0}" -ge 4 ]; then
  adb shell settings get secure default_input_method > native-attempts/ime-default.txt
  adb shell getprop ro.hardware.keyboard > native-attempts/ime-hardware.txt
 fi
+# Candidate updates are applied only when their verified bytecode hash changed.
+bash harness/apply_candidate_update.sh

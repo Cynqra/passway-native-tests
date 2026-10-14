@@ -1,7 +1,7 @@
 {
-  "candidate": "push-token-loop-fix-1",
+  "candidate": "push-token-loop-fix-1-clean-diagnostic",
   "base_aab_sha256": "061364fabf74c8b4433b16a85f81aa3146fc46e7f447d98224f87be302d41088",
-  "bundle_sha256": "fe78186be8967279f5d9138c98736b449bd1680299f38cfbaa4a53c431f4ca21",
+  "bundle_sha256": "f604b9263b7c40fc0f7fe890645be4567c422a9c16614771a91a53a9f65b9c41",
   "hermes_version": 98,
   "source_base_git": "13d49546e90822c71471db4808e1ff290b9b5441",
   "source_provenance": "Restored working-copy redesign source; hashes recorded. Not a new EAS or Google Play release. Original native libraries and manifest retained, test JavaScript replaced and APK debug re-signed.",
@@ -75,5 +75,6 @@
     "package-lock.json": "c094fe7badc116eee982fd3f5bd3b14faad016abb877e17143ed385d90a0b3b8",
     "app.config.ts": "22581cd3a2c69ab2b208c16afcdd19afac21147ae81386268e15cd11363266a4",
     "metro.config.js": "c49f96b6c772e408b8754240125e05f1123cebb4625d8f482093aaa9beeb4f0b"
-  }
+  },
+  "build_cache": "Metro cleared; diagnostic no-SMS branch inspected in compiled Hermes bytecode"
 }
