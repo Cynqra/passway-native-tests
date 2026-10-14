@@ -12,6 +12,10 @@ def hide_keyboard():
 def snap(name):
  shot(name);tree=dump(name);return tree
 
+def location_fix():
+ for provider in ['gps','network','fused']:
+  shell('cmd','location','providers','set-test-provider-location',provider,'--location','28.6139,77.2090','--accuracy','5')
+
 def user(uid):
  shell('am','start-user','-w',uid);shell('am','switch-user',uid)
  for _ in range(30):
@@ -20,7 +24,7 @@ def user(uid):
  shell('settings','--user',uid,'put','secure','user_setup_complete','1')
  shell('settings','--user',uid,'put','secure','show_ime_with_hard_keyboard','1')
  shell('cmd','location','set-location-enabled','true','--user',uid)
- adb('emu','geo','fix','77.2090','28.6139')
+ location_fix()
  shell('settings','--user',uid,'put','system','screen_off_timeout','1800000')
  shell('input','keyevent','KEYCODE_WAKEUP');shell('wm','dismiss-keyguard');shell('cmd','statusbar','collapse')
  shell('am','start','-W','--user',uid,'-n',PKG+'/.MainActivity');time.sleep(3)
@@ -73,10 +77,17 @@ try:
  import threading
  def gps_stream():
   while True:
-   try:adb('emu','geo','fix','77.2090','28.6139',timeout=10)
+   try:location_fix()
    except Exception:pass
    time.sleep(2)
+ shell('appops','set','com.android.shell','android:mock_location','allow')
+ for provider in ['gps','network','fused']:
+  shell('cmd','location','providers','add-test-provider',provider,'--accuracy','1')
+  shell('cmd','location','providers','set-test-provider-enabled',provider,'true')
+ location_fix()
  threading.Thread(target=gps_stream,daemon=True).start()
+ state=shell('dumpsys','location');(ROOT/'location-before.txt').write_text(state)
+ check('Android test-location providers seeded', 'mock' in state.lower() and '28.613' in state, 'OS test providers; simulated Delhi location, not physical proximity certification')
  shell('dumpsys','battery','set','ac','1');shell('dumpsys','battery','set','level','100');shell('cmd','statusbar','collapse')
  shell('settings','put','secure','show_ime_with_hard_keyboard','1')
  shell('settings','put','system','screen_off_timeout','1800000')
