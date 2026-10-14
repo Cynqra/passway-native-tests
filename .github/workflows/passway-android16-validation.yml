@@ -1,0 +1,102 @@
+name: Passway Android 16 compatibility E2E
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: passway-android16-e2e
+  cancel-in-progress: false
+jobs:
+  android:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      PASSWAY_RESULTS: ${{ github.workspace }}/native-results
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish setup status
+        run: python3 harness/status.py setup
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Prepare hardware acceleration and free disk
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android/sdk/ndk /opt/ghc /usr/local/share/boost /opt/hostedtoolcache/CodeQL
+          test -e /dev/kvm
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          free -m
+          df -h /
+      - uses: actions/cache@v4
+        with:
+          path: native-cache
+          key: passway-aab-061364fa-bundletool-1.18.3
+      - name: Prepare verified native base and regression-tested JavaScript candidate
+        run: |
+          set -eu
+          mkdir -p native-cache
+          URL="$(cat harness/build-artifact-url.txt)"
+          echo "::add-mask::$URL"
+          if [ ! -f native-cache/passway-v4.aab ]; then curl --fail --silent --show-error --location "$URL" -o native-cache/passway-v4.aab; fi
+          echo '061364fabf74c8b4433b16a85f81aa3146fc46e7f447d98224f87be302d41088  native-cache/passway-v4.aab' | sha256sum -c -
+          if [ ! -f native-cache/bundletool.jar ]; then curl --fail --silent --show-error --location https://github.com/google/bundletool/releases/download/1.18.3/bundletool-all-1.18.3.jar -o native-cache/bundletool.jar; fi
+          echo 'a099cfa1543f55593bc2ed16a70a7c67fe54b1747bb7301f37fdfd6d91028e29  native-cache/bundletool.jar' | sha256sum -c -
+          keytool -genkeypair -keystore debug.keystore -storepass android -keypass android -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 30 -dname 'CN=Passway Native CI,O=Internal Test,C=IN'
+          java -Xmx512m -jar native-cache/bundletool.jar build-apks --bundle=native-cache/passway-v4.aab --output=passway.apks --mode=universal --ks=debug.keystore --ks-key-alias=androiddebugkey --ks-pass=pass:android --key-pass=pass:android
+          unzip passway.apks universal.apk
+          python3 harness/assemble_candidate.py
+          TOOLS=$(find "$ANDROID_HOME/build-tools" -name apksigner -printf '%h\n' | sort -V | tail -1)
+          "$TOOLS/apksigner" sign --ks debug.keystore --ks-key-alias androiddebugkey --ks-pass pass:android --key-pass pass:android --out universal.apk candidate-unsigned.apk
+          "$TOOLS/apksigner" verify universal.apk
+          bash harness/probe/build.sh
+          python3 harness/status.py emulator_setup
+      - name: Native Android connection and chat test
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 36
+          arch: x86_64
+          target: google_apis
+          profile: pixel_2
+          avd-name: passway-native
+          ram-size: 3072M
+          heap-size: 384M
+          disk-size: 4096M
+          cores: 2
+          enable-hw-keyboard: false
+          disable-animations: true
+          disable-spellchecker: true
+          emulator-boot-timeout: 480
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot -camera-back none -camera-front none -skin 540x1200 -memory 3072
+          pre-emulator-launch-script: python3 harness/configure_avd.py
+          script: |
+            adb install --no-incremental -r universal.apk
+            adb install --no-incremental -r harness/probe/probe.apk
+            adb shell wm size
+            adb shell wm density
+            adb shell settings put global hide_error_dialogs 0
+            python3 harness/status.py emulator_ready
+            python3 harness/coordinator.py
+      - name: Summarize verified native results
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import pathlib,json,os
+          p=pathlib.Path('native-results/results.json');rows=json.loads(p.read_text()) if p.exists() else []
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+            f.write('# Passway native Android E2E\n\nBuild-4 native base with regression-tested push-loop JavaScript candidate, debug re-signed test APK, Android 16 KVM emulator, two isolated Android users, real backend and fictional Firebase OTP. System animations disabled. No real 2Factor SMS or Oppo certification.\n\n')
+            for row in rows:f.write('- **'+row['status']+'** '+row['test']+': '+row.get('detail','')+'\n')
+            f.write('\n**Native critical flow PASSED**\n' if pathlib.Path('native-results/complete.json').exists() else '\n**Native E2E NOT PASSED**\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: passway-native-evidence
+          path: |
+            native-results/
+            native-attempts/
+            candidate-provenance.json
+          retention-days: 1
+          if-no-files-found: warn
