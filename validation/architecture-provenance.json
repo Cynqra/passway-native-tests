@@ -1,6 +1,8 @@
 {
   "source_repo": "naveenbharti310/Paasway",
-  "source_commit": "4e46a19f5a6f075ed300ebcc57d33e6ec11885fc",
-  "archive_sha256": "63b1561afbcef5bf60f45e6888f11edc75f4e57d34c8ad97133c96222b799b03",
-  "scope": "exact release-boundary source; emulator regressions and separate synthetic-config native smoke; no deployment or SMS"
+  "source_commit": "fc8d436d6f1896245a06e5f947d0456aaf601fd9",
+  "archive_sha256": "4cab05310a072d39a4d20776e2a5d9ebc10d39ea0798bf862b2c4529b08dfd82",
+  "application_tree": "5852ac692a58ada3f2584ac438043c70044c4b8f",
+  "native_application_source": "4e46a19f5a6f075ed300ebcc57d33e6ec11885fc",
+  "scope": "CI-routing-only source change; app tree unchanged; no deployment or SMS"
 }

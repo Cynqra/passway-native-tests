@@ -33,7 +33,7 @@ jobs:
           sha256sum -c validation/architecture-source.sha256
           mkdir validation-source
           tar -xzf validation/architecture-source.tar.gz -C validation-source
-          echo 'Source commit: 4e46a19f5a6f075ed300ebcc57d33e6ec11885fc' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Source commit: fc8d436d6f1896245a06e5f947d0456aaf601fd9' >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '22'
@@ -68,7 +68,7 @@ jobs:
           sha256sum -c validation/architecture-source.sha256
           mkdir validation-source
           tar -xzf validation/architecture-source.tar.gz -C validation-source
-          echo 'Source commit: 4e46a19f5a6f075ed300ebcc57d33e6ec11885fc' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Source commit: fc8d436d6f1896245a06e5f947d0456aaf601fd9' >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '22'
