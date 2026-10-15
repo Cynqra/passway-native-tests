@@ -1,8 +1,7 @@
 {
   "source_repo": "naveenbharti310/Paasway",
-  "source_commit": "e5624c49f35d168f49a813ec16ef92b3bfc83a20",
-  "archive_sha256": "4d4b19d93555c5ec8598e72d5942cc3a5b4786d68529d536b422cfda73ce7c43",
-  "application_tree": "9de5060a5ec15f2146d136bc60deffe2d14bffc6",
-  "native_application_source": "822b0a15299a539e4c8e6850817a2416f703fa26",
-  "scope": "Backend person-level block fix; unchanged native client; no deployment or production E2E claim"
+  "source_commit": "76fb4e837005fc09d75304fe181ebd6f9370aff2",
+  "archive_sha256": "e99dfc3bcc8e657aedb78d7e884a4b650c92a8f0c2999e2aad1655e106099cc9",
+  "application_tree": "a14f98a114c2397854fda1b189a26bec0399118a",
+  "scope": "334 local regression tests; current-source native two-user test with explicit test-only local-emulator overlay. No production, SMS or attestation proof."
 }

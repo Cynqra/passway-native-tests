@@ -1,0 +1,9 @@
+# Current-source isolated native phase
+
+The new `passway-isolated-native-e2e.yml` compiles the exact archived candidate source, not a historical native base or an injected update. A recorded test-only overlay routes native Firebase Auth and Firestore to local emulators, rejects any native project other than demo-passway, and permits HTTP only inside the disposable test build. No real project credentials are installed. The original candidate HTTP handlers run behind a localhost-only adapter which rejects non-emulator Admin configuration before loading the SDK. OTP routes and request-triggered maintenance are not exposed by this adapter.
+
+Two isolated Android users exercise phone authentication using the Auth emulator's generated verification codes, connection generation/redemption/acceptance, bidirectional chat, keyboard bounds, notes, navigation, connection ending, relaunch, offline recovery and sign-out. One 900-second attempt, fresh success marker, no hot patches, no implicit reruns. Dependency and Gradle caches are reused. The probe build does not invoke the historical candidate-update script.
+
+Preflight passed: test-only overlay typecheck; strict isolation failure checks; emulator Auth phone verification through the candidate HTTP generation/redemption/acceptance/send/read chain and Firestore; 13 harness unit tests. Native workflow execution is a separate result, not implied by these preflights.
+
+This phase proves only isolated native integration if successful. The separate restricted Vercel preview passed 33 real-service API checks. Neither establishes a single native-to-production two-user flow, real SMS delivery, physical-device quality, or store attestation. Upstream dependency findings still block release. No production rules/indexes/API or paid service changes are made by this workflow.
