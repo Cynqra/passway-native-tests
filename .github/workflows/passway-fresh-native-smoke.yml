@@ -1,22 +1,29 @@
-name: Passway fresh-source Android build and cold-start smoke
+name: Passway current-source isolated native two-user E2E
 on:
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: passway-fresh-native-smoke
+  group: passway-isolated-native-e2e
   cancel-in-progress: false
 jobs:
-  fresh-native:
+  isolated-native:
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
+    timeout-minutes: 40
     env:
       CI: '1'
       EAS_BUILD_PROFILE: play-diagnostics
       EXPO_PUBLIC_APP_CHECK: 'off'
-      EXPO_PUBLIC_DIAGNOSTICS: '0'
-      EXPO_PUBLIC_OTP_PROVIDER: 2factor
-      EXPO_PUBLIC_API_URL: https://example.invalid
+      EXPO_PUBLIC_DIAGNOSTICS: '1'
+      EXPO_PUBLIC_OTP_PROVIDER: firebase
+      EXPO_PUBLIC_API_URL: http://10.0.2.2:8787
+      GCLOUD_PROJECT: demo-passway
+      FIRESTORE_EMULATOR_HOST: 127.0.0.1:8080
+      FIREBASE_AUTH_EMULATOR_HOST: 127.0.0.1:9099
+      ENFORCE_APP_CHECK: 'false'
+      MODERATION_PROVIDER: rules
+      PASSWAY_RESULTS: ${{ github.workspace }}/native-results
+      JAVA_TOOL_OPTIONS: -Xmx768m
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -37,20 +44,14 @@ jobs:
           cache-read-only: ${{ github.event_name != 'workflow_dispatch' }}
       - name: Native harness unit tests
         run: python3 -m unittest discover -s harness/tests -v
-      - name: Verify source and generate synthetic demo-only Firebase config
+      - name: Verify source and apply explicit emulator-only test overlay
         run: |
           set -eu
           sha256sum -c validation/architecture-source.sha256
-          mkdir validation-source native-smoke
+          mkdir validation-source native-results
           tar -xzf validation/architecture-source.tar.gz -C validation-source
-          cp validation/architecture-provenance.json native-smoke/source-provenance.json
-          python3 - <<'PY'
-          import json,pathlib
-          app=pathlib.Path('validation-source/passway-app')
-          config={'project_info':{'project_number':'123456789012','project_id':'demo-passway','storage_bucket':'demo-passway.firebasestorage.app'},'client':[{'client_info':{'mobilesdk_app_id':'1:123456789012:android:abcdef0123456789','android_client_info':{'package_name':'com.passway.app'}},'api_key':[{'current_key':'AIza'+'A'*35}]}],'configuration_version':'1'}
-          (app/'google-services.json').write_text(json.dumps(config))
-          (app/'firebase.json').write_text(json.dumps({'react-native':{'crashlytics_auto_collection_enabled':False,'analytics_auto_collection_enabled':False}}))
-          PY
+          cp validation/architecture-provenance.json native-results/source-provenance.json
+          python3 harness/prepare_isolated_native.py
           sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost /opt/hostedtoolcache/CodeQL
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
@@ -60,6 +61,10 @@ jobs:
         working-directory: validation-source/passway-app
         run: |
           npm ci
+          npm ci --prefix functions
+          npm run typecheck
+          npm run typecheck --prefix functions
+          npm run build --prefix functions
           npx --no-install expo prebuild --platform android --clean --no-install
       - name: Compile fresh native release APK with local diagnostic signing
         working-directory: validation-source/passway-app/android
@@ -67,40 +72,62 @@ jobs:
           chmod +x gradlew
           ./gradlew :app:assembleRelease --build-cache -PreactNativeArchitectures=x86_64 --max-workers=2 -Dorg.gradle.jvmargs='-Xmx4g -XX:MaxMetaspaceSize=1g' --stacktrace
           ./gradlew --stop
-          sha256sum app/build/outputs/apk/release/*.apk > ../../../native-smoke/apk-sha256.txt
-      - name: Cold-start the freshly compiled APK on Android 16
+          sha256sum app/build/outputs/apk/release/*.apk > ../../../native-results/apk-sha256.txt
+      - name: Start isolated Firebase services and original candidate HTTP handlers
+        run: |
+          set -eu
+          cd validation-source/passway-app
+          nohup npx --yes firebase-tools@15.32.1 emulators:start --only auth,firestore --project demo-passway > ../../native-results/firebase-emulators.log 2>&1 &
+          cd ../..
+          for i in $(seq 1 90); do
+            if curl --silent --fail http://127.0.0.1:9099/emulator/v1/projects/demo-passway/verificationCodes > /dev/null && curl --silent --output /dev/null http://127.0.0.1:8080/; then break; fi
+            sleep 2
+          done
+          curl --silent --fail http://127.0.0.1:9099/emulator/v1/projects/demo-passway/verificationCodes > /dev/null
+          nohup node harness/isolated_api.cjs > native-results/isolated-api.log 2>&1 &
+          for i in $(seq 1 20); do if curl --silent --fail http://127.0.0.1:8787/healthz; then break; fi; sleep 1; done
+          curl --silent --fail http://127.0.0.1:8787/healthz
+          keytool -genkeypair -keystore debug.keystore -storepass android -keypass android -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 30 -dname 'CN=Passway Isolated Test,O=Internal Test,C=IN'
+          bash harness/probe/build_isolated.sh
+      - name: Exercise current-source native UI with two isolated Android users
         uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
         with:
           api-level: 36
           arch: x86_64
           target: google_apis
           profile: pixel_2
+          avd-name: passway-isolated
           ram-size: 3072M
+          heap-size: 384M
           cores: 2
+          enable-hw-keyboard: false
           disable-animations: true
+          disable-spellchecker: true
           emulator-boot-timeout: 480
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot -camera-back none -camera-front none -memory 3072
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot -camera-back none -camera-front none -skin 540x1200 -memory 3072
+          pre-emulator-launch-script: python3 harness/configure_avd.py
           script: |
             adb install --no-incremental -r validation-source/passway-app/android/app/build/outputs/apk/release/app-release.apk
+            adb install --no-incremental -r harness/probe/probe.apk
             adb logcat -c
-            adb shell am start -W -n com.passway.app/.MainActivity > native-smoke/launch.txt
-            sleep 25
-            adb shell pidof com.passway.app > native-smoke/pid.txt
-            adb shell uiautomator dump /sdcard/passway-window.xml
-            adb pull /sdcard/passway-window.xml native-smoke/ui.xml
-            adb exec-out screencap -p > native-smoke/screen.png
-            adb logcat -d > native-smoke/logcat.txt
-            python3 -c "import pathlib,re; p=pathlib.Path('native-smoke'); ui=(p/'ui.xml').read_text(); logs=(p/'logcat.txt').read_text(); assert (p/'pid.txt').read_text().strip(); assert re.search(r'meet someone|your phone number|real moments',ui,re.I), 'Expected onboarding UI did not render'; assert not re.search(r'FATAL EXCEPTION|Fatal signal|ANR in com.passway.app',logs); (p/'passed.txt').write_text('Fresh native Android build and signed-out cold-start smoke passed. Synthetic demo config; no production backend or App Check attestation proof. No SMS sent.\n')"
-      - name: Record honest native scope
+            python3 harness/isolated_coordinator.py
+      - name: Record exact scope and fresh success marker
         if: always()
         run: |
-          echo '# Fresh-source Android compilation and onboarding smoke' >> "$GITHUB_STEP_SUMMARY"
+          echo '# Current-source isolated native two-user E2E' >> "$GITHUB_STEP_SUMMARY"
           cat validation/architecture-provenance.json >> "$GITHUB_STEP_SUMMARY"
-          echo 'Synthetic demo Firebase config; unreachable API endpoint; locally diagnostic-signed APK. Not a production-signed two-user E2E or Play Integrity proof. No SMS, API deployment or billing change.' >> "$GITHUB_STEP_SUMMARY"
-          test ! -f native-smoke/passed.txt || cat native-smoke/passed.txt >> "$GITHUB_STEP_SUMMARY"
+          echo 'Test-only emulator routing/cleartext overlay; demo-passway Auth and Firestore; original candidate HTTP handlers. No production service, SMS, attestation or physical-device proof. No live patches or implicit reruns.' >> "$GITHUB_STEP_SUMMARY"
+          python3 - <<'PYTHON'
+          import json,os,pathlib
+          p=pathlib.Path('native-results')
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:
+           for row in json.loads((p/'results.json').read_text()) if (p/'results.json').exists() else []:out.write('- '+row['status']+' '+row['test']+' — '+row.get('detail','')+'\n')
+           out.write('\nNative flow PASSED\n' if (p/'complete.json').exists() and json.loads((p/'coordinator-result.json').read_text()).get('passed') else '\nNative flow NOT PASSED\n')
+          PYTHON
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
-          name: fresh-native-smoke-evidence
-          path: native-smoke
+          name: isolated-current-native-evidence
+          path: native-results
           retention-days: 3
+          if-no-files-found: warn
