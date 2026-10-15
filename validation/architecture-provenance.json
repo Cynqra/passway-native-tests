@@ -1,0 +1,6 @@
+{
+  "source_repo": "naveenbharti310/Paasway",
+  "source_commit": "5f61aaa31ba4075439286ea0d1a480694a125301",
+  "archive_sha256": "cbe30c9f57dbacaab917cd5aae0272ed9c812223b615846b4698ad5a6be3e780",
+  "scope": "secret-free source snapshot; demo-passway emulator only; no deployment; no SMS"
+}
