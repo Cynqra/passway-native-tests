@@ -99,6 +99,25 @@ class PlayAccessTests(unittest.TestCase):
             m.probe("fictional-token", send)
         self.assertEqual(calls, ["POST", "GET", "DELETE"])
 
+    def test_release_status_evidence_is_internal_and_read_only(self):
+        calls = []
+        def send(url, **kwargs):
+            calls.append(kwargs.get("method", "GET"))
+            if len(calls) == 1:
+                return {"id": "123"}
+            if len(calls) == 2:
+                return {"tracks": [
+                    {"track": "internal", "releases": [
+                        {"name": "Internal six", "status": "completed", "versionCodes": ["6"]}
+                    ]},
+                    {"track": "production", "releases": []},
+                ]}
+            return {}
+        report = m.probe("fictional-token", send)
+        self.assertEqual(report["internalReleases"][0]["versionCodes"], ["6"])
+        self.assertFalse(report["publicProductionReleasePresent"])
+        self.assertEqual(calls, ["POST", "GET", "DELETE"])
+
     def test_invalid_edit_identifier_rejected(self):
         with self.assertRaises(m.SafeError):
             m.probe("fictional-token", lambda *a, **k: {"id": "../unexpected"})

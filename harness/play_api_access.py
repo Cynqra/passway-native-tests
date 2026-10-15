@@ -178,6 +178,21 @@ def probe(token, send=request):
             "tracks": sorted(x["track"] for x in tracks.get("tracks", [])),
             "scope": "Temporary edit/read/delete only; no bundle upload, release changes, or commit",
         }
+        internal = next(
+            (x for x in tracks.get("tracks", []) if x.get("track") == "internal"), {}
+        )
+        report["internalReleases"] = [
+            {
+                "name": release.get("name"),
+                "status": release.get("status"),
+                "versionCodes": release.get("versionCodes", []),
+            }
+            for release in internal.get("releases", [])
+        ]
+        report["publicProductionReleasePresent"] = any(
+            x.get("track") == "production" and bool(x.get("releases"))
+            for x in tracks.get("tracks", [])
+        )
     finally:
         send(PUBLISHER + "/" + edit, method="DELETE", headers=headers)
     report["temporaryEditDeleted"] = True
