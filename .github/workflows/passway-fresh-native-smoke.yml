@@ -1,6 +1,15 @@
 name: Passway current-source isolated native two-user E2E
 on:
   workflow_dispatch:
+    inputs:
+      mode:
+        description: Isolated native testing or signed store-bundle validation
+        required: true
+        default: isolated-native
+        type: choice
+        options:
+          - isolated-native
+          - signed-release
 permissions:
   contents: read
 concurrency:
@@ -8,6 +17,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   isolated-native:
+    if: ${{ inputs.mode != 'signed-release' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     env:
@@ -146,3 +156,137 @@ jobs:
           path: native-results
           retention-days: 3
           if-no-files-found: warn
+
+  signed-store-bundle:
+    if: ${{ inputs.mode == 'signed-release' }}
+    name: Signed store bundle validation (not a device test or rollout)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    environment: passway-store-signing
+    env:
+      CI: '1'
+      EAS_BUILD_PROFILE: play-attestation
+      EXPO_PUBLIC_APP_CHECK: 'on'
+      EXPO_PUBLIC_DIAGNOSTICS: '0'
+      EXPO_PUBLIC_SHOW_TEST_NUMBERS: '0'
+      EXPO_PUBLIC_OTP_PROVIDER: 2factor
+      EXPO_PUBLIC_API_URL: https://passway-api.vercel.app
+      JAVA_TOOL_OPTIONS: -Xmx768m
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Verify immutable source snapshot
+        run: |
+          sha256sum -c validation/architecture-source.sha256
+          mkdir validation-source signed-results
+          tar -xzf validation/architecture-source.tar.gz -C validation-source
+          cp validation/architecture-provenance.json signed-results/source-provenance.json
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            validation-source/passway-app/package-lock.json
+            validation-source/passway-app/functions/package-lock.json
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@48b5f213c81028ace310571dc5ec0fbbca0b2947
+        with:
+          cache-read-only: true
+      - name: Materialize existing app-scoped signing credential privately
+        env:
+          SIGNING_SECRET: ${{ secrets.PASSWAY_ANDROID_SIGNING }}
+          GOOGLE_CONFIG_SECRET: ${{ secrets.PASSWAY_GOOGLE_SERVICES_JSON }}
+        run: |
+          python3 - <<'PYTHON'
+          import os,json,base64,pathlib
+          private=pathlib.Path(os.environ['RUNNER_TEMP'])/'passway-private'
+          private.mkdir(mode=0o700)
+          signing=json.loads(os.environ['SIGNING_SECRET'])
+          for k in ['keystorePassword','keyAlias','keyPassword']:
+           value=signing[k]
+           assert isinstance(value,str) and value and '\n' not in value and '\r' not in value
+           print('::add-mask::'+value)
+          google=json.loads(os.environ['GOOGLE_CONFIG_SECRET'])
+          assert google['project_info']['project_id']=='passway-2ddc8'
+          assert any(c['client_info']['android_client_info']['package_name']=='com.passway.app' for c in google['client'])
+          (private/'upload.jks').write_bytes(base64.b64decode(signing.pop('keystoreBase64'),validate=True))
+          (private/'signing.json').write_text(json.dumps(signing))
+          (private/'google-services.json').write_text(json.dumps(google))
+          for p in private.iterdir():p.chmod(0o600)
+          with open(os.environ['GITHUB_ENV'],'a') as out:
+           out.write('PASSWAY_KEYSTORE_PATH='+str(private/'upload.jks')+'\n')
+           out.write('PASSWAY_SIGNING_JSON='+str(private/'signing.json')+'\n')
+           out.write('GOOGLE_SERVICES_JSON='+str(private/'google-services.json')+'\n')
+          PYTHON
+      - name: Install pinned dependencies and run application regression
+        working-directory: validation-source/passway-app
+        run: |
+          npm ci
+          npm ci --prefix functions
+          npm run test:mobile
+          npm run typecheck
+          npm run typecheck --prefix functions
+          npx --no-install expo prebuild --platform android --clean --no-install
+      - name: Configure the existing upload signer without persisting passwords in build files
+        run: |
+          cat >> validation-source/passway-app/android/app/build.gradle <<'GRADLE'
+          def passwaySigning = new groovy.json.JsonSlurper().parse(new File(System.getenv('PASSWAY_SIGNING_JSON')))
+          android {
+            signingConfigs {
+              passwayStore {
+                storeFile file(System.getenv('PASSWAY_KEYSTORE_PATH'))
+                storePassword passwaySigning.keystorePassword
+                keyAlias passwaySigning.keyAlias
+                keyPassword passwaySigning.keyPassword
+              }
+            }
+            buildTypes { release { signingConfig signingConfigs.passwayStore } }
+          }
+          GRADLE
+      - name: Compile hardened signed store bundle on enterprise runner
+        working-directory: validation-source/passway-app/android
+        run: |
+          chmod +x gradlew
+          ./gradlew :app:bundleRelease --no-build-cache --no-configuration-cache --max-workers=2 -Dorg.gradle.jvmargs='-Xmx4g -XX:MaxMetaspaceSize=1g'
+          ./gradlew --stop
+          cp app/build/outputs/bundle/release/app-release.aab ../../../signed-results/passway-v6.aab
+      - name: Verify signer and compiled native security settings
+        run: |
+          curl --fail --location --max-time 120 -o "$RUNNER_TEMP/bundletool.jar" https://github.com/google/bundletool/releases/download/1.18.3/bundletool-all-1.18.3.jar
+          echo "a099cfa1543f55593bc2ed16a70a7c67fe54b1747bb7301f37fdfd6d91028e29  $RUNNER_TEMP/bundletool.jar" | sha256sum -c -
+          jarsigner -verify signed-results/passway-v6.aab
+          keytool -printcert -jarfile signed-results/passway-v6.aab -rfc | openssl x509 -noout -fingerprint -sha256 > signed-results/upload-signer.txt
+          grep -Fq '98:15:DF:C7:D9:03:55:59:F2:18:9C:B0:0C:06:1D:F7:22:B8:DB:E8:8B:09:2F:62:79:DE:78:2A:3F:FE:3A:CC' signed-results/upload-signer.txt
+          java -jar "$RUNNER_TEMP/bundletool.jar" validate --bundle=signed-results/passway-v6.aab > signed-results/bundle-validation.txt
+          java -jar "$RUNNER_TEMP/bundletool.jar" dump manifest --bundle=signed-results/passway-v6.aab > signed-results/AndroidManifest.xml
+          python3 - <<'PYTHON'
+          import xml.etree.ElementTree as E,pathlib
+          root=E.parse('signed-results/AndroidManifest.xml').getroot()
+          a='{http://schemas.android.com/apk/res/android}';app=root.find('application')
+          assert root.attrib['package']=='com.passway.app'
+          assert root.attrib[a+'versionCode']=='6'
+          assert app.attrib.get(a+'debuggable','false')=='false'
+          assert app.attrib.get(a+'allowBackup')=='false'
+          assert app.attrib.get(a+'usesCleartextTraffic','false')=='false'
+          assert a+'dataExtractionRules' in app.attrib and a+'fullBackupContent' in app.attrib
+          permissions={n.attrib[a+'name'] for n in root.findall('uses-permission')}
+          assert not permissions & {'android.permission.SYSTEM_ALERT_WINDOW','android.permission.READ_EXTERNAL_STORAGE','android.permission.WRITE_EXTERNAL_STORAGE','android.permission.READ_SMS','android.permission.READ_CONTACTS'}
+          assert 'FirebaseAppCheckRegistrar' in pathlib.Path('signed-results/AndroidManifest.xml').read_text()
+          print('Compiled release security assertions passed.')
+          PYTHON
+          sha256sum signed-results/passway-v6.aab > signed-results/artifact.sha256
+          echo 'Signed internal-testing artifact only. No Play installation, positive attestation, real SMS, backend cutover or public rollout is claimed.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Remove ephemeral signing material
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/passway-private"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: success()
+        with:
+          name: passway-signed-v6
+          path: signed-results
+          retention-days: 3
+          if-no-files-found: error

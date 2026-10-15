@@ -1,7 +1,7 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "ab2c73f52d2ee0436fc4701287b3df45e8361f65",
-  "archiveSha256": "74a28bda7b4b52e84efd166166a01e59fd136767b2d661cbfcfcdfbcbe2a38af",
-  "createdAt": "2026-10-15T14:35:49.472362+00:00",
-  "scope": "Exact tracked source; current backend phone-hold fix and fail-closed deployment boundary tests. Not store installation or real SMS proof."
+  "sourceCommit": "0616943a11f570e1ac7f715d8b6d92710e1fb4b0",
+  "archiveSha256": "b741946795161e650f7783f0b33ebc79cdd833f6a8da2607183f2f09fdd59c24",
+  "createdAt": "2026-10-15T14:57:00.515312+00:00",
+  "scope": "Exact tracked hardened Android versionCode 6 and current backend policy fixes. No runtime diagnostic overlays in signed-release mode."
 }
