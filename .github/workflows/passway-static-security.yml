@@ -2,7 +2,7 @@ name: Passway exact-source static security analysis
 on:
   workflow_dispatch:
   push:
-    branches: [validation/message-transit-expiry]
+    branches: [validation/message-transit-expiry, validation/block-boundary]
     paths: ['.github/workflows/passway-static-security.yml']
 permissions:
   contents: read
