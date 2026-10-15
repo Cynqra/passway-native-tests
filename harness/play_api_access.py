@@ -1,5 +1,6 @@
 """Keyless Play capability check. No upload, track mutation, or release commit."""
 import argparse
+import base64
 import json
 import os
 import re
@@ -124,6 +125,19 @@ def access_token(env, send=request):
         oidc_url,
         headers={"Authorization": "Bearer " + env["ACTIONS_ID_TOKEN_REQUEST_TOKEN"]},
     )
+    if env.get("PASSWAY_OIDC_DIAGNOSTICS") == "1":
+        # Public identity metadata only; never log the JWT/signature or arbitrary claims.
+        # Decoding here is diagnostic, NOT signature validation; Google STS validates it.
+        try:
+            part = required_token(oidc, "value").split(".")[1]
+            metadata = json.loads(base64.urlsafe_b64decode(part + "=" * (-len(part) % 4)))
+            allowed = (
+                "iss", "sub", "aud", "repository", "repository_id",
+                "repository_owner_id", "ref", "workflow_ref", "environment",
+            )
+            print(json.dumps({"githubOidcIdentity": {k: metadata.get(k) for k in allowed}}))
+        except (ValueError, IndexError, TypeError):
+            raise SafeError("OIDC identity metadata could not be decoded") from None
     sts = send(
         "https://sts.googleapis.com/v1/token",
         method="POST",

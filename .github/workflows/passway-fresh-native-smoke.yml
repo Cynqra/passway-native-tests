@@ -295,6 +295,8 @@ jobs:
       - name: Test keyless authentication and cleanup boundaries
         run: python3 -m unittest discover -s harness/tests -p 'test_play_api_access.py' -v
       - name: Verify keyless Play access without uploading or changing a release
+        env:
+          PASSWAY_OIDC_DIAGNOSTICS: '1'
         run: python3 harness/play_api_access.py --output play-api-access.json
       - name: Upload sanitized access evidence only
         if: always()
