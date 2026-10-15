@@ -1,7 +1,7 @@
 {
-  "candidate": "push-loop-and-android-keyboard-layout-fix",
+  "candidate": "startup-recovery-push-loop-keyboard-fix",
   "base_aab_sha256": "061364fabf74c8b4433b16a85f81aa3146fc46e7f447d98224f87be302d41088",
-  "bundle_sha256": "66fa0c07aa758bff13bdbea8c58c131293a0dfbe9d4a0067e5f5750f8dc870c5",
+  "bundle_sha256": "f71db0d185602b981affd104b4cff947cec2cb0067e806059676f193652d32b8",
   "hermes_version": 98,
   "source_base_git": "13d49546e90822c71471db4808e1ff290b9b5441",
   "source_provenance": "Clean ui/android-modernization source branch plus reviewed push-loop and Android keyboard-layout fixes; source_fix_git records exact source. Original build-4 native libraries/manifest retained. Test JavaScript replaced and APK debug re-signed; not an EAS/Play production release.",
@@ -12,7 +12,7 @@
     "EXPO_PUBLIC_APP_CHECK": "off",
     "EXPO_PUBLIC_API_URL": "https://passway-api.vercel.app"
   },
-  "regression_tests": 13,
+  "regression_tests": 27,
   "source_sha256": {
     "src/components/Avatar.tsx": "6bd314cb13470e29ddee315430cac86fc6a5ca8e127e1a7cdb8c25c2212bde85",
     "src/components/BottomNav.tsx": "c9a833abe2f8b5d6c4e11e501dca3a63bbc660ca3223a962a488b793ccd33af5",
@@ -57,7 +57,7 @@
     "src/firebase/web/firestore.ts": "5e467ac416799dba22eb9f3a8f84997c984ca1a0c34bb6712c2a9dd03c9d0f05",
     "src/firebase/web/functions.ts": "667108130e25040ec6fa4fe5fe7568c153613b5f2d2bc2ee023b4ddf61bfc929",
     "src/hooks/useReducedMotion.ts": "2bf24b05894cf9c6f5010df6bd014f1fb6850ccf83b9798f0184a41ba8838840",
-    "src/navigation/RootNavigator.tsx": "6443a812dac66ab045737636e8c68ef836ed07b21c087127a2c5e843f3b144eb",
+    "src/navigation/RootNavigator.tsx": "a0b6a088544654ccfb9e166cfbf0f7db542310aac0ba9b278c7cd546677b842f",
     "src/navigation/types.ts": "c46247f2557acd726e19c0aec265a3d836ab560e499723ae0b2b8199661dbcef",
     "src/services/diagnostics.ts": "2cb5b1fbcf0bda40545977734f9bc6ec4865279aa9eb7bdce5c16b8fe23fd172",
     "src/services/errors.ts": "852e406c80d5444fc4e3f3d528fc4021eaed6949ca82895c57e839b9a8e18dc3",
@@ -71,11 +71,12 @@
     "src/types/models.ts": "710f92bcaf64a05d280cb5d328bc7b88559727bbf02fa913cf0a2c9ceb5c9442",
     "App.tsx": "55bf7b1497272df5d70732f0d10556969a0e2da57360bc10a8c4afffad979934",
     "index.ts": "3cc816440c81db1b45a7d796c25ee6b45e19cfa2d64f1f934e42b1384c82d90b",
-    "package.json": "a60a9adb6cacf3e6a8e352aac1abc6989860832b607e98b819e3b125202472c1",
+    "package.json": "79c16df23b86837d6cc901c15dedf20a445f0d407cfb2c6d8d7b869199efee1d",
     "package-lock.json": "c094fe7badc116eee982fd3f5bd3b14faad016abb877e17143ed385d90a0b3b8",
     "app.config.ts": "22581cd3a2c69ab2b208c16afcdd19afac21147ae81386268e15cd11363266a4",
-    "metro.config.js": "c49f96b6c772e408b8754240125e05f1123cebb4625d8f482093aaa9beeb4f0b"
+    "metro.config.js": "c49f96b6c772e408b8754240125e05f1123cebb4625d8f482093aaa9beeb4f0b",
+    "test/startup-recovery.test.cjs": "97be2947e9fa5cf18a049670e3d112d92705c36b1c2b12c1ab8f8766a95bd7bf"
   },
   "build_cache": "Metro cleared; diagnostic no-SMS branch inspected in compiled Hermes bytecode",
-  "source_fix_git": "9b4cd30f6ce283566fd5f750ea254958d6caee5c"
+  "source_fix_git": "c69ce29d03561797c891609036b02fdeb03c777b"
 }

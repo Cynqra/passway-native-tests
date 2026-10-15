@@ -1,4 +1,4 @@
-name: Passway Android 16 keyboard-layout E2E
+name: Passway Android 16 startup-recovery E2E
 on:
   workflow_dispatch:
 permissions:
@@ -86,7 +86,7 @@ jobs:
           import pathlib,json,os
           p=pathlib.Path('native-results/results.json');rows=json.loads(p.read_text()) if p.exists() else []
           with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
-            f.write('# Passway native Android E2E\n\nBuild-4 native base with regression-tested push-loop and keyboard-layout JavaScript candidate, debug re-signed test APK, Android 16 KVM emulator, two isolated Android users, real backend and fictional Firebase OTP. Core system animations disabled; post-flow navigation smoke enables animations. Composer and send-button occlusion checked from native IME window bounds. No real 2Factor SMS or Oppo certification.\n\n')
+            f.write('# Passway native Android E2E\n\nBuild-4 native base with regression-tested startup-recovery, push-loop and keyboard-layout JavaScript candidate, debug re-signed test APK, Android 16 KVM emulator, two isolated Android users, real backend and fictional Firebase OTP. Core system animations disabled; post-flow navigation smoke enables animations. Composer and send-button occlusion checked from native IME window bounds. No real 2Factor SMS or Oppo certification.\n\n')
             for row in rows:f.write('- **'+row['status']+'** '+row['test']+': '+row.get('detail','')+'\n')
             f.write('\n**Native critical flow PASSED**\n' if pathlib.Path('native-results/complete.json').exists() else '\n**Native E2E NOT PASSED**\n')
           PY

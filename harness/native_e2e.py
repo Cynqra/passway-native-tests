@@ -167,6 +167,31 @@ try:
   time.sleep(1)
  else:raise AssertionError('Native relaunch did not reach authenticated UI within 30 seconds')
  snap('native-relaunch');record('Native session survives relaunch','PASS','Authenticated screen ready after '+str(round(time.monotonic()-start,2))+' seconds; no fixed three-second assumption')
+ # Disable the emulator's actual network, then verify bounded startup recovery.
+ wifi_before=shell('settings','get','global','wifi_on').strip()
+ data_before=shell('settings','get','global','mobile_data').strip()
+ try:
+  shell('svc','wifi','disable');shell('svc','data','disable')
+  until=time.monotonic()+30
+  while time.monotonic()<until:
+   network=shell('dumpsys','connectivity')
+   if re.search(r'Active default network:\s*(?:none|null|-1)',network,re.I):break
+   time.sleep(1)
+  (ROOT/'offline-connectivity.txt').write_text(network)
+  check('Emulator has no active default network',bool(re.search(r'Active default network:\s*(?:none|null|-1)',network,re.I)),'Wi-Fi and mobile data disabled on test emulator only')
+  shell('am','force-stop',PKG);offline_start=time.monotonic();shell('am','start','-W','-n',PKG+'/.MainActivity')
+  waitfor('startup-error',45);check('Native offline startup offers Retry',find('startup-retry') is not None,'Recovery UI reached after '+str(round(time.monotonic()-offline_start,2))+' seconds; SDK errors may surface before the 20-second watchdog')
+  snap('native-offline-startup-recovery')
+ finally:
+  if wifi_before not in ['0','null']:shell('svc','wifi','enable')
+  if data_before not in ['0','null']:shell('svc','data','enable')
+ until=time.monotonic()+60
+ while time.monotonic()<until:
+  network=shell('dumpsys','connectivity')
+  if re.search(r'Active default network:\s*\d+',network):break
+  time.sleep(1)
+ check('Emulator network restored',bool(re.search(r'Active default network:\s*\d+',network)))
+ tap('startup-retry');ready_generate();snap('native-startup-retry-restored');record('Native startup Retry recovers authenticated UI','PASS','Real network restoration; no fictional-number reauthentication required')
  # Functional navigation with Android animations enabled, not a physical FPS benchmark.
  for key in ['window_animation_scale','transition_animation_scale','animator_duration_scale']:shell('settings','put','global',key,'1')
  check('Android animations enabled for navigation smoke',all(shell('settings','get','global',key).strip() in ['1','1.0'] for key in ['window_animation_scale','transition_animation_scale','animator_duration_scale']))
@@ -183,7 +208,7 @@ try:
  check('Native permission requests remain bounded',permission_launches<=10,'Permission activity launches captured: '+str(permission_launches)+'; prior build captured hundreds')
  check('No Passway Java fatal exception captured',re.search(r'AndroidRuntime.*Process: com\.passway\.app[,\s]',logs) is None,'Captured-log check, not a long-duration or physical-device certification')
  check('No Passway ANR captured during this flow','ANR in com.passway.app' not in logs,'Not an Oppo physical-device or long-duration stability certification')
- (ROOT/'complete.json').write_text(json.dumps({'status':'passed','android_sdk':shell('getprop','ro.build.version.sdk').strip(),'coverage':'Push-loop and Android keyboard-layout JavaScript candidate on build-4 native base, two isolated Android users, one KVM emulator; real backend; fictional Firebase OTP; keyboard and send-button occlusion checked from native window bounds; no real 2Factor SMS; not an Oppo physical-device certification'},indent=2))
+ (ROOT/'complete.json').write_text(json.dumps({'status':'passed','android_sdk':shell('getprop','ro.build.version.sdk').strip(),'coverage':'Startup-recovery, push-loop and Android keyboard-layout JavaScript candidate on build-4 native base, two isolated Android users, one KVM emulator; real backend; fictional Firebase OTP; keyboard and send-button occlusion checked from native window bounds; no real 2Factor SMS; not an Oppo physical-device certification'},indent=2))
 except Exception as e:
  record('Native end-to-end run','FAIL',str(e));traceback.print_exc()
  try:snap('failure')
