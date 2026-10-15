@@ -1,6 +1,7 @@
 // No Firebase Admin key is needed or accepted. Both Admin services are local.
 const http=require('node:http'),path=require('node:path');
 if(process.env.GCLOUD_PROJECT!=='demo-passway'||process.env.FIRESTORE_EMULATOR_HOST!=='127.0.0.1:8080'||process.env.FIREBASE_AUTH_EMULATOR_HOST!=='127.0.0.1:9099'||process.env.GOOGLE_APPLICATION_CREDENTIALS||process.env.FIREBASE_SERVICE_ACCOUNT)throw Error('Strict emulator isolation guard failed');
+process.env.METADATA_SERVER_DETECTION='none';
 process.env.ENFORCE_APP_CHECK='false';process.env.MODERATION_PROVIDER='rules';
 const {handleCallable}=require(path.resolve('validation-source/passway-app/functions/lib/http/server.js'));
 const allowed=new Set(['generateTid','redeemTid','deactivateTid','respondToRequest','sendMessage','getMessages','blockUser','fileReport','endConnection','confirmAge','deleteAccount']);

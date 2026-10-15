@@ -18,4 +18,16 @@ class IsolatedNativeTests(unittest.TestCase):
    finally:os.chdir(cwd)
    code=(app/'src/firebase/client.ts').read_text();self.assertIn("app.options.projectId !== 'demo-passway'",code);self.assertIn('10.0.2.2:9099',code);self.assertIn("'10.0.2.2', 8080",code)
    provenance=json.loads((root/'native-results/overlay-provenance.json').read_text());self.assertNotEqual(provenance['client_before_sha256'],provenance['client_after_sha256']);self.assertEqual(provenance['project'],'demo-passway');self.assertEqual(json.loads((app/'google-services.json').read_text())['project_info']['project_id'],'demo-passway')
+class ReadinessDeadlineTests(unittest.TestCase):
+ def test_unavailable_service_is_bounded(self):
+  import importlib.util,time
+  spec=importlib.util.spec_from_file_location('isolated_readiness',ROOT/'harness/wait_isolated_services.py');module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+  started=time.monotonic()
+  with patch.object(module.urllib.request,'urlopen',side_effect=TimeoutError('synthetic stall')):
+   with self.assertRaises(TimeoutError):module.wait_ready('api',seconds=.03)
+  self.assertLess(time.monotonic()-started,.5)
+ def test_unknown_service_group_cannot_target_real_hosts(self):
+  import importlib.util
+  spec=importlib.util.spec_from_file_location('isolated_readiness',ROOT/'harness/wait_isolated_services.py');module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+  with self.assertRaises(ValueError):module.wait_ready('production')
 if __name__=='__main__':unittest.main()

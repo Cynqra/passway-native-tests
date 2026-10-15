@@ -24,15 +24,25 @@ jobs:
       MODERATION_PROVIDER: rules
       PASSWAY_RESULTS: ${{ github.workspace }}/native-results
       JAVA_TOOL_OPTIONS: -Xmx768m
+      METADATA_SERVER_DETECTION: none
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
+      - name: Verify and unpack immutable candidate source before cache lookup
+        run: |
+          set -eu
+          sha256sum -c validation/architecture-source.sha256
+          mkdir validation-source native-results
+          tar -xzf validation/architecture-source.tar.gz -C validation-source
+          cp validation/architecture-provenance.json native-results/source-provenance.json
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '22'
           cache: npm
-          cache-dependency-path: validation/architecture-source.sha256
+          cache-dependency-path: |
+            validation-source/passway-app/package-lock.json
+            validation-source/passway-app/functions/package-lock.json
       - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
         with:
           distribution: temurin
@@ -47,10 +57,6 @@ jobs:
       - name: Verify source and apply explicit emulator-only test overlay
         run: |
           set -eu
-          sha256sum -c validation/architecture-source.sha256
-          mkdir validation-source native-results
-          tar -xzf validation/architecture-source.tar.gz -C validation-source
-          cp validation/architecture-provenance.json native-results/source-provenance.json
           python3 harness/prepare_isolated_native.py
           sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost /opt/hostedtoolcache/CodeQL
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -66,6 +72,20 @@ jobs:
           npm run typecheck --prefix functions
           npm run build --prefix functions
           npx --no-install expo prebuild --platform android --clean --no-install
+      - name: Preinstall pinned Firebase CLI before starting services
+        timeout-minutes: 4
+        run: npx --yes firebase-tools@15.32.1 --version
+      - name: Start isolated Firebase services and original candidate HTTP handlers
+        timeout-minutes: 5
+        run: |
+          set -eu
+          trap 'tail -n 70 native-results/firebase-emulators.log; tail -n 40 native-results/isolated-api.log 2>/dev/null || true' ERR
+          cd validation-source/passway-app
+          nohup npx --yes firebase-tools@15.32.1 emulators:start --only auth,firestore --project demo-passway > ../../native-results/firebase-emulators.log 2>&1 &
+          cd ../..
+          python3 harness/wait_isolated_services.py services
+          nohup node harness/isolated_api.cjs > native-results/isolated-api.log 2>&1 &
+          python3 harness/wait_isolated_services.py api
       - name: Compile fresh native release APK with local diagnostic signing
         working-directory: validation-source/passway-app/android
         run: |
@@ -73,20 +93,8 @@ jobs:
           ./gradlew :app:assembleRelease --build-cache -PreactNativeArchitectures=x86_64 --max-workers=2 -Dorg.gradle.jvmargs='-Xmx4g -XX:MaxMetaspaceSize=1g' --stacktrace
           ./gradlew --stop
           sha256sum app/build/outputs/apk/release/*.apk > ../../../native-results/apk-sha256.txt
-      - name: Start isolated Firebase services and original candidate HTTP handlers
+      - name: Build native UI probe without historical patch scripts
         run: |
-          set -eu
-          cd validation-source/passway-app
-          nohup npx --yes firebase-tools@15.32.1 emulators:start --only auth,firestore --project demo-passway > ../../native-results/firebase-emulators.log 2>&1 &
-          cd ../..
-          for i in $(seq 1 90); do
-            if curl --silent --fail http://127.0.0.1:9099/emulator/v1/projects/demo-passway/verificationCodes > /dev/null && curl --silent --output /dev/null http://127.0.0.1:8080/; then break; fi
-            sleep 2
-          done
-          curl --silent --fail http://127.0.0.1:9099/emulator/v1/projects/demo-passway/verificationCodes > /dev/null
-          nohup node harness/isolated_api.cjs > native-results/isolated-api.log 2>&1 &
-          for i in $(seq 1 20); do if curl --silent --fail http://127.0.0.1:8787/healthz; then break; fi; sleep 1; done
-          curl --silent --fail http://127.0.0.1:8787/healthz
           keytool -genkeypair -keystore debug.keystore -storepass android -keypass android -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 30 -dname 'CN=Passway Isolated Test,O=Internal Test,C=IN'
           bash harness/probe/build_isolated.sh
       - name: Exercise current-source native UI with two isolated Android users
@@ -114,6 +122,8 @@ jobs:
       - name: Record exact scope and fresh success marker
         if: always()
         run: |
+          tail -n 70 native-results/firebase-emulators.log 2>/dev/null || true
+          tail -n 40 native-results/isolated-api.log 2>/dev/null || true
           echo '# Current-source isolated native two-user E2E' >> "$GITHUB_STEP_SUMMARY"
           cat validation/architecture-provenance.json >> "$GITHUB_STEP_SUMMARY"
           echo 'Test-only emulator routing/cleartext overlay; demo-passway Auth and Firestore; original candidate HTTP handlers. No production service, SMS, attestation or physical-device proof. No live patches or implicit reruns.' >> "$GITHUB_STEP_SUMMARY"
