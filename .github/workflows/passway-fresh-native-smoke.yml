@@ -33,7 +33,8 @@ jobs:
       - name: Restore trusted Gradle dependency and build caches
         uses: gradle/actions/setup-gradle@48b5f213c81028ace310571dc5ec0fbbca0b2947
         with:
-          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+          # This workflow is manually dispatched in the owning repository; fork PRs cannot populate caches.
+          cache-read-only: ${{ github.event_name != 'workflow_dispatch' }}
       - name: Native harness unit tests
         run: python3 -m unittest discover -s harness/tests -v
       - name: Verify source and generate synthetic demo-only Firebase config
