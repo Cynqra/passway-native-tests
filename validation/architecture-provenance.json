@@ -1,8 +1,8 @@
 {
   "source_repo": "naveenbharti310/Paasway",
-  "source_commit": "822b0a15299a539e4c8e6850817a2416f703fa26",
-  "archive_sha256": "7de876012e8a93f03ef91daace0a3f11ee75385603be20e866f9499837ebf7db",
-  "application_tree": "f94ec740fc96e39adc60cb41cab45f6fa0a4eb28",
+  "source_commit": "e5624c49f35d168f49a813ec16ef92b3bfc83a20",
+  "archive_sha256": "4d4b19d93555c5ec8598e72d5942cc3a5b4786d68529d536b422cfda73ce7c43",
+  "application_tree": "9de5060a5ec15f2146d136bc60deffe2d14bffc6",
   "native_application_source": "822b0a15299a539e4c8e6850817a2416f703fa26",
-  "scope": "Client message-transit expiry candidate; not deployed; no current native E2E proof"
+  "scope": "Backend person-level block fix; unchanged native client; no deployment or production E2E claim"
 }
