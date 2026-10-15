@@ -113,8 +113,13 @@ jobs:
           disable-spellchecker: true
           emulator-boot-timeout: 480
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot -camera-back none -camera-front none -skin 540x1200 -memory 3072
-          pre-emulator-launch-script: python3 harness/configure_avd.py
+          pre-emulator-launch-script: PASSWAY_AVD_NAME=passway-isolated python3 harness/configure_avd.py
           script: |
+            set -eu
+            adb shell wm size | tee native-results/display-size.txt
+            adb shell wm density | tee native-results/display-density.txt
+            grep -qx "Physical size: 540x1200" native-results/display-size.txt
+            grep -qx "Physical density: 220" native-results/display-density.txt
             adb install --no-incremental -r validation-source/passway-app/android/app/build/outputs/apk/release/app-release.apk
             adb install --no-incremental -r harness/probe/probe.apk
             adb logcat -c
