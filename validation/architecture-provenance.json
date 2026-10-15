@@ -1,6 +1,6 @@
 {
   "source_repo": "naveenbharti310/Paasway",
-  "source_commit": "076bda388ee98c82b17b0b7e1aaf1a3ef876929b",
-  "archive_sha256": "09866362c9fa68a72d805edbc5d7e059383f320f1f4f796453e6b08964f1b41e",
-  "scope": "secret-free exact deep-audit source; demo-passway emulator; no deployment or SMS"
+  "source_commit": "4e46a19f5a6f075ed300ebcc57d33e6ec11885fc",
+  "archive_sha256": "63b1561afbcef5bf60f45e6888f11edc75f4e57d34c8ad97133c96222b799b03",
+  "scope": "exact release-boundary source; emulator regressions and separate synthetic-config native smoke; no deployment or SMS"
 }
