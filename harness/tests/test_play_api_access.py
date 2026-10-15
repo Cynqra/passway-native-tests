@@ -107,6 +107,23 @@ class PlayAccessTests(unittest.TestCase):
         with self.assertRaises(m.SafeError):
             m.NoRedirect().redirect_request(None, None, 302, "", {}, "https://evil.example")
 
+    def test_error_diagnostics_classify_without_echoing_response_or_tokens(self):
+        error = m.safe_http_error(
+            "https://sts.googleapis.com/v1/token", 400,
+            '{"error":"invalid_grant","error_description":"The given credential is rejected by the attribute condition. secret-token-example"}',
+        )
+        self.assertIn("Google federation exchange", str(error))
+        self.assertIn("trust condition", str(error))
+        self.assertNotIn("secret-token-example", str(error))
+
+    def test_untrusted_error_fields_are_not_logged(self):
+        error = m.safe_http_error(
+            "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/test:generateAccessToken",
+            403, '{"error":{"status":"SECRET-WITH-HYPHENS","message":"private-response"}}',
+        )
+        self.assertNotIn("SECRET-WITH-HYPHENS", str(error))
+        self.assertNotIn("private-response", str(error))
+
 
 if __name__ == "__main__":
     unittest.main()

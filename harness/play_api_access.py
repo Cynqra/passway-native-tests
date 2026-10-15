@@ -2,6 +2,7 @@
 import argparse
 import json
 import os
+import re
 from pathlib import Path
 import urllib.error
 import urllib.parse
@@ -29,6 +30,37 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
         raise SafeError("Unexpected redirect rejected")
 
 
+def safe_http_error(url, code, raw):
+    host = urllib.parse.urlsplit(url).hostname
+    operation = {
+        "sts.googleapis.com": "Google federation exchange",
+        "iamcredentials.googleapis.com": "Service-account delegation",
+        "androidpublisher.googleapis.com": "Play capability check",
+    }.get(host, "GitHub OIDC request")
+    reason = ""
+    try:
+        data = json.loads(raw)
+        value = data.get("error", "")
+        enum = value.get("status", "") if isinstance(value, dict) else value
+        if isinstance(enum, str) and re.fullmatch(r"[A-Za-z_]{1,48}", enum):
+            reason = "; " + enum
+        description = str(data.get("error_description", "")).lower()
+        for marker, classification in (
+            ("attribute condition", "identity rejected by trust condition"),
+            ("audience", "audience configuration rejected"),
+            ("invalid json payload", "request schema rejected"),
+            ("disabled", "provider or API disabled"),
+            ("not found", "identity configuration not found"),
+            ("subject token", "subject-token validation failed"),
+        ):
+            if marker in description:
+                reason += "; " + classification
+                break
+    except (ValueError, TypeError, AttributeError):
+        pass
+    return SafeError(f"{operation} rejected request (HTTP {code}{reason})")
+
+
 def request(url, method="GET", headers=None, body=None):
     data = json.dumps(body).encode() if body is not None else None
     hdr = dict(headers or {})
@@ -42,7 +74,7 @@ def request(url, method="GET", headers=None, body=None):
                 raise SafeError("Response exceeded size limit")
             return json.loads(raw) if raw else {}
     except urllib.error.HTTPError as exc:
-        raise SafeError(f"Google/GitHub API rejected request (HTTP {exc.code})") from None
+        raise safe_http_error(url, exc.code, exc.read(65536)) from None
     except (urllib.error.URLError, TimeoutError, ValueError):
         raise SafeError("API transport or JSON validation failed") from None
 
