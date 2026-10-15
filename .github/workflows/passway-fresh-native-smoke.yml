@@ -233,20 +233,8 @@ jobs:
           npx --no-install expo prebuild --platform android --clean --no-install
       - name: Configure the existing upload signer without persisting passwords in build files
         run: |
-          cat >> validation-source/passway-app/android/app/build.gradle <<'GRADLE'
-          def passwaySigning = new groovy.json.JsonSlurper().parse(new File(System.getenv('PASSWAY_SIGNING_JSON')))
-          android {
-            signingConfigs {
-              passwayStore {
-                storeFile file(System.getenv('PASSWAY_KEYSTORE_PATH'))
-                storePassword passwaySigning.keystorePassword
-                keyAlias passwaySigning.keyAlias
-                keyPassword passwaySigning.keyPassword
-              }
-            }
-            buildTypes { release { signingConfig signingConfigs.passwayStore } }
-          }
-          GRADLE
+          python3 -m unittest discover -s harness/tests -p test_signed_build.py -v
+          python3 harness/configure_store_signing.py validation-source/passway-app/android/app/build.gradle
       - name: Compile hardened signed store bundle on enterprise runner
         working-directory: validation-source/passway-app/android
         run: |
