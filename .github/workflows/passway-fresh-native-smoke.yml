@@ -13,7 +13,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: passway-isolated-native-e2e
+  group: passway-native-${{ inputs.mode || 'isolated-native' }}
   cancel-in-progress: false
 jobs:
   isolated-native:
