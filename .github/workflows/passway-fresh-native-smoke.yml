@@ -9,6 +9,7 @@ on:
         type: choice
         options:
           - isolated-native
+          - isolated-extended
           - signed-release
           - play-api-check
 permissions:
@@ -18,9 +19,9 @@ concurrency:
   cancel-in-progress: false
 jobs:
   isolated-native:
-    if: ${{ inputs.mode == 'isolated-native' || inputs.mode == '' }}
+    if: ${{ inputs.mode == 'isolated-native' || inputs.mode == 'isolated-extended' || inputs.mode == '' }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 40
+    timeout-minutes: 45
     env:
       CI: '1'
       EAS_BUILD_PROFILE: play-diagnostics
@@ -36,6 +37,7 @@ jobs:
       PASSWAY_RESULTS: ${{ github.workspace }}/native-results
       JAVA_TOOL_OPTIONS: -Xmx768m
       METADATA_SERVER_DETECTION: none
+      PASSWAY_NATIVE_EXTENDED: ${{ inputs.mode == 'isolated-extended' && '1' || '0' }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:

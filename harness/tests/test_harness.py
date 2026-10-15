@@ -68,4 +68,16 @@ class HarnessTests(unittest.TestCase):
   with d.deadline(0):
    t=threading.Thread(target=lambda:values.append(d.remaining_timeout(45)));t.start();t.join()
   self.assertEqual(values,[45])
+ def test_standard_isolated_run_keeps_one_bounded_attempt(self):
+  c=load('isolated_coordinator')
+  with patch.dict('os.environ',{'PASSWAY_NATIVE_EXTENDED':'0'}),patch.object(c.subprocess,'run',return_value=types.SimpleNamespace(returncode=1)) as run:
+   self.assertEqual(c.main(),1);self.assertEqual(run.call_count,1)
+   self.assertEqual(run.call_args.kwargs['timeout'],900)
+ def test_extended_run_requires_its_own_fresh_success_marker(self):
+  c=load('isolated_coordinator');(self.root/'extended-complete.json').write_text('{}')
+  def finish(*a,**k):(self.root/'complete.json').write_text('{}');return types.SimpleNamespace(returncode=0)
+  with patch.dict('os.environ',{'PASSWAY_NATIVE_EXTENDED':'1'}),patch.object(c.subprocess,'run',side_effect=finish) as run:
+   self.assertEqual(c.main(),1);self.assertEqual(run.call_count,1)
+   self.assertEqual(run.call_args.kwargs['timeout'],1500)
+  self.assertFalse((self.root/'extended-complete.json').exists())
 if __name__=='__main__':unittest.main()

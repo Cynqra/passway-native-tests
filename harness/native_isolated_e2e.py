@@ -63,6 +63,9 @@ def ready_generate():
   t=dump()
   if find('name-input',t) is not None and find('generate',t) is not None:return
   if find('age-day',t) is not None:
+   check('Native age disclosure explains retained eligibility date',
+         'We store your eligibility result.' in texts(t) and 'we also keep the date you turn 18.' in texts(t))
+   snap('native-age-disclosure')
    fill('age-day','01');fill('age-month','01');fill('age-year','1990');hide_keyboard();tap('age-continue')
   elif find('new-connection',t) is not None:tap('new-connection')
   elif find('chat-back',t) is not None:tap('chat-back')
@@ -227,6 +230,9 @@ try:
   tap('open-chats');waitfor('new-connection');tap('You');waitfor('settings-name');snap('motion-settings-'+str(cycle));tap('Connect');waitfor('name-input')
  (ROOT/'animations-enabled-gfxinfo.txt').write_text(shell('dumpsys','gfxinfo',PKG))
  record('Native animations-enabled navigation smoke','PASS','Two chats/settings/connect cycles with scales at 1; no physical-device animation quality or FPS certification')
+ if os.environ.get('PASSWAY_NATIVE_EXTENDED')=='1':
+  from native_extended_journeys import run as run_extended
+  run_extended(globals(),peer)
  logs=adb('logcat','-d');(ROOT/'app-logcat.txt').write_text(logs)
  app_uids=[]
  for uid in [0,peer]:

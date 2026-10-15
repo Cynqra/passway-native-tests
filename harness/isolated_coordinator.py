@@ -6,15 +6,20 @@ def main():
  ROOT.mkdir(exist_ok=True, parents=True)
  # A stale success marker must never turn a later run into a pass.
  (ROOT/'complete.json').unlink(missing_ok=True)
+ (ROOT/'extended-complete.json').unlink(missing_ok=True)
  os.environ['PASSWAY_ATTEMPT']='1'
  started=time.monotonic()
  publish('native_test_started')
  try:
-  code=subprocess.run([sys.executable,'harness/native_isolated_e2e.py'],timeout=900).returncode
+  # Destructive safety journeys reuse the same APK/emulator but add identities
+  # and independently audited transitions. Still one immutable bounded attempt.
+  budget=1500 if os.environ.get('PASSWAY_NATIVE_EXTENDED')=='1' else 900
+  code=subprocess.run([sys.executable,'harness/native_isolated_e2e.py'],timeout=budget).returncode
  except subprocess.TimeoutExpired:
   code=124
  complete=ROOT/'complete.json'
- passed=code==0 and complete.is_file()
+ passed=code==0 and complete.is_file() and (
+  os.environ.get('PASSWAY_NATIVE_EXTENDED')!='1' or (ROOT/'extended-complete.json').is_file())
  details={'exit_code':code,'duration_seconds':round(time.monotonic()-started,2),
           'passed':passed,'scope':'current-source isolated emulators; one attempt; no live patching'}
  (ROOT/'coordinator-result.json').write_text(json.dumps(details,indent=2))
