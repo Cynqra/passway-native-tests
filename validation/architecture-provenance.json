@@ -1,8 +1,8 @@
 {
   "source_repo": "naveenbharti310/Paasway",
-  "source_commit": "fc8d436d6f1896245a06e5f947d0456aaf601fd9",
-  "archive_sha256": "4cab05310a072d39a4d20776e2a5d9ebc10d39ea0798bf862b2c4529b08dfd82",
-  "application_tree": "5852ac692a58ada3f2584ac438043c70044c4b8f",
-  "native_application_source": "4e46a19f5a6f075ed300ebcc57d33e6ec11885fc",
-  "scope": "CI-routing-only source change; app tree unchanged; no deployment or SMS"
+  "source_commit": "822b0a15299a539e4c8e6850817a2416f703fa26",
+  "archive_sha256": "7de876012e8a93f03ef91daace0a3f11ee75385603be20e866f9499837ebf7db",
+  "application_tree": "f94ec740fc96e39adc60cb41cab45f6fa0a4eb28",
+  "native_application_source": "822b0a15299a539e4c8e6850817a2416f703fa26",
+  "scope": "Client message-transit expiry candidate; not deployed; no current native E2E proof"
 }
