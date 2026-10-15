@@ -1,7 +1,7 @@
 {
   "source_repo": "naveenbharti310/Paasway",
-  "source_commit": "76fb4e837005fc09d75304fe181ebd6f9370aff2",
-  "archive_sha256": "e99dfc3bcc8e657aedb78d7e884a4b650c92a8f0c2999e2aad1655e106099cc9",
-  "application_tree": "a14f98a114c2397854fda1b189a26bec0399118a",
-  "scope": "334 local regression tests; current-source native two-user test with explicit test-only local-emulator overlay. No production, SMS or attestation proof."
+  "source_commit": "e73637bab0faec4bd3dd11f13310c6fcc0c35bdf",
+  "archive_sha256": "d8a2a026135430f3b05298ea27efdafb0a36e9c7f35f4aec30fc431af0a8de12",
+  "application_tree": "85f73e5c123e7d61dbcecef7cc6c0995e249d4a3",
+  "scope": "350 local regressions and 37 real-Firebase restricted-preview checks. Native workflow results are scoped to their immutable checked-out snapshot, not later branch updates."
 }
