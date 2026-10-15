@@ -192,6 +192,27 @@ try:
   time.sleep(1)
  check('Emulator network restored',bool(re.search(r'Active default network:\s*\d+',network)))
  tap('startup-retry');ready_generate();snap('native-startup-retry-restored');record('Native startup Retry recovers authenticated UI','PASS','Real network restoration; no fictional-number reauthentication required')
+ # Exercise Sign out from a SECOND offline recovery screen, not just Retry.
+ try:
+  shell('svc','wifi','disable');shell('svc','data','disable')
+  until=time.monotonic()+30
+  while time.monotonic()<until:
+   network=shell('dumpsys','connectivity')
+   if re.search(r'Active default network:\s*(?:none|null|-1)',network,re.I):break
+   time.sleep(1)
+  check('Second offline startup network verified',bool(re.search(r'Active default network:\s*(?:none|null|-1)',network,re.I)))
+  shell('am','force-stop',PKG);shell('am','start','-W','-n',PKG+'/.MainActivity');waitfor('startup-error',45)
+  tap('startup-signout');waitfor('phone-input',30);snap('native-offline-signout');record('Native offline recovery Sign out reaches sign-in','PASS','Actual signed-out UI, not an ignored auth callback')
+ finally:
+  if wifi_before not in ['0','null']:shell('svc','wifi','enable')
+  if data_before not in ['0','null']:shell('svc','data','enable')
+ until=time.monotonic()+60
+ while time.monotonic()<until:
+  network=shell('dumpsys','connectivity')
+  if re.search(r'Active default network:\s*\d+',network):break
+  time.sleep(1)
+ check('Network restored after recovery Sign out',bool(re.search(r'Active default network:\s*\d+',network)))
+ login(0,'9999900001');record('Native sign-in after recovery Sign out','PASS','Official fictional Firebase no-SMS flow')
  # Functional navigation with Android animations enabled, not a physical FPS benchmark.
  for key in ['window_animation_scale','transition_animation_scale','animator_duration_scale']:shell('settings','put','global',key,'1')
  check('Android animations enabled for navigation smoke',all(shell('settings','get','global',key).strip() in ['1','1.0'] for key in ['window_animation_scale','transition_animation_scale','animator_duration_scale']))
