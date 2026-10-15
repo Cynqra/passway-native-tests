@@ -1,1 +1,1 @@
-{"stage": "native_test_started", "at": "2026-10-15T06:01:54Z", "attempt": "1"}
+{"stage": "Android test-location providers seeded", "at": "2026-10-15T06:01:57Z", "attempt": "1", "status": "PASS", "checks": [{"test": "Android test-location providers seeded", "status": "PASS", "detail": "OS test providers; simulated Delhi location, not physical proximity certification", "at": "2026-10-15T06:01:57Z"}]}
