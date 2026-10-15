@@ -1,7 +1,7 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "25fe9d9c18cc5b4a9b18057967e9bc62750cc223",
-  "archiveSha256": "b0095c6174b8de21126a8ac5fcd427193075c187b008b329df054e460e23290e",
-  "createdAt": "2026-10-15T18:31:06.852027+00:00",
-  "scope": "Exact source: restrictive phone-hold fixes plus accurate eligibility-date disclosure. Backend runtime identical to the 41/41 protected live preview at 92e3101. New disclosure not in previously published build 6. No production cutover."
+  "sourceCommit": "9031f254eaf206fb5e1c3a5ca56500d7c94aed88",
+  "archiveSha256": "6877134dc6241e7e904b5fc03ca0b77677a7d64f94b7bfe744f2cd57cabbbf46",
+  "createdAt": "2026-10-15T19:25:28.026573+00:00",
+  "scope": "Exact candidate including native RNFirebase 26 callable error normalization, restrictive phone-hold fixes and accurate age disclosure. No production promotion or store rebuild."
 }
