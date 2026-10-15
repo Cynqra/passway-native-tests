@@ -1,7 +1,7 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "92e3101da25d98d1b07cdfa9bc7eaf8e7d3fa53a",
-  "archiveSha256": "5ac4502c0003d05d91b3bd5e8ea159c95d7e8625d1604a5a193b41aef0ae9c34",
-  "createdAt": "2026-10-15T17:58:27.170278+00:00",
-  "scope": "Exact tracked source: backend phone-restriction downgrade fixes plus 8 new unit and 7 new Firestore integration cases. Android client/native configuration unchanged from 0616943. No production credentials or deployment."
+  "sourceCommit": "25fe9d9c18cc5b4a9b18057967e9bc62750cc223",
+  "archiveSha256": "b0095c6174b8de21126a8ac5fcd427193075c187b008b329df054e460e23290e",
+  "createdAt": "2026-10-15T18:31:06.852027+00:00",
+  "scope": "Exact source: restrictive phone-hold fixes plus accurate eligibility-date disclosure. Backend runtime identical to the 41/41 protected live preview at 92e3101. New disclosure not in previously published build 6. No production cutover."
 }
