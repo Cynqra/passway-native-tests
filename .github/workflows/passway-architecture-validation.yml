@@ -50,8 +50,22 @@ jobs:
       - run: npm run test:mobile
       - run: npm run typecheck && npm run typecheck --prefix functions
       - run: npm test --prefix functions
-      - run: npm run test:emulator
+      - name: Rules, transaction regressions and bounded parallel workload
+        env:
+          GCLOUD_PROJECT: demo-passway
+          METADATA_SERVER_DETECTION: none
+        run: |
+          npx --yes firebase-tools@15.32.1 emulators:exec --only firestore --project demo-passway \
+            "npm run test:rules && npm run test:integration --prefix functions && node ../../harness/bounded_backend_workload.cjs"
       - run: npx --no-install expo export --platform all --output-dir dist-ci
+      - name: Preserve bounded-workload measurements and scope
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: bounded-backend-workload
+          path: validation-source/passway-app/bounded-workload-results.json
+          if-no-files-found: warn
+          retention-days: 3
   dependency-security:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
