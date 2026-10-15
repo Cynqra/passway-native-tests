@@ -10,6 +10,7 @@ on:
         options:
           - isolated-native
           - signed-release
+          - play-api-check
 permissions:
   contents: read
 concurrency:
@@ -17,7 +18,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   isolated-native:
-    if: ${{ inputs.mode != 'signed-release' }}
+    if: ${{ inputs.mode == 'isolated-native' || inputs.mode == '' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     env:
@@ -278,3 +279,28 @@ jobs:
           path: signed-results
           retention-days: 3
           if-no-files-found: error
+
+  play-api-access:
+    if: ${{ inputs.mode == 'play-api-check' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    environment: passway-play-internal
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Test keyless authentication and cleanup boundaries
+        run: python3 -m unittest discover -s harness/tests -p 'test_play_api_access.py' -v
+      - name: Verify keyless Play access without uploading or changing a release
+        run: python3 harness/play_api_access.py --output play-api-access.json
+      - name: Upload sanitized access evidence only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: passway-keyless-play-access
+          path: play-api-access.json
+          retention-days: 14
+          if-no-files-found: ignore

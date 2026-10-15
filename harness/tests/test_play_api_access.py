@@ -1,0 +1,112 @@
+import importlib.util
+from pathlib import Path
+import unittest
+
+spec = importlib.util.spec_from_file_location(
+    "play_api_access", Path(__file__).parents[1] / "play_api_access.py"
+)
+m = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(m)
+
+
+def env():
+    return {
+        "GITHUB_REPOSITORY": m.REPOSITORY,
+        "GITHUB_REPOSITORY_ID": "1419569453",
+        "GITHUB_REPOSITORY_OWNER_ID": "338663904",
+        "GITHUB_REF": m.REF,
+        "GITHUB_WORKFLOW_REF": m.WORKFLOW_REF,
+        "GITHUB_EVENT_NAME": "workflow_dispatch",
+        "ACTIONS_ID_TOKEN_REQUEST_URL": "https://pipelines.actions.githubusercontent.com/token?api-version=2",
+        "ACTIONS_ID_TOKEN_REQUEST_TOKEN": "fictional-test-token",
+    }
+
+
+class PlayAccessTests(unittest.TestCase):
+    def test_trusted_context(self):
+        self.assertTrue(m.validate_context(env()).startswith("https://"))
+
+    def test_every_identity_boundary_rejected_before_network(self):
+        for key in (
+            "GITHUB_REPOSITORY", "GITHUB_REPOSITORY_ID", "GITHUB_REPOSITORY_OWNER_ID",
+            "GITHUB_REF", "GITHUB_WORKFLOW_REF", "GITHUB_EVENT_NAME",
+        ):
+            with self.subTest(key=key):
+                data = env()
+                data[key] = "untrusted"
+                with self.assertRaises(m.SafeError):
+                    m.access_token(data, lambda *a, **k: self.fail("Network called"))
+
+    def test_oidc_endpoint_boundaries(self):
+        for url in (
+            "http://pipelines.actions.githubusercontent.com/token",
+            "https://evil.example/token",
+            "https://actions.githubusercontent.com.evil.example/token",
+            "https://x.actions.githubusercontent.com:444/token",
+            "https://user:password@x.actions.githubusercontent.com/token",
+            "https://x.actions.githubusercontent.com/token#fragment",
+        ):
+            with self.subTest(url=url):
+                data = env()
+                data["ACTIONS_ID_TOKEN_REQUEST_URL"] = url
+                with self.assertRaises(m.SafeError):
+                    m.validate_context(data)
+
+    def test_missing_oidc_permission_rejected(self):
+        data = env()
+        del data["ACTIONS_ID_TOKEN_REQUEST_TOKEN"]
+        with self.assertRaises(m.SafeError):
+            m.validate_context(data)
+
+    def test_exchange_has_fixed_audience_scope_and_short_lifetime(self):
+        calls = []
+        def send(url, **kwargs):
+            calls.append((url, kwargs))
+            return [{"value": "fictional-oidc"}, {"access_token": "fictional-sts"},
+                    {"accessToken": "fictional-delegated"}][len(calls) - 1]
+        self.assertEqual(m.access_token(env(), send), "fictional-delegated")
+        self.assertIn(m.PROVIDER, calls[1][1]["body"]["audience"])
+        self.assertEqual(calls[2][1]["body"]["lifetime"], "900s")
+        self.assertEqual(calls[2][1]["body"]["scope"],
+                         ["https://www.googleapis.com/auth/androidpublisher"])
+
+    def test_empty_token_fails_closed(self):
+        with self.assertRaises(m.SafeError):
+            m.access_token(env(), lambda *a, **k: {})
+
+    def test_probe_only_creates_reads_deletes(self):
+        calls = []
+        def send(url, **kwargs):
+            calls.append((url, kwargs.get("method", "GET")))
+            if len(calls) == 1:
+                return {"id": "123"}
+            return {"tracks": [{"track": "internal"}]}
+        report = m.probe("fictional-token", send)
+        self.assertEqual([x[1] for x in calls], ["POST", "GET", "DELETE"])
+        self.assertTrue(report["temporaryEditDeleted"])
+        self.assertFalse(any("commit" in x[0] for x in calls))
+
+    def test_cleanup_even_when_track_read_fails(self):
+        calls = []
+        def send(url, **kwargs):
+            calls.append(kwargs.get("method", "GET"))
+            if len(calls) == 1:
+                return {"id": "123"}
+            if len(calls) == 2:
+                raise m.SafeError("Read rejected")
+            return {}
+        with self.assertRaises(m.SafeError):
+            m.probe("fictional-token", send)
+        self.assertEqual(calls, ["POST", "GET", "DELETE"])
+
+    def test_invalid_edit_identifier_rejected(self):
+        with self.assertRaises(m.SafeError):
+            m.probe("fictional-token", lambda *a, **k: {"id": "../unexpected"})
+
+    def test_redirects_never_forward_bearer(self):
+        with self.assertRaises(m.SafeError):
+            m.NoRedirect().redirect_request(None, None, 302, "", {}, "https://evil.example")
+
+
+if __name__ == "__main__":
+    unittest.main()
