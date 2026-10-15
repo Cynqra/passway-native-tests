@@ -1,7 +1,7 @@
 {
-  "source_repo": "naveenbharti310/Paasway",
-  "source_commit": "e73637bab0faec4bd3dd11f13310c6fcc0c35bdf",
-  "archive_sha256": "d8a2a026135430f3b05298ea27efdafb0a36e9c7f35f4aec30fc431af0a8de12",
-  "application_tree": "85f73e5c123e7d61dbcecef7cc6c0995e249d4a3",
-  "scope": "350 local regressions and 37 real-Firebase restricted-preview checks. Native workflow results are scoped to their immutable checked-out snapshot, not later branch updates."
+  "sourceRepository": "naveenbharti310/Paasway",
+  "sourceCommit": "ab2c73f52d2ee0436fc4701287b3df45e8361f65",
+  "archiveSha256": "74a28bda7b4b52e84efd166166a01e59fd136767b2d661cbfcfcdfbcbe2a38af",
+  "createdAt": "2026-10-15T14:35:49.472362+00:00",
+  "scope": "Exact tracked source; current backend phone-hold fix and fail-closed deployment boundary tests. Not store installation or real SMS proof."
 }
