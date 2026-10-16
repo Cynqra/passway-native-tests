@@ -27,3 +27,7 @@ Earlier live backend results (57 assertions +3 isolation +6 negative preview att
 ## Independent post-publication checks
 
 Play readback run38898138210 confirmed internal version8 completed, no public production release, temporary edit deleted. Authenticated generated-APK download run38898141494 verified package/version, cryptographic APK signatures (v2/v3/v3.2), SourceStamp and expected Play signing certificate. Local artifact hash independently matched `6bcc69919bed10d4e1178ff96abd9eda52cdc84a9f708bee8637567b92f4e63c`. This remains download/signature evidence, NOT Store installation or positive attestation.
+
+## Read-only Firebase control-plane verification
+
+At12:08:26Z Play Integrity was configured and the exact Play signing SHA-256 was registered. `deviceIntegrity.minDeviceRecognitionLevel` is `NO_INTEGRITY`: this setting does not require a device-recognition verdict. It does not by itself prove an app-token bypass, and registration is not a positive token test. Assess the supported-device policy and verify a genuine signed client before tightening a project-wide setting; no blind production lockout or control-plane mutation was performed.

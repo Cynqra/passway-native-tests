@@ -145,5 +145,19 @@
     "actualHashMatched": true,
     "packageAndVersionVerified": true,
     "ciCryptographicSignatureVerified": true
+  },
+  "attestationControlPlane": {
+    "at": "2026-10-16T12:08:26.701Z",
+    "scope": "Read-only Firebase registration/configuration, NOT positive device attestation",
+    "package": "com.passway.app",
+    "playIntegrityConfigured": true,
+    "tokenTtl": "3600s",
+    "deviceIntegrity": {
+      "minDeviceRecognitionLevel": "NO_INTEGRITY"
+    },
+    "expectedPlaySigningCertificateRegistered": true,
+    "registeredCertificateCount": 4,
+    "productionAcceptance": false,
+    "mutationsAttempted": false
   }
 }
