@@ -1,6 +1,16 @@
 {
   "backend-byte-equivalence.json": "d695f412304c761b48d9eeaab14904d321600c10410ec2a2a8d97761fcaf3e9d",
   "cache-source-provenance.json": "0e4a5b82e9eb4f470e790b138c0141070255e9d5e9598b58b0a44a0715c53754",
-  "verification-summary.json": "e2c54e1895b9875431a57ffa4fda3258aa911f574ab6c47d52ee7ef479415392",
-  "README.md": "4572a7c215cbdabc19ef13dfc9b974e978aaafbd775ef42452391a5f576b3485"
+  "verification-summary.json": "5914b80fded9fb86888f2b5b74ea2784cf98a82558d292690051ccdd59dc2154",
+  "README.md": "afed57473e18f6b5122f6ef17e9d5ec2b0f373019e8316718760acc523417bb4",
+  "native-verification.json": "787411d12d9b8b52e910385de96b9b32189ff8172a30cc9659bf63fba61f559a",
+  "native-coordinator-result.json": "738ecd2fd278ba99dfae0c35ea3f523a4012d672294819fcc7a7ebba423c92bd",
+  "native-complete.json": "258327f0d367b40ce52b870a67ecbe9d66824e4bb9e7f13896d386cc2f676cae",
+  "native-extended-complete.json": "f911884204b79ec109239a1d667182dc1c39d53d214cd9d1a953367fcaecea6c",
+  "native-results.json": "7bfec3fee06fda8280e6dd1fce5359b4f587f2987c1733a6e0af27aa76fdb771",
+  "native-overlay-provenance.json": "a1b933db67764f905427ee0119e6923052945550f76a9e3d63d2278760679188",
+  "native-source-provenance.json": "0e4a5b82e9eb4f470e790b138c0141070255e9d5e9598b58b0a44a0715c53754",
+  "upstream-conformance-summary.json": "04724397b1ca8498de88de6e549e0176e9c87eb0183d8101f436a1fcea1b0778",
+  "remediation-verification.json": "02dcef38cf856b92b7d1024afbac79b9045c1a700868453f567cb24ccf0f86db",
+  "bounded-workload-results.json": "84874aa18144c9e38300d537cf1f96be5244695a83cf41d1cb83aaa0009643e3"
 }

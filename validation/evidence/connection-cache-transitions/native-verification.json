@@ -1,0 +1,22 @@
+{
+  "sourceCommit": "54b72953b0a9f3ea0748b3323631227b1d88f7b4",
+  "runId": 38887947192,
+  "scope": "Isolated native diagnostic APK, local Auth/Firestore; NOT production SMS/Play attestation or physical-device certification",
+  "passed": true,
+  "assertionCount": 75,
+  "coordinator": {
+    "exit_code": 0,
+    "duration_seconds": 979.3,
+    "passed": true,
+    "scope": "current-source isolated emulators; one attempt; no live patching"
+  },
+  "sourceArchiveSha256": "ebbbf8c8847d2641ac1cffeb67160a18bb0b1a41e768805223cc29e427c4c879",
+  "bothCompletionMarkers": true,
+  "probeTiming": {
+    "count": 779,
+    "totalSeconds": 588.18,
+    "medianSeconds": 0.54,
+    "p95Seconds": 1.64,
+    "caution": "Instrumentation/test-driver time, not app response latency. No native-driver speedup was implemented."
+  }
+}

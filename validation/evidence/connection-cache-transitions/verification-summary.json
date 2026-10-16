@@ -34,5 +34,36 @@
     "nativeExtended": 38887947192
   },
   "productionAcceptance": false,
-  "caution": "Native and independent gates are pending for this source; no native success inherited. Previous live backend checks apply only by verified identical backend Git tree and source hashes."
+  "caution": "No zero-bug/production-readiness claim. Prior backend checks apply by unchanged Functions tree and source hashes; no production rollout.",
+  "independentRegression": {
+    "runId": 38887942046,
+    "passed": true,
+    "total": 465,
+    "counts": [
+      127,
+      223,
+      35,
+      80
+    ],
+    "exports": [
+      "android",
+      "ios",
+      "web"
+    ]
+  },
+  "independentStaticSecurity": {
+    "runId": 38887944663,
+    "passed": true,
+    "sarifFindings": 0
+  },
+  "nativeExtended": {
+    "runId": 38887947192,
+    "passed": true,
+    "assertions": 75,
+    "coordinatorExitCode": 0,
+    "bothFreshCompletionMarkersVerified": true,
+    "durationSeconds": 979.3,
+    "scope": "Isolated Android API36 plus local Auth/Firestore; not SMS or positive Play attestation"
+  },
+  "verifiedAt": "2026-10-16T10:59:59.906650+00:00"
 }

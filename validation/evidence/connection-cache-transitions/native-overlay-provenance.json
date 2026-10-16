@@ -1,0 +1,7 @@
+{
+  "scope": "Current-source Android native UI plus Auth/Firestore emulators and original candidate HTTP handlers. Test-only emulator routing/cleartext overlay; no production backend, SMS or attestation proof.",
+  "project": "demo-passway",
+  "client_before_sha256": "f5614ab9b00278768501684fc52bf0c243116c448c67036a78227cbf6c603ebc",
+  "client_after_sha256": "c401163951e3575fdbd541710bdc326285868d4fb58c770e708fbab06ff565bf",
+  "overlay_sha256": "ac9e7e1c080a72daf119fa4721d8e40de2c27238b1473549b2c64fd5367b764b"
+}
