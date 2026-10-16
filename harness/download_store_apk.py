@@ -21,6 +21,13 @@ def selection(response):
         raise SafeError('Google Play universal APK not ready; no arbitrary split/variant selected')
     return download
 
+def verify_badging(text, version_code):
+    if type(version_code) is not int or not 1 <= version_code <= 2100000000:
+        raise SafeError('Invalid expected APK version')
+    match = re.search(r"^package: name='([^']+)' versionCode='([^']+)'", text, re.MULTILINE)
+    if not match or match.group(1) != 'com.passway.app' or match.group(2) != str(version_code):
+        raise SafeError('Actual APK package/version does not match authenticated download metadata')
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--version-code', required=True)

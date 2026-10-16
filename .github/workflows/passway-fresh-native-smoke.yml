@@ -22,6 +22,11 @@ on:
         description: Successful same-revision extended native run (internal-candidate only)
         type: string
         required: false
+      store_version_code:
+        description: Published internal version to download (read-only; numeric validation enforced)
+        type: string
+        required: false
+        default: '7'
 permissions:
   contents: read
 concurrency:
@@ -360,10 +365,12 @@ jobs:
 
   store-apk-download:
     if: ${{ inputs.mode == 'store-apk-download' }}
-    name: Download Google Play-signed version 7 for physical testing
+    name: Download verified Google Play-signed APK for physical testing
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     environment: passway-play-internal
+    env:
+      PASSWAY_STORE_VERSION_CODE: ${{ inputs.store_version_code }}
     permissions:
       contents: read
       id-token: write
@@ -374,7 +381,7 @@ jobs:
       - name: Verify read-only APK selection boundaries
         run: python3 -m unittest discover -s harness/tests -p test_store_apk_download.py -v
       - name: Download only the registered Google Play-signed universal APK
-        run: python3 harness/download_store_apk.py --version-code 7
+        run: python3 harness/download_store_apk.py --version-code "$PASSWAY_STORE_VERSION_CODE"
       - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
         with:
           distribution: temurin
@@ -385,7 +392,16 @@ jobs:
           "$tools/apksigner" verify --verbose --print-certs store-apk-results/passway-store-signed.apk > store-apk-results/apk-signature.txt
           grep -iq '5f97b4bfe27bdbf3aade7fd1e2e7b323cfdde1cd8d7feaa536ea1db31ef963f2' store-apk-results/apk-signature.txt
           "$tools/aapt2" dump badging store-apk-results/passway-store-signed.apk > store-apk-results/apk-badging.txt
-          grep -q "package: name='com.passway.app' versionCode='7'" store-apk-results/apk-badging.txt
+          python3 - <<'PYTHON'
+          import hashlib,json,pathlib,sys
+          sys.path.insert(0,'harness')
+          from download_store_apk import verify_badging
+          p=pathlib.Path('store-apk-results')
+          metadata=json.loads((p/'download-verification.json').read_text())
+          assert metadata['package']=='com.passway.app'
+          assert hashlib.sha256((p/'passway-store-signed.apk').read_bytes()).hexdigest()==metadata['sha256']
+          verify_badging((p/'apk-badging.txt').read_text(),metadata['versionCode'])
+          PYTHON
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
