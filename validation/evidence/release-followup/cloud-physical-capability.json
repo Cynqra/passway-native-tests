@@ -1,0 +1,21 @@
+{
+  "at": "2026-10-16T12:57:12.929Z",
+  "scope": "Read-only capability inspection; no tests, storage uploads, billing changes or credential output",
+  "rows": [
+    {
+      "name": "billing",
+      "status": 403,
+      "reason": "PERMISSION_DENIED"
+    },
+    {
+      "name": "testLabCatalog",
+      "status": 403,
+      "reason": "PERMISSION_DENIED"
+    },
+    {
+      "name": "storageBuckets",
+      "status": 200,
+      "buckets": []
+    }
+  ]
+}

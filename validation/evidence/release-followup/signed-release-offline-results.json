@@ -1,0 +1,20 @@
+[
+  {
+    "test": "Actual signed release tested without an active default network",
+    "status": "PASS",
+    "detail": "",
+    "at": "2026-10-16T13:04:58Z"
+  },
+  {
+    "test": "font-1-0 system font scale applied",
+    "status": "PASS",
+    "detail": "",
+    "at": "2026-10-16T13:04:58Z"
+  },
+  {
+    "test": "Actual signed-release offline UI acceptance",
+    "status": "FAIL",
+    "detail": "TimeoutError",
+    "at": "2026-10-16T13:06:00Z"
+  }
+]

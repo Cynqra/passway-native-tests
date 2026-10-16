@@ -1,0 +1,62 @@
+{
+  "at": "2026-10-16T13:08:23.609Z",
+  "scope": "Read-only bounded production retention/deletion metadata sample, not a cleanup run or full cardinality scan. No message text, phones, exact locations, account IDs or document IDs retained.",
+  "maxRecordsPerExpiryQuery": 201,
+  "mutationsAttempted": false,
+  "rows": [
+    {
+      "collection": "messages",
+      "sampledEligibleRecords": 0,
+      "sampleCapped": false,
+      "oldestEligibleAgeSeconds": null
+    },
+    {
+      "collection": "tids",
+      "sampledEligibleRecords": 0,
+      "sampleCapped": false,
+      "oldestEligibleAgeSeconds": null
+    },
+    {
+      "collection": "connectionRequests",
+      "sampledEligibleRecords": 0,
+      "sampleCapped": false,
+      "oldestEligibleAgeSeconds": null
+    },
+    {
+      "collection": "connections",
+      "sampledEligibleRecords": 0,
+      "sampleCapped": false,
+      "oldestEligibleAgeSeconds": null
+    },
+    {
+      "collection": "reports",
+      "sampledEligibleRecords": 0,
+      "sampleCapped": false,
+      "oldestEligibleAgeSeconds": null
+    },
+    {
+      "collection": "rateLimits",
+      "sampledEligibleRecords": 0,
+      "sampleCapped": false,
+      "oldestEligibleAgeSeconds": null
+    },
+    {
+      "collection": "accountHolds",
+      "sampledEligibleRecords": 0,
+      "sampleCapped": false,
+      "oldestEligibleAgeSeconds": null
+    },
+    {
+      "collection": "accountDeletions",
+      "sampledEligibleRecords": 0,
+      "sampleCapped": false,
+      "oldestEligibleAgeSeconds": null
+    },
+    {
+      "collection": "pendingAccountDeletions",
+      "sampledRecords": 0,
+      "sampleCapped": false,
+      "oldestRequestedAgeSeconds": null
+    }
+  ]
+}
