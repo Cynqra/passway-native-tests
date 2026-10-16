@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-16T12:24:47.265637+00:00",
+  "scope": "Genuine native Google alternative sign-in inspection on physical Pixel9/API35",
+  "reservation": "1zz9o3zavwhkz",
+  "testerAccountRecognized": true,
+  "passwordSubmitted": false,
+  "alternativePathInspected": true,
+  "phoneApprovalOffered": false,
+  "googleResult": "You are trying to sign in on a device Google does not recognize, and we do not have enough information to verify that it is you. For your protection, you cannot sign in here right now. Try again from a device or location where you have signed in before.",
+  "accountPasswordReset": false,
+  "securityBypassAttempted": false,
+  "passwayInstalled": false,
+  "positiveStoreAttestationVerified": false,
+  "smsSent": false,
+  "productionReady": false,
+  "reservationReleased": true,
+  "activeReservationsAfter": 0
+}
