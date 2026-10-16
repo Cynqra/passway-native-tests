@@ -9,7 +9,7 @@ Source `5f89b86fa1862b8566666de3749bd170aa458436`. New evidence only; previous-r
 - Strict guarded preview: 6/6 missing/invalid attestation rejections; inert SMS key and malformed payload only. No SMS sent.
 - Dependency mitigation conformance: Forge 829 pass, 4 pre-existing pending; braces 899 pass; raw registry audit remains NOT clean.
 - Bounded local Firestore workload: 16 pairs, 160 message intents, 320 send/replay calls, all five invariants passed. This is not production capacity.
-- Fresh extended native CI is still running; see verification-summary.json for its source-specific final state.
+- Fresh extended native CI FAILED: peer displayed Connection ended instead of composer; 16 passing checks, then failure, no completion markers. A reproduced client cache-snapshot race is being corrected in a subsequent source revision.
 
 Synthetic fixture cleanup used three bounded message-delete batches and completed in 13,237ms. This changes only the local probe cleanup, not production retention. It is not an Android speed-up claim.
 

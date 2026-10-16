@@ -38,8 +38,9 @@
   },
   "nativeExtended": {
     "runId": 38885268149,
-    "state": "pending",
-    "scope": "Fresh diagnostic APK with explicit isolated Firebase emulator overlay; not production attestation."
+    "state": "failure",
+    "passed": false,
+    "scope": "Actual screen components reproducibly treat cache-only absent snapshots as authoritative closure. Consistent mechanism; full corrected native rerun is required."
   },
   "productionAcceptance": {
     "passed": false,
