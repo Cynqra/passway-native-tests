@@ -1,7 +1,7 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "0ca7c9cdb3ae903a44b56494de7b4656a2900065",
-  "archiveSha256": "e3101384c17b298a061ed148a4baa51af2e3a0a445a97f3a92d4f922157bd352",
-  "createdAt": "2026-10-15T20:01:27.878938+00:00",
-  "scope": "Exact candidate: native callable errors, six accessible loading states, fresh permission-state checks without redundant OS requests, bounded location acquisition. Original permission-launch gate unchanged. No production promotion or signed-store rebuild."
+  "sourceCommit": "45d2e89739f65de51ba838aff7a4a775bab4de98",
+  "archiveSha256": "3a1e10ad3b961008c540d6f3018f43a1efba8043bc4b71f8400bb87125f31343",
+  "createdAt": "2026-10-16T06:18:25.571871+00:00",
+  "scope": "Version 7 (0.3.1) signed candidate with callable-error, loading accessibility and location fixes. No production promotion, store installation or positive attestation claimed."
 }

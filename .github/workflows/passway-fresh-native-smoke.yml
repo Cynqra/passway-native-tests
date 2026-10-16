@@ -234,6 +234,11 @@ jobs:
           npm run typecheck
           npm run typecheck --prefix functions
           npx --no-install expo prebuild --platform android --clean --no-install
+      - name: Bind signed candidate metadata to immutable source
+        working-directory: validation-source/passway-app
+        run: |
+          npx --no-install expo config --type public --json > "$RUNNER_TEMP/passway-release-config.json"
+          python3 ../../harness/release_metadata.py "$RUNNER_TEMP/passway-release-config.json" ../../signed-results/source-provenance.json ../../signed-results/release-metadata.json
       - name: Configure the existing upload signer without persisting passwords in build files
         run: |
           python3 -m unittest discover -s harness/tests -p test_signed_build.py -v
@@ -244,22 +249,24 @@ jobs:
           chmod +x gradlew
           ./gradlew :app:bundleRelease --no-build-cache --no-configuration-cache --max-workers=2 -Dorg.gradle.jvmargs='-Xmx4g -XX:MaxMetaspaceSize=1g'
           ./gradlew --stop
-          cp app/build/outputs/bundle/release/app-release.aab ../../../signed-results/passway-v6.aab
+          cp app/build/outputs/bundle/release/app-release.aab ../../../signed-results/passway-release.aab
       - name: Verify signer and compiled native security settings
         run: |
           curl --fail --location --max-time 120 -o "$RUNNER_TEMP/bundletool.jar" https://github.com/google/bundletool/releases/download/1.18.3/bundletool-all-1.18.3.jar
           echo "a099cfa1543f55593bc2ed16a70a7c67fe54b1747bb7301f37fdfd6d91028e29  $RUNNER_TEMP/bundletool.jar" | sha256sum -c -
-          jarsigner -verify signed-results/passway-v6.aab
-          keytool -printcert -jarfile signed-results/passway-v6.aab -rfc | openssl x509 -noout -fingerprint -sha256 > signed-results/upload-signer.txt
+          jarsigner -verify signed-results/passway-release.aab
+          keytool -printcert -jarfile signed-results/passway-release.aab -rfc | openssl x509 -noout -fingerprint -sha256 > signed-results/upload-signer.txt
           grep -Fq '98:15:DF:C7:D9:03:55:59:F2:18:9C:B0:0C:06:1D:F7:22:B8:DB:E8:8B:09:2F:62:79:DE:78:2A:3F:FE:3A:CC' signed-results/upload-signer.txt
-          java -jar "$RUNNER_TEMP/bundletool.jar" validate --bundle=signed-results/passway-v6.aab > signed-results/bundle-validation.txt
-          java -jar "$RUNNER_TEMP/bundletool.jar" dump manifest --bundle=signed-results/passway-v6.aab > signed-results/AndroidManifest.xml
+          java -jar "$RUNNER_TEMP/bundletool.jar" validate --bundle=signed-results/passway-release.aab > signed-results/bundle-validation.txt
+          java -jar "$RUNNER_TEMP/bundletool.jar" dump manifest --bundle=signed-results/passway-release.aab > signed-results/AndroidManifest.xml
           python3 - <<'PYTHON'
           import xml.etree.ElementTree as E,pathlib
           root=E.parse('signed-results/AndroidManifest.xml').getroot()
           a='{http://schemas.android.com/apk/res/android}';app=root.find('application')
           assert root.attrib['package']=='com.passway.app'
-          assert root.attrib[a+'versionCode']=='6'
+          metadata=__import__('json').loads(pathlib.Path('signed-results/release-metadata.json').read_text())
+          assert root.attrib[a+'versionCode']==str(metadata['versionCode'])
+          assert root.attrib[a+'versionName']==metadata['versionName']
           assert app.attrib.get(a+'debuggable','false')=='false'
           assert app.attrib.get(a+'allowBackup')=='false'
           assert app.attrib.get(a+'usesCleartextTraffic','false')=='false'
@@ -269,7 +276,7 @@ jobs:
           assert 'FirebaseAppCheckRegistrar' in pathlib.Path('signed-results/AndroidManifest.xml').read_text()
           print('Compiled release security assertions passed.')
           PYTHON
-          sha256sum signed-results/passway-v6.aab > signed-results/artifact.sha256
+          sha256sum signed-results/passway-release.aab > signed-results/artifact.sha256
           echo 'Signed internal-testing artifact only. No Play installation, positive attestation, real SMS, backend cutover or public rollout is claimed.' >> "$GITHUB_STEP_SUMMARY"
       - name: Remove ephemeral signing material
         if: always()
@@ -277,7 +284,7 @@ jobs:
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: success()
         with:
-          name: passway-signed-v6
+          name: passway-signed-candidate
           path: signed-results
           retention-days: 3
           if-no-files-found: error
