@@ -1,0 +1,38 @@
+{
+  "sourceCommit": "54b72953b0a9f3ea0748b3323631227b1d88f7b4",
+  "reproducedAgainstParent": "5f89b86fa1862b8566666de3749bd170aa458436",
+  "focusedOriginal": {
+    "tests": 14,
+    "passed": 5,
+    "failed": 9
+  },
+  "focusedCorrected": {
+    "tests": 14,
+    "passed": 14,
+    "failed": 0
+  },
+  "completeLocalGate": {
+    "exitCode": 0,
+    "mobile": 127,
+    "backendUnitHttp": 223,
+    "rules": 35,
+    "realFirestoreIntegration": 80,
+    "total": 465,
+    "typechecks": [
+      "client",
+      "backend"
+    ],
+    "platformExports": [
+      "android",
+      "ios",
+      "web"
+    ]
+  },
+  "independentRuns": {
+    "regression": 38887942046,
+    "staticSecurity": 38887944663,
+    "nativeExtended": 38887947192
+  },
+  "productionAcceptance": false,
+  "caution": "Native and independent gates are pending for this source; no native success inherited. Previous live backend checks apply only by verified identical backend Git tree and source hashes."
+}

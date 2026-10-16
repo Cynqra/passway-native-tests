@@ -1,0 +1,9 @@
+{
+  "previousSourceCommit": "5f89b86fa1862b8566666de3749bd170aa458436",
+  "currentSourceCommit": "54b72953b0a9f3ea0748b3323631227b1d88f7b4",
+  "functionsGitTree": "0651723168ebc806aa25e9e523bd168d372ec259",
+  "entireFunctionsTreeUnchanged": true,
+  "sourceFileHashesIndependentlyCompared": 27,
+  "scope": "Reuse only the 57 live backend, 3 isolation/cleanup and 6 negative-attestation checks against unchanged backend bytes. These were executed on the previous source commit, NOT freshly rerun on this client commit. No previous native/client pass inherited.",
+  "verifiedAt": "2026-10-16T10:33:06.641095+00:00"
+}
