@@ -60,7 +60,6 @@
       "id": 3,
       "name": "Backend transactions/retries/deletion/retention",
       "status": "engineering_gates_passed_with_release_scope_limits",
-      "backlog": "Argon High deletion lifecycle response saved for independent validation later; no patch applied.",
       "evidence": {
         "sourceRepository": "naveenbharti310/Paasway",
         "sourceCommit": "bc3a4020520d9c779a698bea7681d416ae2d69d0",
@@ -82,28 +81,192 @@
         "assertionsPerRun": 553,
         "allConclusions": "success",
         "staticSarifFindings": 0
+      },
+      "followup": "Firebase configured credential reused for moderation; full 2500ms deadline includes credential/HTTP/body; 282 backend cases passed locally, clean candidate gate pending.",
+      "followupEvidence": {
+        "source": {
+          "id": 38931478728,
+          "suiteTotals": {
+            "workflowPolicy": 4,
+            "mobile": 162,
+            "backend": 282,
+            "rules": 35,
+            "realFirestore": 83,
+            "realAuthBridge": 4
+          },
+          "totalCases": 570,
+          "failureCounts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "conclusion": "success"
+        },
+        "central": {
+          "id": 38931561376,
+          "suiteTotals": {
+            "workflowPolicy": 4,
+            "mobile": 162,
+            "backend": 282,
+            "rules": 35,
+            "realFirestore": 83,
+            "realAuthBridge": 4
+          },
+          "totalCases": 570,
+          "failureCounts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "conclusion": "success"
+        }
       }
     },
     {
       "id": 4,
       "name": "Client/offline/performance/accessibility",
-      "status": "active",
+      "status": "engineering_gates_passed_with_release_scope_limits",
       "confirmedFindings": [
         "Generator RequestScreen did not subscribe to server terminal request changes: six rendered component tests failed before, pass after listener with cache/unmount/race guards.",
-        "Timed pairing screens were fixed-layout without overflow scrolling; hardened to scrollable content, native large-text verification pending."
-      ]
+        "Timed pairing screens were fixed-layout without overflow scrolling; hardened to scrollable content, native large-text verification pending.",
+        "Rapid same-render generate caused three intents; synchronous lock added; two rendered cases pass.",
+        "Observed large-text native failure caused by harness swipe starting on fixed navigation; regression reproduced and corrected using actual inner ScrollView bounds.92 harness cases pass locally."
+      ],
+      "cleanMobileCases": 162,
+      "screenshotFindings": [
+        "Actual four-character code wrapped3+1 despite functional pass",
+        "Actual large-font half-width consent labels split mid-word",
+        "Connect navigation label wrapped at large text"
+      ],
+      "localVerification": {
+        "mobile": 168,
+        "typecheck": "pass",
+        "harness": 99,
+        "nativeVisualAcceptance": "pending"
+      },
+      "evidence": {
+        "sourceCommit": "2ffec5fd702824ec5d4f1b200ac28102fd8b2a4b",
+        "mobileCases": 168,
+        "sourceAndCentralCasesEach": 576,
+        "nativeAPI34": {
+          "run": 38935487439,
+          "pass": 81,
+          "fail": 0,
+          "singleFullAttempt": true,
+          "preDispatchReacquisitions": 0
+        },
+        "nativeAPI36": {
+          "run": 38935492565,
+          "pass": 81,
+          "fail": 0,
+          "singleFullAttempt": true,
+          "preDispatchReacquisitions": 0
+        },
+        "staticFindings": 0,
+        "secretMatches": 0,
+        "harnessUnitCases": 99,
+        "screenshotsReviewed": true,
+        "scope": "Native two-user local services; no real SMS, production App Check, physical-device, production load or licensed Store acceptance."
+      }
     },
     {
       "id": 5,
       "name": "Native two-user and production release acceptance",
-      "status": "not_started",
+      "status": "blocked_by_production_cutover_and_genuine_store_acceptance_prerequisites",
       "parallelBaselineRun": 38920011786,
-      "baselineRunScope": "Pre-existing exact-current-source isolated native regression run remains running; not production acceptance.",
-      "parallelBaselineRunConclusion": "success, verified75/75 for baseline abd9ae2 only; not inherited by phase1 commit"
+      "parallelBaselineRunConclusion": "success, verified75/75 for baseline abd9ae2 only; not inherited by phase1 commit",
+      "releaseBlockers": [
+        "Live production negative gate0/8 including getMessages404; no coordinated API/rules/index migration performed.",
+        "Actual licensed Store-installed positive attestation and production two-user flows remain unverified.",
+        "Read-only IAM capability check grants storage.buckets.create only, not cloudtestservice matrices permissions.",
+        "Raw npm audit21 high from two still-unpatched roots; installed mitigations do not erase upstream advisory risk."
+      ],
+      "keylessPlayCapability": {
+        "run": 38932991427,
+        "authorized": true,
+        "internalVersion": 9,
+        "publicProductionRelease": false,
+        "temporaryEditDeleted": true
+      },
+      "latestProductionNegativeGate": {
+        "pass": false,
+        "passing": 0,
+        "total": 8,
+        "getMessagesStatus": 404,
+        "artifact": "visual10-production-negative.json"
+      },
+      "signedCandidate": {
+        "run": 38935337937,
+        "versionCode": 10,
+        "published": false,
+        "scope": "Upload-signed AAB verified; not installation or attestation proof"
+      }
     }
   ],
   "gatePolicy": "Do not advance a phase as complete with untested fixes or unclassified blockers. Reproduce failures before minimal changes, validate concurrently independent fixes together, and retain raw failures. Production cannot be labeled zero-bugs or accepted without licensed store attestation and real production acceptance.",
   "phase1Source": "d58e411b5355bede342c94b52b9075b9a3614b0b",
   "modelAvailability": "Argon High previously quota-blocked; subsequent browser is signed out; no fallback prompts sent.",
-  "phase1PromotionPolicy": "All confirmed phase1 engineering defects fixed and clean tested; deployment mismatch and unpatched upstream advisory risks remain explicit release blockers for coordinated phase5 acceptance, not falsely marked fixed."
+  "phase1PromotionPolicy": "All confirmed phase1 engineering defects fixed and clean tested; deployment mismatch and unpatched upstream advisory risks remain explicit release blockers for coordinated phase5 acceptance, not falsely marked fixed.",
+  "updatedAt": "2026-10-16T17:20:16.248708+00:00",
+  "currentCandidate": {
+    "sourceCommit": "2ffec5fd702824ec5d4f1b200ac28102fd8b2a4b",
+    "archiveSha256": "38b34906d1dcf6b5b0fa61cbc9cdd9ffed7a60534f741fd3cfd1151aca4ea048",
+    "version": "0.3.4",
+    "androidVersionCode": 10,
+    "published": false,
+    "nativeHarnessCommit": "60e2e35b60f29f07ba2bb77a2150599441999ed4",
+    "cleanAndSigningHarnessCommit": "10a4db2ec1672154ac57c2a333ce9293b3072c45",
+    "status": "isolated_engineering_acceptance_passed_production_release_blocked",
+    "runs": {
+      "source": 38935318797,
+      "central": 38935320479,
+      "static": 38935325182,
+      "nativeAPI34": 38935487439,
+      "nativeAPI36": 38935492565,
+      "signed": 38935337937
+    },
+    "verifiedReports": [
+      "visual10-clean-verification.json",
+      "visual10-signed-verification.json",
+      "visual10-native-verification.json",
+      "visual10-production-negative.json"
+    ]
+  },
+  "preservedFailures": [
+    {
+      "run": 38930445090,
+      "reason": "Stale exact0.3.3/9 regression contradicted deliberate candidate0.3.4/10 metadata",
+      "classification": "test_defect"
+    },
+    {
+      "run": 38930440454,
+      "reason": "Same stale version assertion",
+      "classification": "test_defect"
+    },
+    {
+      "run": 38928769314,
+      "reason": "Large-text name field hidden; gesture y704 touched bottom navigation not inner form ending y674",
+      "classification": "harness_gesture_defect; real accessibility rerun required"
+    },
+    {
+      "run": 38930458214,
+      "reason": "Protected environment rejected non-authorized development branch before runner steps",
+      "classification": "expected_environment_protection_not_product_failure"
+    },
+    {
+      "run": 38930452778,
+      "reason": "Explicitly cancelled superseded harness/source rather than run known-bad accessibility test",
+      "classification": "cancelled_not_passed"
+    },
+    {
+      "run": 38931567916,
+      "classification": "native probe explicit pre-dispatch target unavailable after preceding visible snapshot; cache/window root cause not yet proven; no product pass claimed"
+    }
+  ]
 }
