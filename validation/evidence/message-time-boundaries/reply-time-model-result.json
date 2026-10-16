@@ -1,0 +1,10 @@
+{
+  "sourceCommit": "bc5a5918719cb22ea6e915e09c5d7281a5d15ca7",
+  "scope": "Actual compiled sendMessage handler, in-memory transactional fixture; not live Firebase or native E2E",
+  "seed": "0x50a55eed",
+  "trials": 2065,
+  "accepted": 504,
+  "rejected": 1561,
+  "networkCalls": 0,
+  "passed": true
+}

@@ -31,3 +31,10 @@ The separately measured prior native run 38864503942 took 1113.19 seconds. 777 i
 `release/production-acceptance` remains failure. Store-installed positive attestation and a full production two-user flow remain unverified. Current candidate API/client/rules migration must be coordinated; rules-only promotion breaks older direct-message-read clients. No public production release was made. A fresh hosted preview of this backend revision was not deployed: the saved Vercel token was rejected. Historical hosted-preview results must not be relabeled as this revision's results.
 
 A secure browser input failure coincided with the local workspace reverting to an older snapshot. Remote commits/runs/artifacts survived and were recovered, rather than blindly repeating completed runs. Platform root cause is unknown; no unsupported claim about session lifetime is made.
+
+## Supplemental timestamp model (separate from CI/native totals)
+
+After recovery, an additional deterministic experiment ran the actual compiled `sendMessage` handler with an in-memory transactional fixture and all networking forbidden: **2065/2065 expected outcomes**, 504 eligible timestamps accepted, 1561 invalid/unavailable timestamps rejected, zero network calls. The seed and runnable diagnostic are preserved alongside the result. This does not substitute for the 65 real-Firestore checks or production acceptance.
+
+Reproduce after compiling candidate functions:
+`node reply-time-model.cjs /path/to/candidate/passway-app/functions /path/to/output.json`
