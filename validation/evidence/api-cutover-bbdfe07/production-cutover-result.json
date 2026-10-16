@@ -1,0 +1,22 @@
+{
+  "sourceCommit": "bbdfe0735cedc07c5a401ae147cb9abe76f2e6e1",
+  "deploymentId": "dpl_8xyA4os4SKu4vvDDk6UVidty9zxD",
+  "previousAliases": [
+    {
+      "alias": "passway-api.vercel.app",
+      "deploymentId": "dpl_HwzmiRmbLnjuwvZTnWYPpZFooKEe",
+      "deploymentUrl": "passway-aqr4x5ghs-naveenbharti310s-projects.vercel.app"
+    },
+    {
+      "alias": "passway-api-naveenbharti310s-projects.vercel.app",
+      "deploymentId": "dpl_HwzmiRmbLnjuwvZTnWYPpZFooKEe",
+      "deploymentUrl": "passway-aqr4x5ghs-naveenbharti310s-projects.vercel.app"
+    }
+  ],
+  "publicProductionApiUpdated": true,
+  "publicPlayRollout": false,
+  "positiveStoreAttestationVerified": false,
+  "boundaryChecksPassed": 26,
+  "stagedBusinessChecksPassed": 48,
+  "completedAt": "2026-10-16T22:30:06.154014+00:00"
+}

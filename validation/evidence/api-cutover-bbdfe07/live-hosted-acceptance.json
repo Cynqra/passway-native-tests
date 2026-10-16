@@ -1,0 +1,258 @@
+{
+  "checkedAt": "2026-10-16T22:32:52.133Z",
+  "target": "https://passway-api.vercel.app",
+  "scope": "Real production-config HTTP and Firebase integration using disposable test accounts and ADMIN-issued App Check. No SMS, genuine native/Store attestation, native UI, or public rollout proof.",
+  "pass": true,
+  "rows": [
+    {
+      "name": "All 26 missing/invalid App Check boundaries",
+      "pass": true,
+      "detail": "26/26"
+    },
+    {
+      "name": "otpSend valid operator attestation reaches safe payload validation",
+      "pass": true,
+      "detail": "No legitimate phone, OTP, or provider request"
+    },
+    {
+      "name": "otpVerify valid operator attestation reaches safe payload validation",
+      "pass": true,
+      "detail": "No legitimate phone, OTP, or provider request"
+    },
+    {
+      "name": "Three distinct disposable users authenticate with live Firebase",
+      "pass": true,
+      "detail": "No phone numbers or SMS used"
+    },
+    {
+      "name": "Missing age eligibility fails closed",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Synthetic user 0 age confirmation",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Synthetic user 0 raw DOB not stored",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Synthetic user 1 age confirmation",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Synthetic user 1 raw DOB not stored",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Synthetic user 2 age confirmation",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Synthetic user 2 raw DOB not stored",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Decline fixture code allocation",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Decline fixture nearby redemption",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Decline and lost-response retry remain idempotent",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Declined consent cannot be reversed by acceptance replay",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "First code allocation",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Own-code redemption denied",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Remote redemption denied",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "First nearby redemption",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Redemption recovery preserves request identity",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Third user cannot reuse consumed code",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Non-owner cannot accept request",
+      "pass": true,
+      "detail": "HTTP 400; FAILED_PRECONDITION; request unchanged"
+    },
+    {
+      "name": "First owner acceptance",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Acceptance retry is idempotent",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Nonparticipant cannot read messages",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Message retry stores exactly one copy",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Retry key cannot replace message content",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Peer reads exact message through current API",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Two-way reply retains only reference identity",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Expired message is hidden before physical cleanup",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Expired message cannot be quoted again",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Second code allocation",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Second nearby redemption",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Second owner acceptance",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Report cannot target an unrelated user",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Reporting is idempotent and closes selected connection",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Report block protects alternate active conversation",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Blocked alternate conversation cannot leak message reads",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Explicit block handler and retry close the alternate connection",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Explicit end remains available after safety action",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Third synthetic user allocates cancelable code",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Code cancellation retry is idempotent",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Canceled code cannot be redeemed",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Synthetic account 0 deletion removes authentication",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Deleted account 0 token is rejected",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Synthetic account 1 deletion removes authentication",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Deleted account 1 token is rejected",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Synthetic account 2 deletion removes authentication",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Deleted account 2 token is rejected",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Unique synthetic fixture cleanup",
+      "pass": true,
+      "detail": "Only generated audit UIDs, messages, requests, codes, reports and pair blocks targeted"
+    }
+  ]
+}

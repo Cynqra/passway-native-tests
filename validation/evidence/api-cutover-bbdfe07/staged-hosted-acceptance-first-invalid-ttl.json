@@ -1,0 +1,23 @@
+{
+  "checkedAt": "2026-10-16T22:21:55.836Z",
+  "target": "https://passway-a9dp1o0m9-naveenbharti310s-projects.vercel.app",
+  "scope": "Real production-config HTTP and Firebase integration using disposable test accounts and ADMIN-issued App Check. No SMS, genuine native/Store attestation, native UI, or public rollout proof.",
+  "pass": false,
+  "rows": [
+    {
+      "name": "All 26 missing/invalid App Check boundaries",
+      "pass": true,
+      "detail": "26/26"
+    },
+    {
+      "name": "Hosted acceptance execution",
+      "pass": false,
+      "detail": "app-check/invalid-argument"
+    },
+    {
+      "name": "Unique synthetic fixture cleanup",
+      "pass": true,
+      "detail": "Only generated audit UIDs, messages, requests, codes, reports and pair blocks targeted"
+    }
+  ]
+}

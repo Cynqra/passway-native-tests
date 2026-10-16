@@ -1,0 +1,13 @@
+✔ source dependency CI installs pinned remedies before verifying hashes, exploits and upstream conformance (24.391765ms)
+✔ source CI preserves raw registry evidence on success and failure without relabeling audit clean (10.119173ms)
+✔ source CI keeps strict backend audit, pinned actions, read-only permissions and policy regressions (7.37085ms)
+✔ working source CI automatically validates PRs and main without embedding runtime credentials (7.030172ms)
+✔ required source checks cannot remain permanently pending because of path-filtered events (6.775321ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 224.61678

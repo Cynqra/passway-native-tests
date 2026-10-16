@@ -1,0 +1,13 @@
+{
+  "id": "dpl_8xyA4os4SKu4vvDDk6UVidty9zxD",
+  "url": "https://passway-a9dp1o0m9-naveenbharti310s-projects.vercel.app",
+  "readyState": "READY",
+  "target": "production",
+  "meta": {
+    "sourceCommit": "bbdfe0735cedc07c5a401ae147cb9abe76f2e6e1",
+    "sourceArchiveSha256": "addea431c5714824d5bc678a3fc3a4f0fde66e9877092305c6384a77a6fb40ed",
+    "releaseScope": "staged-not-promoted"
+  },
+  "aliasRepairs": [],
+  "canonicalPromoted": false
+}

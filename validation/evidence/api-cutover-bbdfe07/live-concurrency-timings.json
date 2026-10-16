@@ -1,0 +1,370 @@
+{
+  "scope": "Operator-harness service timing from this sandbox, not physical-device, native UI, cold-start SLA or load certification",
+  "maximumConcurrentRequests": 8,
+  "requests": 72,
+  "p50Ms": 721,
+  "p95Ms": 2296,
+  "maxMs": 2819,
+  "observations": [
+    {
+      "route": "generateTid",
+      "status": 400,
+      "durationMs": 727
+    },
+    {
+      "route": "confirmAge",
+      "status": 200,
+      "durationMs": 621
+    },
+    {
+      "route": "confirmAge",
+      "status": 200,
+      "durationMs": 600
+    },
+    {
+      "route": "confirmAge",
+      "status": 200,
+      "durationMs": 579
+    },
+    {
+      "route": "generateTid",
+      "status": 200,
+      "durationMs": 637
+    },
+    {
+      "route": "redeemTid",
+      "status": 200,
+      "durationMs": 762
+    },
+    {
+      "route": "respondToRequest",
+      "status": 200,
+      "durationMs": 616
+    },
+    {
+      "route": "respondToRequest",
+      "status": 200,
+      "durationMs": 564
+    },
+    {
+      "route": "respondToRequest",
+      "status": 400,
+      "durationMs": 555
+    },
+    {
+      "route": "generateTid",
+      "status": 200,
+      "durationMs": 651
+    },
+    {
+      "route": "redeemTid",
+      "status": 400,
+      "durationMs": 608
+    },
+    {
+      "route": "redeemTid",
+      "status": 404,
+      "durationMs": 645
+    },
+    {
+      "route": "redeemTid",
+      "status": 200,
+      "durationMs": 708
+    },
+    {
+      "route": "redeemTid",
+      "status": 200,
+      "durationMs": 840
+    },
+    {
+      "route": "redeemTid",
+      "status": 200,
+      "durationMs": 1322
+    },
+    {
+      "route": "redeemTid",
+      "status": 200,
+      "durationMs": 677
+    },
+    {
+      "route": "redeemTid",
+      "status": 404,
+      "durationMs": 634
+    },
+    {
+      "route": "respondToRequest",
+      "status": 400,
+      "durationMs": 559
+    },
+    {
+      "route": "respondToRequest",
+      "status": 200,
+      "durationMs": 637
+    },
+    {
+      "route": "respondToRequest",
+      "status": 200,
+      "durationMs": 791
+    },
+    {
+      "route": "respondToRequest",
+      "status": 200,
+      "durationMs": 985
+    },
+    {
+      "route": "respondToRequest",
+      "status": 200,
+      "durationMs": 1293
+    },
+    {
+      "route": "respondToRequest",
+      "status": 200,
+      "durationMs": 2250
+    },
+    {
+      "route": "respondToRequest",
+      "status": 200,
+      "durationMs": 2264
+    },
+    {
+      "route": "respondToRequest",
+      "status": 200,
+      "durationMs": 871
+    },
+    {
+      "route": "getMessages",
+      "status": 403,
+      "durationMs": 626
+    },
+    {
+      "route": "sendMessage",
+      "status": 200,
+      "durationMs": 736
+    },
+    {
+      "route": "sendMessage",
+      "status": 200,
+      "durationMs": 817
+    },
+    {
+      "route": "sendMessage",
+      "status": 200,
+      "durationMs": 2137
+    },
+    {
+      "route": "sendMessage",
+      "status": 200,
+      "durationMs": 2149
+    },
+    {
+      "route": "sendMessage",
+      "status": 200,
+      "durationMs": 2227
+    },
+    {
+      "route": "sendMessage",
+      "status": 200,
+      "durationMs": 2296
+    },
+    {
+      "route": "sendMessage",
+      "status": 200,
+      "durationMs": 2322
+    },
+    {
+      "route": "sendMessage",
+      "status": 200,
+      "durationMs": 2498
+    },
+    {
+      "route": "sendMessage",
+      "status": 200,
+      "durationMs": 678
+    },
+    {
+      "route": "sendMessage",
+      "status": 400,
+      "durationMs": 577
+    },
+    {
+      "route": "getMessages",
+      "status": 200,
+      "durationMs": 703
+    },
+    {
+      "route": "sendMessage",
+      "status": 200,
+      "durationMs": 756
+    },
+    {
+      "route": "getMessages",
+      "status": 200,
+      "durationMs": 673
+    },
+    {
+      "route": "getMessages",
+      "status": 200,
+      "durationMs": 700
+    },
+    {
+      "route": "sendMessage",
+      "status": 400,
+      "durationMs": 709
+    },
+    {
+      "route": "generateTid",
+      "status": 200,
+      "durationMs": 622
+    },
+    {
+      "route": "redeemTid",
+      "status": 200,
+      "durationMs": 863
+    },
+    {
+      "route": "redeemTid",
+      "status": 200,
+      "durationMs": 1345
+    },
+    {
+      "route": "redeemTid",
+      "status": 200,
+      "durationMs": 2056
+    },
+    {
+      "route": "respondToRequest",
+      "status": 200,
+      "durationMs": 721
+    },
+    {
+      "route": "respondToRequest",
+      "status": 200,
+      "durationMs": 1374
+    },
+    {
+      "route": "respondToRequest",
+      "status": 200,
+      "durationMs": 1448
+    },
+    {
+      "route": "respondToRequest",
+      "status": 200,
+      "durationMs": 1499
+    },
+    {
+      "route": "respondToRequest",
+      "status": 200,
+      "durationMs": 1577
+    },
+    {
+      "route": "respondToRequest",
+      "status": 200,
+      "durationMs": 1847
+    },
+    {
+      "route": "fileReport",
+      "status": 400,
+      "durationMs": 541
+    },
+    {
+      "route": "fileReport",
+      "status": 200,
+      "durationMs": 1650
+    },
+    {
+      "route": "fileReport",
+      "status": 200,
+      "durationMs": 1720
+    },
+    {
+      "route": "fileReport",
+      "status": 200,
+      "durationMs": 1795
+    },
+    {
+      "route": "fileReport",
+      "status": 200,
+      "durationMs": 2819
+    },
+    {
+      "route": "fileReport",
+      "status": 200,
+      "durationMs": 678
+    },
+    {
+      "route": "sendMessage",
+      "status": 404,
+      "durationMs": 653
+    },
+    {
+      "route": "getMessages",
+      "status": 404,
+      "durationMs": 619
+    },
+    {
+      "route": "blockUser",
+      "status": 200,
+      "durationMs": 677
+    },
+    {
+      "route": "blockUser",
+      "status": 200,
+      "durationMs": 662
+    },
+    {
+      "route": "endConnection",
+      "status": 200,
+      "durationMs": 784
+    },
+    {
+      "route": "generateTid",
+      "status": 200,
+      "durationMs": 614
+    },
+    {
+      "route": "deactivateTid",
+      "status": 200,
+      "durationMs": 560
+    },
+    {
+      "route": "deactivateTid",
+      "status": 200,
+      "durationMs": 567
+    },
+    {
+      "route": "redeemTid",
+      "status": 404,
+      "durationMs": 856
+    },
+    {
+      "route": "deleteAccount",
+      "status": 200,
+      "durationMs": 1371
+    },
+    {
+      "route": "getMessages",
+      "status": 401,
+      "durationMs": 526
+    },
+    {
+      "route": "deleteAccount",
+      "status": 200,
+      "durationMs": 1380
+    },
+    {
+      "route": "getMessages",
+      "status": 401,
+      "durationMs": 524
+    },
+    {
+      "route": "deleteAccount",
+      "status": 200,
+      "durationMs": 1353
+    },
+    {
+      "route": "getMessages",
+      "status": 401,
+      "durationMs": 533
+    }
+  ]
+}

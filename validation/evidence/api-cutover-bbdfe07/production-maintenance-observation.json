@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-10-16T22:34:43.469Z",
+  "exists": true,
+  "fieldNames": [
+    "lastRunAt"
+  ],
+  "lastRunAt": 1792189439162.511,
+  "lastFailedAt": null,
+  "activeLease": false,
+  "leaseUntil": null,
+  "scope": "Read-only observation of maintenance record; only lastRunAt exists. No claim that the cron endpoint was explicitly exercised."
+}

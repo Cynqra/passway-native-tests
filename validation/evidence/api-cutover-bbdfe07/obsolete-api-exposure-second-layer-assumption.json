@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-10-16T22:42:12.399Z",
+  "pass": false,
+  "scope": "Noncanonical backend URLs remain authentication-protected; canonical secondary alias enforces App Check. No provider response bodies or authentication callback nonces retained.",
+  "rows": [
+    {
+      "target": "https://passway-aqr4x5ghs-naveenbharti310s-projects.vercel.app",
+      "status": 401,
+      "pass": true,
+      "rejectionLayer": "Vercel deployment authentication"
+    },
+    {
+      "target": "https://passway-a9dp1o0m9-naveenbharti310s-projects.vercel.app",
+      "status": 401,
+      "pass": true,
+      "rejectionLayer": "Vercel deployment authentication"
+    },
+    {
+      "target": "https://passway-api-naveenbharti310s-projects.vercel.app",
+      "status": 401,
+      "pass": false,
+      "rejectionLayer": "Application App Check"
+    }
+  ]
+}

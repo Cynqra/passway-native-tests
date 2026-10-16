@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-10-16T22:35:30.939Z",
+  "pass": false,
+  "rows": [
+    {
+      "target": "https://passway-aqr4x5ghs-naveenbharti310s-projects.vercel.app",
+      "status": 401,
+      "contentType": "application/json",
+      "pass": false,
+      "scope": "Historical/staged unique URL must remain behind deployment authentication"
+    },
+    {
+      "target": "https://passway-a9dp1o0m9-naveenbharti310s-projects.vercel.app",
+      "status": 401,
+      "contentType": "application/json",
+      "pass": false,
+      "scope": "Historical/staged unique URL must remain behind deployment authentication"
+    },
+    {
+      "target": "https://passway-api-naveenbharti310s-projects.vercel.app",
+      "status": 401,
+      "contentType": "application/json",
+      "pass": true,
+      "scope": "Secondary production alias must enforce application attestation"
+    }
+  ]
+}

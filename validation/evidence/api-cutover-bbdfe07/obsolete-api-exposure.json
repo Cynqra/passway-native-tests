@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-10-16T22:48:30.733Z",
+  "pass": true,
+  "scope": "Unauthenticated access to old/new unique deployments and secondary alias is blocked by Vercel authentication. Canonical public API is separately checked for App Check. No response bodies or callback nonces retained.",
+  "rows": [
+    {
+      "target": "https://passway-aqr4x5ghs-naveenbharti310s-projects.vercel.app",
+      "status": 401,
+      "pass": true,
+      "rejectionLayer": "Vercel deployment authentication"
+    },
+    {
+      "target": "https://passway-a9dp1o0m9-naveenbharti310s-projects.vercel.app",
+      "status": 401,
+      "pass": true,
+      "rejectionLayer": "Vercel deployment authentication"
+    },
+    {
+      "target": "https://passway-api-naveenbharti310s-projects.vercel.app",
+      "status": 401,
+      "pass": true,
+      "rejectionLayer": "Vercel deployment authentication"
+    }
+  ]
+}
