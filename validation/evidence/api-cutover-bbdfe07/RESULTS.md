@@ -45,3 +45,9 @@ Play access uses short-lived OIDC federation, not a stored publisher JSON key. I
 Not production-ready certification. Genuine Play-installed positive native attestation and real-device release flow remain unverified. Prior Android14/16 emulator results (81 assertions each) are historical accepted-source evidence, not new native production tests in this pass. Genuine store/installer licensing must not be spoofed.
 
 Store privacy policy, off-app deletion request process, reviewer access, content rating, target audience and Data Safety require completion and factual validation. Raw dependency advisories remain visible; hash-bound reviewed build-tool remediations and exploit/conformance gates pass, which is not a claim of zero upstream advisories. No claim of zero possible bugs, no paid upgrade and no public rollout.
+
+## Subsequent deeper database verification: release remains blocked
+
+Read-only inspection confirmed all three required production composite indexes READY, but the deployed Firestore rules SHA256 is 74f5ff0a79cc9965f9aad1aa417ccefecf3df73f7a5e6c1e34a336b5e9c1579e, not accepted source 59914db6e5de3b2837a9c0d01327b8a777660c8809d43937832731ff6edb3f06. The old rules still permit direct participant message-body reads and lack deletion-state profile protections. A disposable synthetic expired message was directly readable (HTTP200), while the current API returned only the fresh message. This confirms a real server-expiry bypass via stale rules, not an API test failure. All owned fixtures were deleted.
+
+The Firebase Rules compiler request was denied HTTP403 IAM_PERMISSION_DENIED for the available service credential. No rules were changed. The observation report deliberately remains failing. Resolution requires rule-management authorization and the controlled accepted-rule cutover with direct-read denial and compatible API/profile/metadata postchecks. Historical rule-emulator success is not deployed-rule parity.

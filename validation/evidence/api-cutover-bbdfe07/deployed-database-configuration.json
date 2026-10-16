@@ -1,0 +1,90 @@
+{
+  "checkedAt": "2026-10-16T22:50:54.026Z",
+  "scope": "Read-only deployed database configuration, no user document bodies or tokens retained",
+  "rows": [
+    {
+      "name": "Production composite indexes",
+      "httpStatus": 200,
+      "indexes": [
+        {
+          "collectionGroup": "connectionRequests",
+          "queryScope": "COLLECTION",
+          "state": "READY",
+          "fields": [
+            {
+              "fieldPath": "generatorId",
+              "order": "ASCENDING"
+            },
+            {
+              "fieldPath": "tid",
+              "order": "ASCENDING"
+            },
+            {
+              "fieldPath": "tidCreatedAt",
+              "order": "ASCENDING"
+            },
+            {
+              "fieldPath": "status",
+              "order": "ASCENDING"
+            },
+            {
+              "fieldPath": "__name__",
+              "order": "ASCENDING"
+            }
+          ]
+        },
+        {
+          "collectionGroup": "accountDeletions",
+          "queryScope": "COLLECTION",
+          "state": "READY",
+          "fields": [
+            {
+              "fieldPath": "status",
+              "order": "ASCENDING"
+            },
+            {
+              "fieldPath": "lastAttemptAt",
+              "order": "ASCENDING"
+            },
+            {
+              "fieldPath": "__name__",
+              "order": "ASCENDING"
+            }
+          ]
+        },
+        {
+          "collectionGroup": "connections",
+          "queryScope": "COLLECTION",
+          "state": "READY",
+          "fields": [
+            {
+              "fieldPath": "status",
+              "order": "ASCENDING"
+            },
+            {
+              "fieldPath": "lastActivityAt",
+              "order": "ASCENDING"
+            },
+            {
+              "fieldPath": "__name__",
+              "order": "ASCENDING"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Production Firestore rules binding",
+      "httpStatus": 200,
+      "rulesetHttpStatus": 200,
+      "updatedAt": "2026-10-03T05:23:25.323379Z",
+      "files": [
+        {
+          "name": "firestore.rules",
+          "sha256": "74f5ff0a79cc9965f9aad1aa417ccefecf3df73f7a5e6c1e34a336b5e9c1579e",
+          "matchesAcceptedSource": false
+        }
+      ]
+    }
+  ]
+}

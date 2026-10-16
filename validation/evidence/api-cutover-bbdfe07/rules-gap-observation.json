@@ -1,0 +1,38 @@
+{
+  "checkedAt": "2026-10-16T22:53:49.733Z",
+  "applied": false,
+  "scope": "Real deployed Firestore rules using disposable synthetic fixtures and ADMIN-issued App Check. No SMS, genuine Store attestation, public release or pre-existing user data changed.",
+  "pass": false,
+  "rows": [
+    {
+      "name": "Rule bytes match tested accepted source",
+      "pass": true
+    },
+    {
+      "name": "Current canonical server-read acceptance passed",
+      "pass": true
+    },
+    {
+      "name": "Current compatible client is available internally; no public legacy release",
+      "pass": true
+    },
+    {
+      "name": "Official rule compiler and four semantic assertions pass",
+      "pass": false,
+      "detail": "HTTP 403"
+    },
+    {
+      "name": "Pre-change stale-rule bypass reproduced on owned expired message",
+      "pass": true,
+      "detail": "HTTP 200; body omitted"
+    },
+    {
+      "name": "Current server path returns only the fresh message",
+      "pass": true
+    },
+    {
+      "name": "Owned rule fixture cleanup",
+      "pass": true
+    }
+  ]
+}
