@@ -211,32 +211,35 @@
   ],
   "gatePolicy": "Do not advance a phase as complete with untested fixes or unclassified blockers. Reproduce failures before minimal changes, validate concurrently independent fixes together, and retain raw failures. Production cannot be labeled zero-bugs or accepted without licensed store attestation and real production acceptance.",
   "phase1Source": "d58e411b5355bede342c94b52b9075b9a3614b0b",
-  "modelAvailability": "Argon High previously quota-blocked; subsequent browser is signed out; no fallback prompts sent.",
+  "modelAvailability": {
+    "model": "gemini-4-argon-high",
+    "effort": "high",
+    "highestAvailable": true,
+    "cli": "Antigravity1.4.0",
+    "authenticated": true,
+    "independentReview": "success",
+    "firstAttempt": "invalid-file-discovery loop stopped; not accepted",
+    "reviewEvidence": "intent-recovery-ec65e82/argon-high-review.json",
+    "paidApiBillingEnabled": false
+  },
   "phase1PromotionPolicy": "All confirmed phase1 engineering defects fixed and clean tested; deployment mismatch and unpatched upstream advisory risks remain explicit release blockers for coordinated phase5 acceptance, not falsely marked fixed.",
-  "updatedAt": "2026-10-16T17:20:16.248708+00:00",
+  "updatedAt": "2026-10-16T18:07:55.819052+00:00",
   "currentCandidate": {
-    "sourceCommit": "2ffec5fd702824ec5d4f1b200ac28102fd8b2a4b",
-    "archiveSha256": "38b34906d1dcf6b5b0fa61cbc9cdd9ffed7a60534f741fd3cfd1151aca4ea048",
+    "source": "ec65e826e456f406a9087da843c4d4d6425d886d",
+    "archiveSha256": "b6b17bd4f65dec104f2c7287e297722884695b4351e639ea99642a1b5b563daf",
     "version": "0.3.4",
     "androidVersionCode": 10,
-    "published": false,
-    "nativeHarnessCommit": "60e2e35b60f29f07ba2bb77a2150599441999ed4",
-    "cleanAndSigningHarnessCommit": "10a4db2ec1672154ac57c2a333ce9293b3072c45",
-    "status": "isolated_engineering_acceptance_passed_production_release_blocked",
-    "runs": {
-      "source": 38935318797,
-      "central": 38935320479,
-      "static": 38935325182,
-      "nativeAPI34": 38935487439,
-      "nativeAPI36": 38935492565,
-      "signed": 38935337937
-    },
-    "verifiedReports": [
-      "visual10-clean-verification.json",
-      "visual10-signed-verification.json",
-      "visual10-native-verification.json",
-      "visual10-production-negative.json"
-    ]
+    "sourceCleanRun": 38941004403,
+    "independentCleanRun": 38941001227,
+    "casesPerCleanRun": 634,
+    "nativeAndroid14": 38941009423,
+    "nativeAndroid16": 38941013183,
+    "nativeCasesPerRun": 81,
+    "staticRun": 38941005486,
+    "signedRun": 38941016522,
+    "productionReady": false,
+    "productionNegativePassed": 0,
+    "productionNegativeTotal": 8
   },
   "preservedFailures": [
     {
@@ -268,5 +271,37 @@
       "run": 38931567916,
       "classification": "native probe explicit pre-dispatch target unavailable after preceding visible snapshot; cache/window root cause not yet proven; no product pass claimed"
     }
-  ]
+  ],
+  "candidateHistory": [
+    {
+      "sourceCommit": "2ffec5fd702824ec5d4f1b200ac28102fd8b2a4b",
+      "archiveSha256": "38b34906d1dcf6b5b0fa61cbc9cdd9ffed7a60534f741fd3cfd1151aca4ea048",
+      "version": "0.3.4",
+      "androidVersionCode": 10,
+      "published": false,
+      "nativeHarnessCommit": "60e2e35b60f29f07ba2bb77a2150599441999ed4",
+      "cleanAndSigningHarnessCommit": "10a4db2ec1672154ac57c2a333ce9293b3072c45",
+      "status": "isolated_engineering_acceptance_passed_production_release_blocked",
+      "runs": {
+        "source": 38935318797,
+        "central": 38935320479,
+        "static": 38935325182,
+        "nativeAPI34": 38935487439,
+        "nativeAPI36": 38935492565,
+        "signed": 38935337937
+      },
+      "verifiedReports": [
+        "visual10-clean-verification.json",
+        "visual10-signed-verification.json",
+        "visual10-native-verification.json",
+        "visual10-production-negative.json"
+      ]
+    }
+  ],
+  "phase5IntentRecovery": {
+    "mobileRegressionCasesAdded": 28,
+    "backendRegressionCasesAdded": 26,
+    "realFirestoreCasesAdded": 4,
+    "liveProductionStillBlocked": true
+  }
 }

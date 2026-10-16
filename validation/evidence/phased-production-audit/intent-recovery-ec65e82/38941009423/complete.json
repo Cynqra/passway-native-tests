@@ -1,0 +1,5 @@
+{
+  "status": "passed",
+  "android_sdk": "34",
+  "coverage": "Fresh candidate-source Android build with a test-only local emulator routing overlay; two isolated Android users; local Firebase Auth/Firestore and candidate HTTP handlers; keyboard occlusion and startup recovery; no production, real SMS, store attestation or physical-device certification"
+}

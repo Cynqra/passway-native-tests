@@ -1,0 +1,16 @@
+{
+  "failure": "Argon CLI file-discovery repeatedly requested nonexistent paths despite selected files being supplied. Review not accepted.",
+  "statusCounts": {
+    "DONE": 49,
+    "ERROR": 352
+  },
+  "errorCount": 352,
+  "sampleErrors": [
+    "declaring permissions: cortex tool view_file: convert tool call for permissions: model output error: invalid tool call error (invalid_args) failed to read file: stat /data/passway-argon-review/.git/HEAD: no such file or directory",
+    "declaring permissions: cortex tool view_file: convert tool call for permissions: model output error: invalid tool call error (invalid_args) failed to read file: stat /data/passway-argon-review/package.json: no such file or directory",
+    "declaring permissions: cortex tool view_file: convert tool call for permissions: model output error: invalid tool call error (invalid_args) cannot view \"/data/passway-argon-review\": path is a directory, not a file",
+    "declaring permissions: cortex tool view_file: convert tool call for permissions: model output error: invalid tool call error (invalid_args) failed to read file: stat /data/passway-argon-review/backend: no such file or directory",
+    "declaring permissions: cortex tool view_file: convert tool call for permissions: model output error: invalid tool call error (invalid_args) failed to read file: stat /data/passway-argon-review/mobile: no such file or directory"
+  ],
+  "action": "Stop loop; rerun bounded review with exact source in prompt and no tools."
+}

@@ -1,4 +1,46 @@
-# Phased audit: isolated engineering acceptance passed; production release BLOCKED
+# Latest rigorous audit: ec65e82 isolated gates passed; production BLOCKED
+
+## Exact latest candidate
+
+- Source `ec65e826e456f406a9087da843c4d4d6425d886d`, archive SHA256 `b6b17bd4f65dec104f2c7287e297722884695b4351e639ea99642a1b5b563daf`.
+- New clean, native, static and signed gates consume the identical archive through harness `62e9723ae23dd6112965ecfb218210657e0a04c9`.
+- Unpublished0.3.4/Android10. AAB SHA256 `872fb7529f38dff18e5533c1e273d3e51899e73670df1b98873133f813465a9a`. Backup explicitlyfalse; debuggable absent/defaultfalse; cleartext absent/defaultfalse with target API36. No store publication, production deployment, paid API enablement, or billing change.
+
+## Confirmed reliability fixes
+
+- A lost redemption acknowledgement formerly stranded a successfully committed requester. Optional random intent identity now binds recovery to authenticated UID, normalized name, code and exact code incarnation. Rechecks cover active accounts/phone holds, diagnostic cohort, bidirectional blocks, proximity, request/code expiry and accepted connection participants/status. Recovery cannot reverse a decline, extend expiry, claim a new code incarnation, or reopen an ended connection. Legacy clients retain strict single-use semantics. Replay sends no duplicate notification.
+- Expiry is rechecked after asynchronous account/block/connection reads before returning or writing; expiry crossing fails closed.
+- Synchronous refs serialize same-render connect/cancel/accept-vs-decline, OTP send-vs-verify, chat send/safety/note, age, name-save and account deletion/recovery operations. Button and keyboard/system-back paths share guards. Failures permit explicit retries; a resent OTP clears superseded input.
+- Sign-out errors are caught and displayed rather than unhandled; duplicate deletion dialogs and overlapping deletion loops are suppressed.
+
+58 additional cases:28 actual-TSX handler,26 backend recovery/security,4 real-Firestore. Not every new regression is a distinct vulnerability.
+
+| Latest gate | Actual result | Run |
+|---|---|---|
+| Source clean dependency/regression/export |634/634; typechecks; all-platform exports; controlled preview build|[38941004403](https://github.com/naveenbharti310/Paasway/actions/runs/38941004403)|
+| Independent clean validation |634/634; installed remediation/conformance policy passed|[38941001227](https://github.com/Cynqra/passway-native-tests/actions/runs/38941001227)|
+| Static analysis |0 SARIF findings|[38941005486](https://github.com/Cynqra/passway-native-tests/actions/runs/38941005486)|
+| Android14 native |81/81;925.34s; one full attempt;0 pre-dispatch reacquisitions|[38941009423](https://github.com/Cynqra/passway-native-tests/actions/runs/38941009423)|
+| Android16 native |81/81;905.62s; one full attempt;0 pre-dispatch reacquisitions|[38941013183](https://github.com/Cynqra/passway-native-tests/actions/runs/38941013183)|
+| Upload-signed candidate |same source/archive; metadata, manifest and SHA independently checked|[38941016522](https://github.com/Cynqra/passway-native-tests/actions/runs/38941016522)|
+
+634 cases per clean run =4policy+196mobile+308backend+35rules+87real-Firestore+4real-Auth. Independent repeats do not double unique coverage. Both native screenshots were inspected: codes remain single-line; large-text consent labels remain whole/stacked. Request screenshots are scrolled to decision controls, not evidence that all content fits without scrolling. Native emulator evidence is not real SMS, licensed Play attestation, physical-device accessibility or production load certification. A bounded local workload separately passed160unique messages under320send/replay calls across16pairs; it is not a production SLA.
+
+## Requested external review: Argon High actually executed
+
+Official Antigravity CLI1.4.0 is authenticated. Model `gemini-4-argon-high` was pinned, effort `high`; actual effort inspection reports only `low,medium,high`, so High is the highest supported tier. No silent fallback or paid API activation.
+
+The first file-discovery review repeatedly requested nonexistent paths and was stopped, not accepted. The replacement supplied14 exact source files directly and completed in one turn,142.00s:39,737input tokens,11,988output tokens,10,757thinking tokens,51,725total. It reports no confirmed correctness/security bug in supplied-code scope. It ran no tests and is not zero-bug/production certification. Result/configuration proof is in `intent-recovery-ec65e82/argon-high-review.json`; OAuth secrets and private reasoning transcripts are excluded.
+
+## Production remains blocked
+
+Fresh safe live negative probe:0/8. OTP routes400 before required attestation rejection; generateTid401wrongcontract; getMessages404. No SMS or authenticated mutation. Candidate not deployed. Coordinated additive API/index/client/rules cutover, genuine Play-installed positive attestation, actual2factor delivery acceptance, cloud-test IAM, and production monitoring remain unresolved. Raw registry audit still reports21high; installed hash-bound mitigations do not make it clean.
+
+Detailed proof: `intent-recovery-ec65e82/`. Earlier evidence below is historical, never inherited as acceptance of changed source.
+
+---
+
+# Historical candidate: 2ffec5f (superseded by ec65e82)
 
 ## Exact candidate
 
@@ -47,4 +89,4 @@ Do not blindly deploy deny-body-read rules or enable enforcement against an unve
 
 Current cloud-test credential's read-only IAM inspection grants storage.buckets.create, not Test Lab matrix permissions. Free minutes do not grant IAM permission; no paid APIs, billing upgrade, self-granted roles, or security bypass was introduced. The Play publishing connection itself is working.
 
-No current Gemini4Argon inference is claimed: its prior quota/sign-in block remained, and no Flash-Lite fallback prompt was sent. Runtime evidence comes from actual GitHub/Android/Node tools. No zero-bugs or production-ready certification is made.
+At this historical checkpoint, no Gemini4Argon inference was claimed. This was subsequently resolved through the official Antigravity CLI, as documented above. No Flash-Lite fallback review was used. Runtime evidence comes from actual GitHub/Android/Node tools. No zero-bugs or production-ready certification is made.

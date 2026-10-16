@@ -1,0 +1,30 @@
+{
+  "sourceCommit": "ec65e826e456f406a9087da843c4d4d6425d886d",
+  "sourceArchiveSha256": "b6b17bd4f65dec104f2c7287e297722884695b4351e639ea99642a1b5b563daf",
+  "harnessCommit": "62e9723ae23dd6112965ecfb218210657e0a04c9",
+  "model": "gemini-4-argon-high",
+  "effort": {
+    "adjustable": true,
+    "current": "high",
+    "available": [
+      "low",
+      "medium",
+      "high"
+    ]
+  },
+  "cliVersion": "1.4.0",
+  "status": "SUCCESS",
+  "durationSeconds": 142.000925962,
+  "turns": 1,
+  "usage": {
+    "input_tokens": 39737,
+    "output_tokens": 11988,
+    "thinking_tokens": 10757,
+    "cache_read_tokens": 0,
+    "total_tokens": 51725
+  },
+  "findingScope": "14 selected source files, styles omitted; independent code review only; no runtime tests executed by Argon",
+  "result": "No confirmed correctness or security bugs were found in commit `ec65e826e456f406a9087da843c4d4d6425d886d`.\n\n### Verification Summary\n\n1. **Lost HTTP Response Recovery & Replay Binding (`tids.ts:45-99`, `EnterCodeScreen.tsx:28,81-91`, `api/connections.ts:9,16-20`)**\n   - **Principal & Intent Binding**: `requestRef` is deterministically derived as `sha256(\"${uid}\\0${redemptionId}\")` (`tids.ts:55-56`), binding the recovery document ID to the authenticated caller's `uid` rather than caller-supplied identity, with `redemptionId` validated against `/^[A-Za-z0-9_-]{20,128}$/` (`tids.ts:46`).\n   - **Code Incarnation & Parameter Pinning**: When `prior` exists (`tids.ts:62-71`), the transaction verifies `prior.requesterId === uid`, `prior.requesterName === displayName`, `prior.tid === tid`, `code.createdAt === prior.tidCreatedAt`, `code.generatorId === prior.generatorId`, `code.requestId === requestRef.id`, and `code.expiresAt === prior.expiresAt`. A replay cannot switch names, claim a different code incarnation, or hijack another request.\n   - **State & Lifecycle Enforcement**: Replay is permitted only while `(prior.status === 'pending' && code.status === 'pending')` or `(prior.status === 'accepted' && code.status === 'connected')` (`tids.ts:69`), and while both `prior.expiresAt` and `code.expiresAt` remain unexpired at both transaction start (`now`, `tids.ts:68`) and completion (`servedAt`, `tids.ts:88-89`).\n   - **Accepted-State Active Connection Check**: If the generator already accepted the request before the requester's retry arrived (`prior.status === 'accepted'`, `tids.ts:81-87`), the transaction loads `connections/{prior.connectionId}` and requires `connection?.status === 'active'`, `connection.userA === code.generatorId`, and `connection.userB === uid`, preventing revival of an ended, blocked, or reported chat.\n   - **Push Idempotency**: `fresh: false` on recovery (`tids.ts:90,98`) suppresses duplicate push notifications to the generator.\n   - **Client Intent Rotation**: `EnterCodeScreen.tsx:82-85` reuses `redemptionIntent.current.id` across failed attempts for the exact `{ tid, displayName }` pair and allocates a fresh `newRedemptionId()` whenever `tid` or trimmed `displayName` changes.\n\n2. **Acceptance Replay & Guarding (`connections.ts:11-60`, `RequestScreen.tsx:34-70`)**\n   - **Idempotent Accept/Decline Recovery**: `respondToRequest` (`connections.ts:24-36`) safely recovers lost HTTP responses when `pending.status === 'accepted' && data.accept` (verifying the existing connection is still `'active'` with matching `userA`/`userB` and re-running account, cohort, and block assertions) or when `pending.status === 'declined' && !data.accept`, while rejecting decision flips or stale states.\n\n3. **Participant, Account, Cohort, Block & Proximity Checks (`tids.ts:58,75-79`, `connections.ts:29-32,46-50`, `accounts.ts:28-60`, `blocks.ts:11-14`, `validation.ts:6-8`)**\n   - Self-redemption/self-connection checks, `assertAccountActive` (including fail-closed status checks, age confirmation, and `accountHolds` phone-hash policy checks), `assertSameTestCohort`, bidirectional `assertNotBlocked`, geohash neighbor verification, and non-coercing `isUnexpiredMillis` checks are enforced inside the Firestore transactions on both initial and replay paths.\n\n4. **Same-Render Synchronous Ref Guards & React Async Paths**\n   - Synchronous `useRef` guards (`connectInFlight` in `EnterCodeScreen.tsx:27,67,77,95`, `cancelInFlight` in `CodeScreen.tsx:21,72-73,82`, `responseInFlight` in `RequestScreen.tsx:31,53-54,67`, `authInFlight` in `PhoneAuthScreen.tsx:31,36,42,53,59,64,74,105`, `sendInFlight`/`safetyInFlight`/`noteInFlight`/`navigatedAway` in `ChatScreen.tsx:74-76,89,180-258,333-345`, `operationInFlight` in `DeletionRecoveryScreen.tsx:10,14-27` and `AgeCheckScreen.tsx:24,30,36,46,52-56`, and `operationInFlight`/`confirmationOpen` in `SettingsScreen.tsx:26-27,43-102`) are set synchronously after input validation and reset in `finally`/dismiss handlers, preventing same-render duplicate invocations.\n",
+  "paidApiBillingEnabledByAgent": false,
+  "firstAttempt": "Stopped for invalid-path tool loop; no acceptance inherited from that attempt."
+}
