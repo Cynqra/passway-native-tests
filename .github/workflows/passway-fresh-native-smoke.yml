@@ -154,9 +154,7 @@ jobs:
           pre-emulator-launch-script: PASSWAY_AVD_NAME=passway-isolated python3 harness/configure_avd.py
           script: |
             set -eu
-            actual_api=$(adb shell getprop ro.build.version.sdk | tr -d '\r')
-            printf '%s\n' "$actual_api" | tee native-results/android-api.txt
-            test "$actual_api" = "$PASSWAY_EXPECTED_ANDROID_API"
+            python3 harness/verify_android_api.py
             adb shell wm size | tee native-results/display-size.txt
             adb shell wm density | tee native-results/display-density.txt
             grep -qx "Physical size: 540x1200" native-results/display-size.txt

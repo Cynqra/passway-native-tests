@@ -118,6 +118,6 @@ class HarnessTests(unittest.TestCase):
   self.assertIn("android_api_level:\n",text)
   self.assertIn("options: ['34', '35', '36']",text)
   self.assertIn("api-level: ${{ inputs.android_api_level || '36' }}",text)
-  self.assertIn('test \"$actual_api\" = \"$PASSWAY_EXPECTED_ANDROID_API\"',text)
-  self.assertIn('native-results/android-api.txt',text)
+  self.assertIn('            python3 harness/verify_android_api.py\n',text)
+  self.assertNotIn('actual_api=$(',text)
 if __name__=='__main__':unittest.main()
