@@ -10,6 +10,59 @@ VERSION = 8
 DIGEST = '6bcc69919bed10d4e1178ff96abd9eda52cdc84a9f708bee8637567b92f4e63c'
 
 
+class StartupEnvironmentBlocked(RuntimeError):
+    def __init__(self, diagnostic):
+        self.diagnostic = diagnostic
+        super().__init__('Environment blocked: ' + ', '.join(diagnostic['signals']))
+
+
+def classify_startup_blocker(visible_text, process_log):
+    # A historical warning or generic app error alone is not an environment
+    # diagnosis. Require the observed Google Play error screen plus evidence.
+    if 'check that google play is enabled' not in visible_text.lower():
+        return None
+    signals = []
+    if 'local install check failed due to wrong installer' in process_log.lower():
+        signals.append('wrong-installer')
+    older = re.search(
+        r'Google Play services out of date[^\r\n]*'
+        r'Requires\s+(\d+)\s+but found\s+(\d+)', process_log, re.I)
+    if older and int(older[1]) > int(older[2]):
+        signals.append('play-services-outdated')
+    if ('com.pairip.licensecheck.LicenseCheckException' in process_log
+            and 'Licensing service could not process request' in process_log):
+        signals.append('licensing-service-denied')
+    if not signals:
+        return None
+    # Never persist arbitrary raw log content, credentials, or account data here.
+    return {
+        'kind': 'environment-blocked', 'signals': signals, 'passed': False,
+        'storeInstallationOrAttestationVerified': False,
+        'requiredEnvironment': 'Supported Play environment with genuine installation',
+        'securityBypassAttempted': False,
+    }
+
+
+def wait_for_release_onboarding(read_tree, locate, read_process_log, seconds=60,
+                                clock=time.monotonic, sleep_fn=time.sleep):
+    end = clock() + seconds
+    while clock() < end:
+        tree = read_tree()
+        control = locate('welcome-next', tree)
+        if control is not None and control.get('visible-to-user') == 'true':
+            return control
+        text = ' '.join(n.get('text', '') for n in tree.iter('node'))
+        if 'check that google play is enabled' in text.lower():
+            diagnostic = classify_startup_blocker(text, read_process_log())
+            if diagnostic:
+                raise StartupEnvironmentBlocked(diagnostic)
+        remaining = end - clock()
+        if remaining <= 0:
+            break
+        sleep_fn(min(1, remaining))
+    raise TimeoutError('Actual Play release did not reach onboarding within its deadline')
+
+
 def verify_download(directory, expected_digest=DIGEST):
     directory = pathlib.Path(directory)
     metadata = json.loads((directory / 'download-verification.json').read_text())
@@ -26,10 +79,12 @@ def verify_download(directory, expected_digest=DIGEST):
 
 def main():
     # Importing test helpers must never start a phone interaction.
-    from driver import ROOT, adb, shell, dump, find, tap, fill, waitfor, shot, record
+    from driver import ROOT, adb, shell, dump, find, tap, fill, waitfor, shot, record, deadline
     verify_download('store-apk-results')
     (ROOT / 'store-release-complete.json').unlink(missing_ok=True)
+    (ROOT / 'startup-environment-blocker.json').unlink(missing_ok=True)
     passed = False
+    environment_blocker = None
 
     def check(name, condition):
         if not condition:
@@ -62,7 +117,12 @@ def main():
             observed = float(shell('settings', 'get', 'system', 'font_scale').strip())
             check(label + ' system font scale applied', observed == float(scale))
             shell('am', 'start', '-W', '-n', PACKAGE + '/.MainActivity')
-            waitfor('welcome-next', 60)
+            def current_process_log():
+                pid = shell('pidof', PACKAGE).strip()
+                # Constrain logs to the exact currently running app process.
+                return adb('logcat', '-d', '--pid=' + pid) if pid.isdigit() else ''
+            with deadline(60):
+                wait_for_release_onboarding(dump, find, current_process_log)
             capture(label + '-welcome-1')
             check(label + ' release cold start reaches onboarding', True)
             for page in range(2, 5):
@@ -93,6 +153,10 @@ def main():
             'authenticatedTwoUserFlowTested': False, 'realSmsSent': False,
         }, indent=2) + '\n')
     except Exception as error:
+        if isinstance(error, StartupEnvironmentBlocked):
+            environment_blocker = error.diagnostic
+            (ROOT / 'startup-environment-blocker.json').write_text(
+                json.dumps(environment_blocker, indent=2) + '\n')
         record('Actual signed-release offline UI acceptance', 'FAIL', type(error).__name__)
         try:
             capture('release-failure')
@@ -103,6 +167,7 @@ def main():
         (ROOT / 'store-release-outcome.json').write_text(json.dumps({
             'passed': passed, 'realSmsSent': False,
             'storeInstallationOrAttestationClaimed': False,
+            'environmentBlocker': environment_blocker,
         }, indent=2) + '\n')
         try:
             pid = shell('pidof', PACKAGE).strip()
