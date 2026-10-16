@@ -1,0 +1,14 @@
+{
+  "sourceCommit": "fbc13efb9ce8ea0322ae455e1694d164a163af76",
+  "regressionRun": 38905433289,
+  "sourceCases": {
+    "mobile": 129,
+    "backend": 223,
+    "rules": 35,
+    "realFirestore": 80,
+    "total": 467
+  },
+  "staticRun": 38905436876,
+  "sarifFindings": 0,
+  "scope": "Exact-source regression and static checks; not production/Store attestation"
+}

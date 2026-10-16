@@ -1,0 +1,8 @@
+{
+  "scope": "Read-only exact Test Lab denial, no authentication token output",
+  "status": 403,
+  "message": "Not authorized for project passway-2ddc8",
+  "legacyReasons": [
+    "forbidden"
+  ]
+}

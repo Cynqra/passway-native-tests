@@ -1,0 +1,60 @@
+{
+  "sourceCommit": "8a6d79da24454e5373e5b89d34df279b067a1993",
+  "baselineRun": 38894446875,
+  "optimizedRun": 38903889888,
+  "same75AssertionsAllPassed": true,
+  "freshCompletionMarkersVerified": true,
+  "baseline": {
+    "coordinatorSeconds": 1037.54,
+    "instrumentationCalls": 779,
+    "instrumentationSeconds": 644.34,
+    "byAction": {
+      "read": {
+        "calls": 542,
+        "totalSeconds": 340.71,
+        "medianSeconds": 0.56,
+        "p95Seconds": 1.24
+      },
+      "touch": {
+        "calls": 174,
+        "totalSeconds": 229.67,
+        "medianSeconds": 1.21,
+        "p95Seconds": 1.89
+      },
+      "setText": {
+        "calls": 63,
+        "totalSeconds": 73.96,
+        "medianSeconds": 1.07,
+        "p95Seconds": 1.94
+      }
+    },
+    "scope": "Instrumentation cost, not measured application response latency. No speedup claim.",
+    "instrumentationFraction": 0.621
+  },
+  "optimized": {
+    "coordinatorSeconds": 813.91,
+    "instrumentationCalls": 717,
+    "instrumentationSeconds": 544.51,
+    "byAction": {
+      "read": {
+        "calls": 480,
+        "totalSeconds": 263.62
+      },
+      "setText": {
+        "calls": 63,
+        "totalSeconds": 69.24
+      },
+      "touch": {
+        "calls": 174,
+        "totalSeconds": 211.65
+      }
+    }
+  },
+  "reduction": {
+    "coordinatorSeconds": 223.63,
+    "coordinatorPercent": 21.6,
+    "instrumentationCalls": 62,
+    "instrumentationSeconds": 99.83
+  },
+  "scope": "One hosted same-app/unchanged-assertion comparison; runner noise prevents a general benchmark claim. These are test-driver costs, not app response latency."
+}

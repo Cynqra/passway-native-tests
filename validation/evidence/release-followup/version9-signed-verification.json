@@ -1,0 +1,10 @@
+{
+  "sourceCommit": "fbc13efb9ce8ea0322ae455e1694d164a163af76",
+  "run": 38905440467,
+  "versionCode": 9,
+  "versionName": "0.3.3",
+  "bundleSha256": "a878b7bb96312679b62c69be0a587209d03535a08cdb6a2e3de71af75d843dab",
+  "compiledManifestSecurityChecks": "PASS",
+  "localCryptographicSignatureVerification": false,
+  "signatureScope": "CI signing evidence; cryptographic signature rechecked by internal publication guard"
+}
