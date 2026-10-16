@@ -131,6 +131,14 @@ class AdaptiveGestureTests(unittest.TestCase):
   d=load('driver');t=d.ET.fromstring('<hierarchy><node bounds="[10,20][550,1220]"/></hierarchy>')
   with patch.object(d,'shell') as shell:d.swipe_viewport(t)
   self.assertEqual(shell.call_args.args,('input','swipe','280','980','280','380','450'))
+ def test_swipe_targets_inner_form_not_bottom_navigation_from_failure_evidence(self):
+  d=load('driver');t=d.ET.fromstring('<hierarchy><node bounds="[0,0][440,880]"><node class="android.widget.ScrollView" bounds="[0,33][440,847]" visible-to-user="true"><node class="android.widget.ScrollView" bounds="[33,116][407,674]" visible-to-user="true"/></node></node></hierarchy>')
+  with patch.object(d,'shell') as shell:d.swipe_viewport(t)
+  self.assertEqual(shell.call_args.args,('input','swipe','220','562','220','283','450'))
+ def test_hidden_scroll_surface_is_not_selected(self):
+  d=load('driver');t=d.ET.fromstring('<hierarchy><node bounds="[0,0][440,880]"><node class="android.widget.ScrollView" bounds="[33,116][407,674]" visible-to-user="false"/></node></hierarchy>')
+  with patch.object(d,'shell') as shell:d.swipe_viewport(t)
+  self.assertEqual(shell.call_args.args,('input','swipe','220','704','220','264','450'))
  def test_unknown_viewport_fails_instead_of_inventing_coordinates(self):
   d=load('driver');t=d.ET.fromstring('<hierarchy><node/></hierarchy>')
   with patch.object(d,'shell') as shell:

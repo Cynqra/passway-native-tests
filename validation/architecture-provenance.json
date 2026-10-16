@@ -1,8 +1,8 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "caf76f7364fc10449d3e6b448fa5f3566122c538",
-  "archiveSha256": "2b85468f06f585b427340a4dca868ef5016726d1cf034f1def10946fc6327e95",
-  "createdAt": "2026-10-16T16:14:57.206481+00:00",
-  "scope": "Unpublished candidate0.3.4/code10: all phase1-4 fixes including moderation deadline and immediate generation lock. Exact-current-source tests required; no inherited production acceptance.",
+  "sourceCommit": "ccb5f7d80d2d944e8e23beaa32fef0d698af1ec8",
+  "archiveSha256": "218569783fb386db7b0dea5a8ce578bcfe95be0c1dec54be953afb4c390f97d4",
+  "createdAt": "2026-10-16T16:22:42.221214+00:00",
+  "scope": "Candidate10 corrected release-regression guard; confirmed inner-scroll-surface native harness fix; exact-source revalidation, no production acceptance",
   "fullTrackedSourceArchive": true
 }

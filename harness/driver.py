@@ -51,13 +51,20 @@ def tapnode(n):
  # Probe already waits for dispatch and returns a fresh post-action hierarchy.
  tree,_=probe(s,'touch');return tree
 def swipe_viewport(tree):
- # Derive gesture coordinates from the actual inspected display, never a
- # hardcoded 540x1200 skin. Small-display accessibility runs must really scroll.
+ # Prefer the smallest visible vertical scroll surface. A display-wide
+ # gesture can start on fixed bottom navigation and never reach the form.
+ # Use only observed bounds; retain the display fallback for legacy trees.
+ def bounds(node):
+  values=re.findall(r'-?\d+',node.get('bounds',''))
+  if len(values)!=4:return None
+  l,t,r,b=map(int,values)
+  return (l,t,r,b) if r-l>=100 and b-t>=100 else None
+ surfaces=[bounds(n) for n in tree.iter('node') if n.get('class')=='android.widget.ScrollView' and n.get('visible-to-user')=='true']
+ surfaces=[b for b in surfaces if b is not None]
  root=next(tree.iter('node'),None)
- values=re.findall(r'-?\d+',root.get('bounds','') if root is not None else '')
- if len(values)!=4:raise RuntimeError('Cannot scroll without observed viewport bounds')
- left,top,right,bottom=map(int,values);width=right-left;height=bottom-top
- if width<100 or height<100:raise RuntimeError('Invalid observed viewport bounds')
+ viewport=min(surfaces,key=lambda b:(b[2]-b[0])*(b[3]-b[1])) if surfaces else (bounds(root) if root is not None else None)
+ if viewport is None:raise RuntimeError('Cannot scroll without valid observed viewport bounds')
+ left,top,right,bottom=viewport;width=right-left;height=bottom-top
  shell('input','swipe',str(left+width//2),str(top+int(height*.8)),str(left+width//2),str(top+int(height*.3)),'450')
 def tap(s,scroll=True):
  for _ in range(7 if scroll else 1):
