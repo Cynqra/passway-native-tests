@@ -13,6 +13,7 @@ on:
           - signed-release
           - play-api-check
           - internal-candidate
+          - store-apk-download
       candidate_run_id:
         description: Successful same-revision signed candidate run (internal-candidate only)
         type: string
@@ -354,5 +355,37 @@ jobs:
         with:
           name: internal-candidate-release-result
           path: internal-release-result.json
+          retention-days: 3
+          if-no-files-found: error
+
+  store-apk-download:
+    if: ${{ inputs.mode == 'store-apk-download' }}
+    name: Download Google Play-signed version 7 for physical testing
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: passway-play-internal
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Verify read-only APK selection boundaries
+        run: python3 -m unittest discover -s harness/tests -p test_store_apk_download.py -v
+      - name: Download only the registered Google Play-signed universal APK
+        run: python3 harness/download_store_apk.py --version-code 7
+      - name: Verify actual Android APK signature and package version
+        run: |
+          tools=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1 | xargs dirname)
+          "$tools/apksigner" verify --verbose --print-certs store-apk-results/passway-store-signed.apk > store-apk-results/apk-signature.txt
+          grep -iq '5f97b4bfe27bdbf3aade7fd1e2e7b323cfdde1cd8d7feaa536ea1db31ef963f2' store-apk-results/apk-signature.txt
+          "$tools/aapt2" dump badging store-apk-results/passway-store-signed.apk > store-apk-results/apk-badging.txt
+          grep -q "package: name='com.passway.app' versionCode='7'" store-apk-results/apk-badging.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: google-play-signed-physical-device-apk
+          path: store-apk-results
           retention-days: 3
           if-no-files-found: error
