@@ -1,0 +1,23 @@
+{
+  "package": "com.passway.app",
+  "authentication": "GitHub OIDC federation; 15-minute delegated token; no JSON key",
+  "authorized": true,
+  "tracks": [
+    "alpha",
+    "beta",
+    "internal",
+    "production"
+  ],
+  "scope": "Temporary edit/read/delete only; no bundle upload, release changes, or commit",
+  "internalReleases": [
+    {
+      "name": "0.3.1 (7) \u2014 candidate validation",
+      "status": "completed",
+      "versionCodes": [
+        "7"
+      ]
+    }
+  ],
+  "publicProductionReleasePresent": false,
+  "temporaryEditDeleted": true
+}
