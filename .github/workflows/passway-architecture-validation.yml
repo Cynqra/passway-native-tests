@@ -60,6 +60,10 @@ jobs:
           npx --yes firebase-tools@15.32.1 emulators:exec --only firestore --project demo-passway \
             "npm run test:rules && npm run test:integration --prefix functions && node ../../harness/bounded_backend_workload.cjs"
       - run: npx --no-install expo export --platform all --output-dir dist-ci
+      - name: Exercise controlled build-only web preview helper
+        env:
+          EXPO_PUBLIC_API_URL: http://127.0.0.1:8787
+        run: npm run preview:web
       - name: Preserve bounded-workload measurements and scope
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

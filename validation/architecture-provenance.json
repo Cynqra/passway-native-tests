@@ -1,9 +1,8 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "40943f30079970c73088eedbe1456dd1a673ad4f",
-  "archiveSha256": "ca0979f8861cc43a8c1ae3f67f5f7521a7ea9c0294323f1f0a970b3ad0d4be1c",
-  "createdAt": "2026-10-16T15:19:46.285155+00:00",
-  "scope": "Phase1 source CI policy alignment and required read-route negative gate coverage; full tracked source archive includes source .github policy/tests. No new signed/native/production acceptance inherited.",
-  "fullTrackedSourceArchive": true,
-  "knownCredentialValueMatches": 0
+  "sourceCommit": "d58e411b5355bede342c94b52b9075b9a3614b0b",
+  "archiveSha256": "b5885f6f1e52b5bc75fdedf782c19952dfc8a6c9940fdb720691899e1e320517",
+  "createdAt": "2026-10-16T15:34:14.081269+00:00",
+  "scope": "Phase1 verified CI alignment, automatic PR/main gates and build-only non-production preview hardening. Complete tracked source; no inherited native/signed/production acceptance.",
+  "fullTrackedSourceArchive": true
 }
