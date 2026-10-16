@@ -1,8 +1,8 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "8bd269bd0d602b91a5d6fb261624d660ad70486d",
-  "archiveSha256": "06a7c223d01e3251a59972c886edb44daa1bd3402b2b38fa6cccef627b05a715",
-  "createdAt": "2026-10-16T16:02:20.265448+00:00",
-  "scope": "Phase4 actual request-terminal recovery and scrollable pairing screens. Native large-text/small-display journey added; no production acceptance.",
+  "sourceCommit": "835beedc825ba0f4a2c37f6a5741436eb9d16adb",
+  "archiveSha256": "d9750c0662e0aa0c9b869f330e154046842a331d0f4f5f92e104c3df553a2e17",
+  "createdAt": "2026-10-16T16:11:45.971116+00:00",
+  "scope": "Late Phase3 external-service follow-up: configured Firebase credential, whole-operation moderation deadline and no late content request. Native/client inputs unchanged from8bd269b; no inherited whole-source native or production acceptance.",
   "fullTrackedSourceArchive": true
 }
