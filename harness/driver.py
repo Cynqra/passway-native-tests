@@ -23,6 +23,10 @@ def adb(*args,timeout=90):
  if r.returncode:raise RuntimeError('adb '+str(args[:3])+': '+r.stderr.decode(errors='replace')[:500])
  return r.stdout.decode(errors='replace')
 def shell(*args):return adb('shell',*args)
+class TargetUnavailableBeforeDispatch(RuntimeError):
+ """Native probe explicitly confirms no target/action dispatch occurred."""
+ pass
+
 def probe(selector=None,action=None,value=''):
  uid=shell('am','get-current-user').strip();args=['shell','am','instrument','-w','--user',uid]
  if action:
@@ -31,6 +35,8 @@ def probe(selector=None,action=None,value=''):
  t=time.monotonic();out=adb(*args,'com.passway.nativeprobe/.Probe',timeout=45)
  with (ROOT/'probe-timing.jsonl').open('a') as f:f.write(json.dumps({'action':action or 'read','selector':selector,'seconds':round(time.monotonic()-t,2)})+'\n')
  m=re.search(r'INSTRUMENTATION_RESULT: hierarchy=([^\r\n]+)',out)
+ if action=='touch' and 'action_result=performed' not in out and re.search(r'^INSTRUMENTATION_RESULT: probe_error=java\.lang\.Exception: Visible action target missing: '+re.escape(selector or '')+r'\r?$',out,re.M):
+  raise TargetUnavailableBeforeDispatch('Visible action target missing before dispatch: '+str(selector))
  if not m or (action and 'action_result=performed' not in out):raise RuntimeError('Native probe failed at '+str(selector)+': '+out[:1200])
  raw=base64.b64decode(m.group(1)).decode();return ET.fromstring(raw),raw
 def dump(label='current'):
@@ -67,10 +73,21 @@ def swipe_viewport(tree):
  left,top,right,bottom=viewport;width=right-left;height=bottom-top
  shell('input','swipe',str(left+width//2),str(top+int(height*.8)),str(left+width//2),str(top+int(height*.3)),'450')
 def tap(s,scroll=True):
- for _ in range(7 if scroll else 1):
-  tree=dump();n=find(s,tree)
-  if n is not None and n.get('visible-to-user')=='true' and n.get('enabled')=='true':return tapnode(n)
-  if scroll:swipe_viewport(tree);time.sleep(.7)
+ # A fresh inspection does not make a later accessibility node immutable.
+ # Reacquire only the probe's explicit pre-dispatch missing-target condition.
+ # Never retry rejected/uncertain injection or a performed action.
+ missing=0
+ with deadline(30):
+  for _ in range(7 if scroll else 3):
+   tree=dump();n=find(s,tree)
+   if n is not None and n.get('visible-to-user')=='true' and n.get('enabled')=='true':
+    try:return tapnode(n)
+    except TargetUnavailableBeforeDispatch:
+     missing+=1
+     with (ROOT/'pre-dispatch-reacquisition.jsonl').open('a') as f:f.write(json.dumps({'selector':s,'attempt':missing,'actionDispatched':False})+'\n')
+     if missing>=3:raise
+     time.sleep(remaining_timeout(.2));continue
+   if scroll:swipe_viewport(tree);time.sleep(remaining_timeout(.7))
  raise RuntimeError('Visible actionable control not found: '+s)
 def fill(s,value):
  tap(s);t,_=probe(s,'setText',value)

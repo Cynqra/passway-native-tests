@@ -152,3 +152,32 @@ class AccessibilityMarkerTests(unittest.TestCase):
   def finish(*a,**k):(self.root/'complete.json').write_text('{}');return types.SimpleNamespace(returncode=0)
   with patch.dict('os.environ',{'PASSWAY_NATIVE_ACCESSIBILITY':'1','PASSWAY_NATIVE_EXTENDED':'0'}),patch.object(c.subprocess,'run',side_effect=finish):self.assertEqual(c.main(),1)
   self.assertFalse((self.root/'accessibility-complete.json').exists())
+
+class PreDispatchTargetTests(unittest.TestCase):
+ setUp=HarnessTests.setUp
+ def test_explicit_missing_target_is_reacquired_before_any_action_is_dispatched(self):
+  d=load('driver');t=d.ET.fromstring('<hierarchy><node bounds="[0,0][540,1200]" resource-id="generate" visible-to-user="true" enabled="true"/></hierarchy>')
+  error=d.TargetUnavailableBeforeDispatch('generate')
+  with patch.object(d,'dump',return_value=t) as inspect,patch.object(d,'tapnode',side_effect=[error,t]) as action,patch.object(d.time,'sleep'):
+   self.assertIs(d.tap('generate'),t)
+  self.assertEqual(inspect.call_count,2);self.assertEqual(action.call_count,2)
+  self.assertTrue((self.root/'pre-dispatch-reacquisition.jsonl').exists())
+ def test_unknown_action_failure_is_never_retried(self):
+  d=load('driver');t=d.ET.fromstring('<hierarchy><node resource-id="generate" visible-to-user="true" enabled="true"/></hierarchy>')
+  with patch.object(d,'dump',return_value=t),patch.object(d,'tapnode',side_effect=RuntimeError('Touch up rejected')) as action:
+   with self.assertRaisesRegex(RuntimeError,'Touch up rejected'):d.tap('generate')
+  self.assertEqual(action.call_count,1)
+ def test_repeated_missing_target_fails_after_bounded_reacquisitions(self):
+  d=load('driver');t=d.ET.fromstring('<hierarchy><node resource-id="generate" visible-to-user="true" enabled="true"/></hierarchy>')
+  with patch.object(d,'dump',return_value=t),patch.object(d,'tapnode',side_effect=d.TargetUnavailableBeforeDispatch('generate')) as action,patch.object(d.time,'sleep'):
+   with self.assertRaisesRegex(RuntimeError,'generate'):d.tap('generate')
+  self.assertEqual(action.call_count,3)
+ def test_only_exact_native_pre_dispatch_error_is_classified_safe_to_reacquire(self):
+  import base64
+  d=load('driver');raw='<hierarchy><node/></hierarchy>'
+  output='INSTRUMENTATION_RESULT: probe_error=java.lang.Exception: Visible action target missing: generate\nINSTRUMENTATION_CODE: 1\n'
+  with patch.object(d,'shell',return_value='0'),patch.object(d,'adb',return_value=output):
+   with self.assertRaises(d.TargetUnavailableBeforeDispatch):d.probe('generate','touch')
+  with patch.object(d,'shell',return_value='0'),patch.object(d,'adb',return_value='INSTRUMENTATION_RESULT: probe_error=java.lang.Exception: Touch up rejected\n'):
+   with self.assertRaises(RuntimeError) as error:d.probe('generate','touch')
+  self.assertNotIsInstance(error.exception,d.TargetUnavailableBeforeDispatch)
