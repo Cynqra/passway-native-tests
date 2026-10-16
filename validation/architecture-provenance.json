@@ -1,7 +1,7 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "8a6d79da24454e5373e5b89d34df279b067a1993",
-  "archiveSha256": "b5bd74a87f8392b9a3a86de52685595aae7dfaee29148a2d6d4a9043c791deb5",
-  "createdAt": "2026-10-16T11:32:18.889023+00:00",
-  "scope": "Internal candidate 0.3.2 version8; client code identical to verified 54b7295 except monotonic version metadata and its expectation test. New source-specific CI/native/signing required; previous candidate not relabelled as this version. No public production release."
+  "sourceCommit": "fbc13efb9ce8ea0322ae455e1694d164a163af76",
+  "archiveSha256": "5a4b1cabbf5b5e589d580ff8e1d478a0fe0bee9cd92ee7efd724b1e7c582d656",
+  "createdAt": "2026-10-16T13:07:13.863811+00:00",
+  "scope": "Internal 0.3.3 / version9 retention-disclosure correction plus version metadata and regression expectations. Exact-source regression/static/signing/fresh native gates required; no production promotion or inherited client/native evidence."
 }
