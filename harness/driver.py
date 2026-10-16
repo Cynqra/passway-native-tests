@@ -47,22 +47,28 @@ def find(s,tree=None):
  t=tree if tree is not None else dump()
  return next((n for n in nodes(t) if match(n,s)),None)
 def tapnode(n):
- s=n.get('resource-id') or n.get('text') or n.get('content-desc');probe(s,'touch');time.sleep(.5)
+ s=n.get('resource-id') or n.get('text') or n.get('content-desc')
+ # Probe already waits for dispatch and returns a fresh post-action hierarchy.
+ tree,_=probe(s,'touch');return tree
 def tap(s,scroll=True):
  for _ in range(7 if scroll else 1):
   n=find(s)
-  if n is not None and n.get('visible-to-user')=='true' and n.get('enabled')=='true':tapnode(n);return
+  if n is not None and n.get('visible-to-user')=='true' and n.get('enabled')=='true':return tapnode(n)
   if scroll:shell('input','swipe','270','970','270','380','450');time.sleep(.7)
  raise RuntimeError('Visible actionable control not found: '+s)
 def fill(s,value):
- tap(s);probe(s,'setText',value);time.sleep(.5)
- for attempt in range(4):
-  t=dump();n=find(s,t)
+ tap(s);t,_=probe(s,'setText',value)
+ # Verify the actual post-setText hierarchy, never the pre-touch tree. Keep
+ # all four fresh-read retries for asynchronously committed native input.
+ def matches(t):
   if s=='code-box-0':actual=''.join((find('code-box-'+str(i),t) or {}).get('text','') for i in range(4))
-  else:actual=(n or {}).get('text','')
-  if actual==value:return
-  time.sleep(.5)
- raise RuntimeError('Native input readback mismatch at '+s+' after four fresh snapshots')
+  else:actual=(find(s,t) or {}).get('text','')
+  return actual==value
+ if matches(t):return
+ for attempt in range(4):
+  time.sleep(min(.5,remaining_timeout(.5)))
+  if matches(dump()):return
+ raise RuntimeError('Native input readback mismatch at '+s+' after post-action snapshot and four fresh retries')
 def back():shell('input','keyevent','KEYCODE_BACK');time.sleep(.7)
 def shot(name):
  p=ROOT/'screens'/f'{name}.png';r=subprocess.run([A,'exec-out','screencap','-p'],capture_output=True,timeout=remaining_timeout(30))

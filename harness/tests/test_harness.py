@@ -80,4 +80,30 @@ class HarnessTests(unittest.TestCase):
    self.assertEqual(c.main(),1);self.assertEqual(run.call_count,1)
    self.assertEqual(run.call_args.kwargs['timeout'],1500)
   self.assertFalse((self.root/'extended-complete.json').exists())
+ def tree(self,d,text='value'):
+  return d.ET.fromstring('<hierarchy><node resource-id="field" text="'+text+'" visible-to-user="true" enabled="true"/></hierarchy>')
+ def test_tapnode_returns_fresh_post_action_snapshot_without_duplicate_sleep(self):
+  d=load('driver');t=self.tree(d)
+  with patch.object(d,'probe',return_value=(t,'fresh')) as probe,patch.object(d.time,'sleep') as sleep:
+   self.assertIs(d.tapnode({'resource-id':'field'}),t);probe.assert_called_once_with('field','touch');sleep.assert_not_called()
+ def test_tap_returns_post_action_snapshot(self):
+  d=load('driver');t=self.tree(d);n={'resource-id':'field','visible-to-user':'true','enabled':'true'}
+  with patch.object(d,'find',return_value=n),patch.object(d,'tapnode',return_value=t):self.assertIs(d.tap('field'),t)
+ def test_fill_verifies_fresh_settext_snapshot_without_redundant_read_or_sleep(self):
+  d=load('driver');t=self.tree(d)
+  with patch.object(d,'tap'),patch.object(d,'probe',return_value=(t,'fresh')) as probe,patch.object(d,'dump',side_effect=AssertionError('Unnecessary read')),patch.object(d.time,'sleep') as sleep:
+   d.fill('field','value');probe.assert_called_once_with('field','setText','value');sleep.assert_not_called()
+ def test_fill_refreshes_after_post_action_text_mismatch(self):
+  d=load('driver');wrong=self.tree(d,'pending');right=self.tree(d)
+  with patch.object(d,'tap'),patch.object(d,'probe',return_value=(wrong,'fresh')),patch.object(d,'dump',return_value=right) as dump,patch.object(d.time,'sleep'):
+   d.fill('field','value');dump.assert_called_once()
+ def test_fill_never_accepts_pre_action_snapshot(self):
+  d=load('driver');right=self.tree(d);wrong=self.tree(d,'unchanged')
+  with patch.object(d,'tap',return_value=right),patch.object(d,'probe',return_value=(wrong,'fresh')),patch.object(d,'dump',return_value=wrong) as dump,patch.object(d.time,'sleep'):
+   with self.assertRaises(RuntimeError):d.fill('field','value')
+   self.assertEqual(dump.call_count,4)
+ def test_fill_split_code_readback_uses_fresh_action_snapshot(self):
+  d=load('driver');t=d.ET.fromstring('<hierarchy>'+''.join('<node resource-id="code-box-'+str(i)+'" text="'+c+'"/>' for i,c in enumerate('AB12'))+'</hierarchy>')
+  with patch.object(d,'tap'),patch.object(d,'probe',return_value=(t,'fresh')),patch.object(d,'dump',side_effect=AssertionError('Unnecessary read')),patch.object(d.time,'sleep'):
+   d.fill('code-box-0','AB12')
 if __name__=='__main__':unittest.main()

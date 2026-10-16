@@ -1,0 +1,27 @@
+{
+  "coordinatorSeconds": 1037.54,
+  "instrumentationCalls": 779,
+  "instrumentationSeconds": 644.34,
+  "byAction": {
+    "read": {
+      "calls": 542,
+      "totalSeconds": 340.71,
+      "medianSeconds": 0.56,
+      "p95Seconds": 1.24
+    },
+    "touch": {
+      "calls": 174,
+      "totalSeconds": 229.67,
+      "medianSeconds": 1.21,
+      "p95Seconds": 1.89
+    },
+    "setText": {
+      "calls": 63,
+      "totalSeconds": 73.96,
+      "medianSeconds": 1.07,
+      "p95Seconds": 1.94
+    }
+  },
+  "scope": "Instrumentation cost, not measured application response latency. No speedup claim.",
+  "instrumentationFraction": 0.621
+}
