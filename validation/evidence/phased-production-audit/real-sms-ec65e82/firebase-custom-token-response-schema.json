@@ -1,0 +1,12 @@
+{
+  "source": "https://identitytoolkit.googleapis.com/$discovery/rest?version=v1",
+  "schemas": {
+    "GoogleCloudIdentitytoolkitV1SignInWithCustomTokenResponse": [
+      "expiresIn",
+      "idToken",
+      "isNewUser",
+      "kind",
+      "refreshToken"
+    ]
+  }
+}

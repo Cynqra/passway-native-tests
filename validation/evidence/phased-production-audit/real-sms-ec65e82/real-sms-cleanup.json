@@ -1,0 +1,8 @@
+{
+  "checkedAt": "2026-10-16T19:00:00.219Z",
+  "scope": "Temporary real-SMS browser session only; existing real account retained, no global token revocation",
+  "testBrowserOriginStorageCleared": true,
+  "temporaryPreviewRetired": true,
+  "realAccountDeleted": false,
+  "globalSessionsRevoked": false
+}

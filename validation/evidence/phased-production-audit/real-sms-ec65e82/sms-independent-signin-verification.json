@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-16T18:47:39.096Z",
+  "scope": "Independent recheck of the persisted real SMS login. No new SMS, no account/profile/chat mutation, no tokens or identifiers logged.",
+  "checks": {
+    "firebaseSignatureExpiryAndRevocationValid": true,
+    "storedUidMatchesVerifiedSubject": true,
+    "verifiedPhoneMatchesRequested": true,
+    "storedPhoneMatchesRequested": true,
+    "existingPhoneAccountMatchesVerifiedSubject": true,
+    "projectAudienceMatches": true,
+    "customTokenProviderConfirmed": true
+  },
+  "pass": true
+}

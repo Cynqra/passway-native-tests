@@ -1,0 +1,58 @@
+{
+  "startedAt": "2026-10-16T18:43:54.908Z",
+  "sourceCommit": "ec65e826e456f406a9087da843c4d4d6425d886d",
+  "scope": "Real 2factor SMS and unchanged web PhoneAuthScreen -> production-config candidate -> Firebase custom-token exchange. Test-only browser adapter adds ADMIN App Check token and protected-deployment header; adapts browser CORS to native no-Origin transport. NOT native/store-installed attestation or browser-CORS acceptance.",
+  "rows": [
+    {
+      "name": "Unchanged app phone sign-in screen loaded",
+      "pass": true,
+      "detail": "Protected current-source diagnostic preview"
+    },
+    {
+      "name": "Real SMS request accepted by the configured 2factor provider",
+      "pass": true,
+      "detail": "HTTP 200; 2880ms"
+    },
+    {
+      "name": "2factor OTP accepted and Firebase custom token returned",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Real Firebase sign-in token verified server-side",
+      "pass": false,
+      "detail": "UID and phone claim checked without logging either"
+    },
+    {
+      "name": "Existing phone account identity preserved",
+      "pass": true,
+      "detail": "Existing account retained"
+    }
+  ],
+  "status": "passed-after-independent-harness-correction",
+  "phoneMasked": "******9054",
+  "accountPreviouslyExisted": true,
+  "existingAccountDisabled": false,
+  "smsSendAttempts": 1,
+  "otpVerifyAttempts": 1,
+  "completedAt": "2026-10-16T18:47:39.097Z",
+  "initialHarnessAssertionFailed": true,
+  "initialHarnessIssue": "The assertion required REST signInWithCustomToken response.localId, which is not in the response contract. Correct verification binds verified ID-token subject to the persisted user and the phone account. Initial failure retained separately.",
+  "independentVerification": {
+    "checkedAt": "2026-10-16T18:47:39.096Z",
+    "scope": "Independent recheck of the persisted real SMS login. No new SMS, no account/profile/chat mutation, no tokens or identifiers logged.",
+    "checks": {
+      "firebaseSignatureExpiryAndRevocationValid": true,
+      "storedUidMatchesVerifiedSubject": true,
+      "verifiedPhoneMatchesRequested": true,
+      "storedPhoneMatchesRequested": true,
+      "existingPhoneAccountMatchesVerifiedSubject": true,
+      "projectAudienceMatches": true,
+      "customTokenProviderConfirmed": true
+    },
+    "pass": true
+  },
+  "realSmsProviderAccepted": true,
+  "realOtpVerified": true,
+  "firebaseSigninVerified": true
+}
