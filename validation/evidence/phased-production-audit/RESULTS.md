@@ -6,6 +6,7 @@
 - All required live composite indexes READY. Candidate source remains unchanged; earlier634-case clean and Android14/16 81-case gates still refer to the same archive.
 - **Real 2factor SMS, OTP verification and Firebase login completed** with one SMS and seven independent identity/token checks; original false harness assertion retained and corrected. [Evidence](real-sms-ec65e82/README.md).
 - Hourly public API security monitor is active; first live run correctly FAILED0/8 against the old deployment. Private canary upload blocked by Google `NOT_PUBLISHED`, with exact encrypted diagnostic; no release tracks changed. [Details](private-sharing-and-monitoring/README.md).
+- Authenticated Console inspection: internal9 available to5testers; private-sharing keys initialized and tester-only access saved, but post-initialization upload still fails `NOT_PUBLISHED`. Five factual declarations saved/not submitted; five app-content declarations remain. Argon High plan review completed; unsafe immediate API-promotion advice explicitly rejected because client9 compatibility is known to fail. [Follow-up](private-sharing-and-monitoring/README.md).
 - The actual public API was NOT cut over; both live aliases are verified on the old deployment. Genuine Play-installed positive attestation, coordinated client/API/rules migration, operational monitoring and residual dependency risk remain gates. Admin tokens are not Store attestation.
 
 Details, retained diagnostic failure, cleanup and alias proofs: [cloud-staging-ec65e82](cloud-staging-ec65e82/README.md).

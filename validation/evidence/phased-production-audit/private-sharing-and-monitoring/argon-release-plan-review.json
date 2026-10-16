@@ -1,0 +1,30 @@
+{
+  "configuredModel": "gemini-4-argon-high",
+  "configuredEffort": "high",
+  "mode": "plan",
+  "status": "SUCCESS",
+  "durationSeconds": 57.756074172,
+  "turns": 1,
+  "usage": {
+    "input_tokens": 13147,
+    "output_tokens": 4293,
+    "thinking_tokens": 2056,
+    "cache_read_tokens": 0,
+    "total_tokens": 17440
+  },
+  "scope": "Advice based only on supplied observed facts; no tools, independent docs, runtime tests or release certification",
+  "acceptedRecommendations": [
+    "Keep private sharing NOT_PUBLISHED blocked after initialization",
+    "Do not repeat unchanged-source native gates to inflate counts",
+    "Draft factual privacy/data safety inventory and complete owner-dependent disclosures",
+    "Keep raw upstream advisories explicit",
+    "Do not apply message-body denial rules before verified getMessages client/API migration",
+    "Use ordinary internal track as a possible future device acceptance path, not a public rollout"
+  ],
+  "rejectedOrQualifiedRecommendations": [
+    "Do not apply advice to promote API autonomously now: existing9 AppCheck-off incompatibility is KNOWN, not an unresolved assumption. Genuine native attestation and coordinated migration remain gates.",
+    "Do not treat suggested live reviewer OTP window as Google-approved or non-expiring review access.",
+    "Do not grant uploader roles speculatively to repair NOT_PUBLISHED: current error is a precondition, not a demonstrated permission denial.",
+    "No model advice was treated as observed API documentation, positive native attestation or compliance approval."
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "source": "Official npm registry latest metadata, bounded unauthenticated GET",
+  "node-forge": "1.4.0",
+  "braces": "3.0.3",
+  "newerUpstreamFixAvailable": false,
+  "installedMitigationsAreNotRawAuditClean": true
+}
