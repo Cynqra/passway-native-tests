@@ -63,7 +63,7 @@ def verify_artifacts(signed, native, provenance):
         raise SafeError('Actual bundle signature or signer mismatch')
     return meta, bundle.read_bytes(), digest
 
-def send(url, method='GET', headers=None, body=None, binary=None):
+def send(url, method='GET', headers=None, body=None, binary=None, error_observer=None):
     data = binary if binary is not None else json.dumps(body).encode() if body is not None else None
     hdr = dict(headers or {})
     if data is not None:
@@ -76,7 +76,10 @@ def send(url, method='GET', headers=None, body=None, binary=None):
                 raise SafeError('Oversized Play response')
             return json.loads(raw) if raw else {}
     except urllib.error.HTTPError as error:
-        raise safe_http_error(url, error.code, error.read(65536)) from None
+        raw = error.read(65536)
+        if error_observer is not None:
+            error_observer(error.code, raw)
+        raise safe_http_error(url, error.code, raw) from None
     except (urllib.error.URLError, TimeoutError, ValueError):
         raise SafeError('Play release transport or JSON validation failed') from None
 

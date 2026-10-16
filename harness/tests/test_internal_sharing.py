@@ -39,4 +39,22 @@ class InternalSharingTests(unittest.TestCase):
         x=m.encrypt_delivery(self.payload,key);self.assertEqual(x['format'],'passway-private-canary-v1')
         self.assertNotIn(self.payload['downloadUrl'],json.dumps(x));self.assertNotIn('downloadUrl',x)
 
+    def test_private_error_encrypted_before_disk_and_not_logged(self):
+        import os
+        original=os.getcwd()
+        key=pathlib.Path(__file__).parents[1]/'internal-sharing-recipient.pub'
+        with tempfile.TemporaryDirectory() as directory:
+            try:
+                os.chdir(directory)
+                pathlib.Path('harness').mkdir()
+                pathlib.Path('harness/internal-sharing-recipient.pub').write_bytes(key.read_bytes())
+                m.record_private_error(400,b'{"error":{"message":"private-url-and-secret"}}')
+                result=pathlib.Path('internal-sharing-error.encrypted.json').read_text()
+                self.assertNotIn('private-url-and-secret',result)
+                self.assertEqual(json.loads(result)['format'],'passway-private-canary-v1')
+            finally:os.chdir(original)
+    def test_private_diagnostic_denies_other_endpoints(self):
+        with patch.object(m,'send',side_effect=AssertionError('network')),self.assertRaises(m.SafeError):
+            m.private_request('https://evil.test/')
+
 if __name__=='__main__':unittest.main()

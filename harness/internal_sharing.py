@@ -74,6 +74,19 @@ console.log(JSON.stringify({format:'passway-private-canary-v1',recipientSha256:c
     return json.loads(result.stdout)
 
 
+def record_private_error(code, raw):
+    # Error bodies may contain private installation URLs. Encrypt before writing.
+    encrypted = encrypt_delivery({'httpStatus': code, 'response': raw.decode('utf-8', errors='replace')},
+                                 Path('harness/internal-sharing-recipient.pub'))
+    Path('internal-sharing-error.encrypted.json').write_text(json.dumps(encrypted, indent=2) + '\n')
+
+
+def private_request(url, **kwargs):
+    if url != UPLOAD:
+        raise SafeError('Private diagnostic transport is limited to the approved sharing endpoint')
+    return send(url, **kwargs, error_observer=record_private_error)
+
+
 def main():
     try:
         provenance = json.loads(Path('validation/architecture-provenance.json').read_text())
@@ -92,7 +105,7 @@ def main():
         meta, bundle, digest = verify_artifacts(Path('sharing-signed'), Path('sharing-native'), provenance)
         if digest != BUNDLE:
             raise SafeError('Accepted bundle digest mismatch')
-        payload = upload_shared(access_token(os.environ), meta, bundle, digest)
+        payload = upload_shared(access_token(os.environ), meta, bundle, digest, request=private_request)
         encrypted = encrypt_delivery(payload, Path('harness/internal-sharing-recipient.pub'))
         Path('internal-sharing-delivery.encrypted.json').write_text(json.dumps(encrypted, indent=2) + '\n')
         report = {k: v for k, v in payload.items() if k != 'downloadUrl'}

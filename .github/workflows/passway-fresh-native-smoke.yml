@@ -542,5 +542,6 @@ jobs:
           path: |
             internal-sharing-result.json
             internal-sharing-delivery.encrypted.json
+            internal-sharing-error.encrypted.json
           retention-days: 3
           if-no-files-found: error
