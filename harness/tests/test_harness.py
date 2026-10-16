@@ -181,3 +181,15 @@ class PreDispatchTargetTests(unittest.TestCase):
   with patch.object(d,'shell',return_value='0'),patch.object(d,'adb',return_value='INSTRUMENTATION_RESULT: probe_error=java.lang.Exception: Touch up rejected\n'):
    with self.assertRaises(RuntimeError) as error:d.probe('generate','touch')
   self.assertNotIsInstance(error.exception,d.TargetUnavailableBeforeDispatch)
+
+class NativeLineGeometryTests(unittest.TestCase):
+ def test_observed_multiline_code_and_split_consent_are_rejected(self):
+  import sys
+  with patch.dict(sys.modules,{'driver':load('driver')}):m=load('native_accessibility_journey')
+  t=m.dump.__globals__['ET'].fromstring('<hierarchy><node text="AB12" resource-id="code-text" visible-to-user="true" bounds="[90,480][370,680]"/><node text="Decline" visible-to-user="true" bounds="[34,700][180,826]"/></hierarchy>')
+  self.assertFalse(m.visible_single_line(t,'code-text',120));self.assertFalse(m.visible_single_line(t,'Decline',80))
+ def test_full_single_line_visible_geometry_passes_and_hidden_never_does(self):
+  import sys
+  with patch.dict(sys.modules,{'driver':load('driver')}):m=load('native_accessibility_journey')
+  t=m.dump.__globals__['ET'].fromstring('<hierarchy><node text="Accept" visible-to-user="true" bounds="[34,700][406,763]"/><node text="Decline" visible-to-user="false" bounds="[34,800][406,863]"/></hierarchy>')
+  self.assertTrue(m.visible_single_line(t,'Accept',80));self.assertFalse(m.visible_single_line(t,'Decline',80))

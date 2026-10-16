@@ -1,8 +1,8 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "ccb5f7d80d2d944e8e23beaa32fef0d698af1ec8",
-  "archiveSha256": "218569783fb386db7b0dea5a8ce578bcfe95be0c1dec54be953afb4c390f97d4",
-  "createdAt": "2026-10-16T16:22:42.221214+00:00",
-  "scope": "Candidate10 corrected release-regression guard; confirmed inner-scroll-surface native harness fix; exact-source revalidation, no production acceptance",
+  "sourceCommit": "2ffec5fd702824ec5d4f1b200ac28102fd8b2a4b",
+  "archiveSha256": "38b34906d1dcf6b5b0fa61cbc9cdd9ffed7a60534f741fd3cfd1151aca4ea048",
+  "createdAt": "2026-10-16T16:52:24.625603+00:00",
+  "scope": "Candidate10 native-observed visual accessibility fixes; full code single line, responsive consent actions, complete navigation labels. New native geometry requirements; no inherited production acceptance.",
   "fullTrackedSourceArchive": true
 }
