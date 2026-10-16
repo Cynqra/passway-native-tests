@@ -1,7 +1,9 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "abd9ae23df7261bbb446c0484545492c63bbafcc",
-  "archiveSha256": "d48bf333dd22e0c5f72a7ae7615f0588b29d106f877318129a17699a382580c0",
-  "createdAt": "2026-10-16T14:57:17.761299+00:00",
-  "scope": "Unsiged clock-skew correction source; no new release, deployment or inherited native acceptance. Existing version metadata retained pending a future release candidate. Exact-source gates required."
+  "sourceCommit": "40943f30079970c73088eedbe1456dd1a673ad4f",
+  "archiveSha256": "ca0979f8861cc43a8c1ae3f67f5f7521a7ea9c0294323f1f0a970b3ad0d4be1c",
+  "createdAt": "2026-10-16T15:19:46.285155+00:00",
+  "scope": "Phase1 source CI policy alignment and required read-route negative gate coverage; full tracked source archive includes source .github policy/tests. No new signed/native/production acceptance inherited.",
+  "fullTrackedSourceArchive": true,
+  "knownCredentialValueMatches": 0
 }
