@@ -3,7 +3,9 @@ import json, re
 from driver import ROOT, shell, fill, tap, tapnode, waitfor, find, dump, swipe_viewport, record
 
 def visible_single_line(tree, selector, max_height):
- node=find(selector,tree)
+ # Accessible button names can precede their TextView in the hierarchy.
+ # Measure actual text, not the entire pill's padded touch target.
+ node=next((dict(n.attrib) for n in tree.iter('node') if n.get('text')==selector),None) or find(selector,tree)
  if node is None or node.get('visible-to-user')!='true':return False
  b=list(map(int,re.findall(r'-?\d+',node.get('bounds',''))))
  return len(b)==4 and b[2]>b[0] and 0<b[3]-b[1]<=max_height

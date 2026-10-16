@@ -193,3 +193,9 @@ class NativeLineGeometryTests(unittest.TestCase):
   with patch.dict(sys.modules,{'driver':load('driver')}):m=load('native_accessibility_journey')
   t=m.dump.__globals__['ET'].fromstring('<hierarchy><node text="Accept" visible-to-user="true" bounds="[34,700][406,763]"/><node text="Decline" visible-to-user="false" bounds="[34,800][406,863]"/></hierarchy>')
   self.assertTrue(m.visible_single_line(t,'Accept',80));self.assertFalse(m.visible_single_line(t,'Decline',80))
+
+class NativeTextTargetTests(unittest.TestCase):
+ def test_measure_label_text_not_accessible_button_container(self):
+  with patch.dict(sys.modules,{'driver':load('driver')}):m=load('native_accessibility_journey')
+  t=m.dump.__globals__['ET'].fromstring('<hierarchy><node class="android.widget.Button" content-desc="Accept" visible-to-user="true" bounds="[33,675][407,815]"><node class="android.widget.TextView" text="Accept" visible-to-user="true" bounds="[140,700][300,763]"/></node></hierarchy>')
+  self.assertTrue(m.visible_single_line(t,'Accept',80))
