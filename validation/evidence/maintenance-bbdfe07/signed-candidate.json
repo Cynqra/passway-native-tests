@@ -1,0 +1,16 @@
+{
+  "run": 38963758738,
+  "harnessRevision": "6cffe32",
+  "metadata": {
+    "package": "com.passway.app",
+    "versionCode": 10,
+    "versionName": "0.3.4",
+    "sourceCommit": "bbdfe0735cedc07c5a401ae147cb9abe76f2e6e1",
+    "sourceArchiveSha256": "addea431c5714824d5bc678a3fc3a4f0fde66e9877092305c6384a77a6fb40ed",
+    "scope": "Signed candidate only; no store installation, attestation or rollout proof"
+  },
+  "sha256": "d7b1b4dfe87f3f065555ff44b7e6020c38e9204248f4f500f43689cee1ad5a3e",
+  "independentArtifactHashMatches": true,
+  "publicProductionRollout": false,
+  "storeInstallationOrPositiveAttestationVerified": false
+}

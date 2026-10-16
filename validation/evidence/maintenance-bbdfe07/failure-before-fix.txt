@@ -1,0 +1,25 @@
+✖ failed maintenance does not suppress the next eligible retry for fifteen minutes (4.13145ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 692.452006
+
+✖ failing tests:
+
+test at test/maintenance-retry.test.cjs:10:1
+✖ failed maintenance does not suppress the next eligible retry for fifteen minutes (4.13145ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (/data/passway-clock-fix/passway-app/functions/test/maintenance-retry.test.cjs:13:2)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /synthetic infrastructure outage/,
+    operator: 'rejects',
+    diff: 'simple'
+  }

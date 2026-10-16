@@ -1,0 +1,20 @@
+{
+  "sourceCommit": "bbdfe0735cedc07c5a401ae147cb9abe76f2e6e1",
+  "harnessRevision": "6cffe32ef4f1f3d9f178ae4a106f38bb1cce84a3",
+  "sourceRepositoryRun": 38959132791,
+  "protectedIndependentRun": 38963743840,
+  "assertions": {
+    "dependencyPolicy": 4,
+    "mobile": 196,
+    "backend": 316,
+    "firestoreRules": 35,
+    "realFirestoreTransactions": 92,
+    "realAuth": 4
+  },
+  "totalAssertions": 647,
+  "typechecks": "passed",
+  "webAndNativePlatformExports": "passed",
+  "harnessPythonTests": 112,
+  "smsResponseAssertionTests": 10,
+  "scope": "Unit, emulator, export and synthetic workload acceptance. Not production deployment, real native SMS or Store attestation acceptance."
+}

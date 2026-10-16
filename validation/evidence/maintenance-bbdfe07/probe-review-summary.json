@@ -1,0 +1,14 @@
+{
+  "model": "gemini-4-argon-high",
+  "effort": "high",
+  "status": "SUCCESS",
+  "durationSeconds": 48.050479397,
+  "usage": {
+    "input_tokens": 23213,
+    "output_tokens": 4427,
+    "thinking_tokens": 3749,
+    "cache_read_tokens": 0,
+    "total_tokens": 27640
+  },
+  "conclusion": "No confirmed defect in narrowly gated pre-dispatch probe retry. Review only; reviewer executed no tests."
+}

@@ -1,0 +1,86 @@
+{
+  "localSharedInstallation": {
+    "result": "failed",
+    "passed": 13,
+    "failed": 5,
+    "cause": "Installed node-forge and braces remedies are not applied in the reused development dependency tree. No shared node_modules files were manually changed."
+  },
+  "cleanSourceCI": 38959132791,
+  "cleanIndependentCI": 38959234689,
+  "verification": {
+    "status": "locally-remediated-build-tools; registry audit is NOT clean",
+    "remediatedAdvisories": [
+      "https://github.com/advisories/GHSA-86w9-cpqp-85rv",
+      "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm"
+    ],
+    "registryVulnerabilityCounts": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 21,
+      "critical": 0,
+      "total": 21
+    },
+    "installedFileHashesVerified": true,
+    "exploitRegressionsPassed": true,
+    "dependencyVersionsRewritten": false,
+    "fixes": [
+      {
+        "package": "node-forge",
+        "version": "1.4.0",
+        "advisory": "GHSA-86w9-cpqp-85rv",
+        "registryAdvisory": {
+          "source": 1240912,
+          "name": "node-forge",
+          "dependency": "node-forge",
+          "title": "node-forge RSA PKCS#1 v1.5 signature verification accepts extra nested DigestAlgorithm elements",
+          "url": "https://github.com/advisories/GHSA-86w9-cpqp-85rv",
+          "severity": "high",
+          "cwe": [
+            "CWE-347"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+          },
+          "range": "<=1.4.0"
+        },
+        "location": "node_modules/node-forge"
+      },
+      {
+        "package": "braces",
+        "version": "3.0.3",
+        "advisory": "GHSA-vfj7-8cjw-p6xm",
+        "registryAdvisory": {
+          "source": 1240992,
+          "name": "braces",
+          "dependency": "braces",
+          "title": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+          "url": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+          "severity": "high",
+          "cwe": [
+            "CWE-674"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": "<=3.0.3"
+        },
+        "location": "node_modules/braces"
+      }
+    ]
+  },
+  "conformance": {
+    "forge": {
+      "passed": 829,
+      "failed": 0,
+      "pending": 4
+    },
+    "braces": {
+      "passed": 899,
+      "failed": 0,
+      "pending": 0
+    }
+  }
+}

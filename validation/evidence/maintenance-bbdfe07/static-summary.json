@@ -1,0 +1,7 @@
+{
+  "run": 38963747764,
+  "harnessRevision": "6cffe32",
+  "sourceCommit": "bbdfe0735cedc07c5a401ae147cb9abe76f2e6e1",
+  "sarifResults": 0,
+  "scope": "CodeQL extended JavaScript and TypeScript analysis; not proof of no vulnerabilities"
+}

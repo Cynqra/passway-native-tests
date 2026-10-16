@@ -1,0 +1,46 @@
+{
+  "sourceCommit": "bbdfe0735cedc07c5a401ae147cb9abe76f2e6e1",
+  "scope": "Bounded in-process handler workload against local Firestore emulator. Not HTTP, native-device, production capacity, SMS or attestation proof.",
+  "pairs": 16,
+  "syntheticParticipants": 32,
+  "uniqueMessageIntents": 160,
+  "sendCallsIncludingReplays": 320,
+  "checks": [
+    {
+      "name": "All 160 distinct messages persisted exactly once despite 320 send/replay calls",
+      "pass": true
+    },
+    {
+      "name": "Both directions of all 16 conversations read all ten unique messages",
+      "pass": true
+    },
+    {
+      "name": "Eight blocked conversations reject later sends and reads",
+      "pass": true
+    },
+    {
+      "name": "Eight unrelated conversations remain readable after other pairs block",
+      "pass": true
+    },
+    {
+      "name": "Sixteen parallel account deletions complete without leaving peer read access",
+      "pass": true
+    }
+  ],
+  "latencyMs": {
+    "sendPlusReplay": {
+      "samples": 160,
+      "p50": 239.96,
+      "p95": 334.76,
+      "max": 345.26
+    },
+    "read": {
+      "samples": 32,
+      "p50": 129.51,
+      "p95": 163.25,
+      "max": 166.93
+    }
+  },
+  "elapsedSeconds": 6.77,
+  "passed": true
+}

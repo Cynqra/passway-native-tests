@@ -1,0 +1,926 @@
+{
+  "android14": {
+    "run": 38960254920,
+    "accepted": false,
+    "results": [
+      {
+        "test": "Android test-location providers seeded",
+        "status": "PASS",
+        "detail": "OS test providers; simulated Delhi location, not physical proximity certification",
+        "at": "2026-10-16T20:17:58Z"
+      },
+      {
+        "test": "Second isolated Android user created",
+        "status": "PASS",
+        "detail": "Success: created user id 10\n",
+        "at": "2026-10-16T20:18:02Z"
+      },
+      {
+        "test": "Native onboarding all four pages",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:18:30Z"
+      },
+      {
+        "test": "Native invalid phone rejected",
+        "status": "PASS",
+        "detail": "                                    PASSWAY          Your phone number  Used only to sign in. It is never shown to anyone you connect with.  Internal diagnostic build: crash reports and screen/keyboard timing help investigate freezing. Phone numbers and chat text are not added to diagnostic logs.  Indian mobile number (+91)  111 Indian mobile number (+91) Enter a 10 digit Indian mobile number     Send code Send code          Never shown to people you connect with.  Passway is for people aged 18 and over.     How Passway works How Passway works ",
+        "at": "2026-10-16T20:18:39Z"
+      },
+      {
+        "test": "Native fictional OTP request user0",
+        "status": "PASS",
+        "detail": "Local Firebase Auth emulator, no SMS delivery",
+        "at": "2026-10-16T20:18:53Z"
+      },
+      {
+        "test": "Native wrong OTP rejected",
+        "status": "PASS",
+        "detail": "                                    PASSWAY          Enter the code  We sent a 6 digit code to 9999900001  Verification code  000000 verification code That code did not match. Try again.     Verify Verify     Send another code Send another code     Use another number Use another number ",
+        "at": "2026-10-16T20:19:04Z"
+      },
+      {
+        "test": "Native age disclosure explains retained eligibility date",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:19:18Z"
+      },
+      {
+        "test": "Native Firebase sign-in user0",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:19:32Z"
+      },
+      {
+        "test": "Native fictional OTP request user10",
+        "status": "PASS",
+        "detail": "Local Firebase Auth emulator, no SMS delivery",
+        "at": "2026-10-16T20:20:37Z"
+      },
+      {
+        "test": "Native age disclosure explains retained eligibility date",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:20:52Z"
+      },
+      {
+        "test": "Native Firebase sign-in user10",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:21:13Z"
+      },
+      {
+        "test": "Native generation form input verified",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:21:32Z"
+      },
+      {
+        "test": "Native code generated",
+        "status": "PASS",
+        "detail": "Four-character code rendered",
+        "at": "2026-10-16T20:21:40Z"
+      },
+      {
+        "test": "Native peer redeemed code",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:22:10Z"
+      },
+      {
+        "test": "Native request acceptance",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:22:24Z"
+      },
+      {
+        "test": "Native composer and send button above keyboard native-composer-keyboard",
+        "status": "PASS",
+        "detail": "Input bottom 770, send bottom 769, IME top 783",
+        "at": "2026-10-16T20:22:28Z"
+      },
+      {
+        "test": "Native A to native B delivery",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:22:38Z"
+      },
+      {
+        "test": "Native B to native A delivery",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:22:49Z"
+      },
+      {
+        "test": "Native soft keyboard visible",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:22:53Z"
+      },
+      {
+        "test": "Native composer and send button above keyboard keyboard-cycle-0",
+        "status": "PASS",
+        "detail": "Input bottom 770, send bottom 769, IME top 783",
+        "at": "2026-10-16T20:22:57Z"
+      },
+      {
+        "test": "Native keyboard typed character 0",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:22:59Z"
+      },
+      {
+        "test": "Native composer and send button above keyboard keyboard-cycle-1",
+        "status": "PASS",
+        "detail": "Input bottom 770, send bottom 769, IME top 783",
+        "at": "2026-10-16T20:23:04Z"
+      },
+      {
+        "test": "Native keyboard typed character 1",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:23:06Z"
+      },
+      {
+        "test": "Native composer and send button above keyboard keyboard-cycle-2",
+        "status": "PASS",
+        "detail": "Input bottom 770, send bottom 769, IME top 783",
+        "at": "2026-10-16T20:23:11Z"
+      },
+      {
+        "test": "Native keyboard typed character 2",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:23:12Z"
+      },
+      {
+        "test": "Native keyboard edit and dismissal cycles",
+        "status": "PASS",
+        "detail": "Three cycles; emulator results do not certify Oppo keyboard behavior",
+        "at": "2026-10-16T20:23:14Z"
+      },
+      {
+        "test": "Native private note saved",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:23:22Z"
+      },
+      {
+        "test": "Native report sheet and cancellation",
+        "status": "PASS",
+        "detail": "No report filed against a real user",
+        "at": "2026-10-16T20:23:28Z"
+      },
+      {
+        "test": "Native chat list navigation",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:23:31Z"
+      },
+      {
+        "test": "Native settings navigation",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:23:33Z"
+      },
+      {
+        "test": "Native end connection",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:23:42Z"
+      },
+      {
+        "test": "Native return after ending connection",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:23:44Z"
+      },
+      {
+        "test": "Native session survives relaunch",
+        "status": "PASS",
+        "detail": "Authenticated screen ready after 5.37 seconds; no fixed three-second assumption",
+        "at": "2026-10-16T20:23:50Z"
+      },
+      {
+        "test": "Emulator has no active default network",
+        "status": "PASS",
+        "detail": "Wi-Fi and mobile data disabled on test emulator only",
+        "at": "2026-10-16T20:23:51Z"
+      },
+      {
+        "test": "Native offline startup offers Retry",
+        "status": "PASS",
+        "detail": "Recovery UI reached after 2.54 seconds; SDK errors may surface before the 20-second watchdog",
+        "at": "2026-10-16T20:23:53Z"
+      },
+      {
+        "test": "Emulator network restored",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:23:55Z"
+      },
+      {
+        "test": "Native startup Retry recovers authenticated UI",
+        "status": "PASS",
+        "detail": "Real network restoration; no fictional-number reauthentication required",
+        "at": "2026-10-16T20:23:58Z"
+      },
+      {
+        "test": "Second offline startup network verified",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:23:59Z"
+      },
+      {
+        "test": "Native offline recovery Sign out reaches sign-in",
+        "status": "PASS",
+        "detail": "Actual signed-out UI, not an ignored auth callback",
+        "at": "2026-10-16T20:24:04Z"
+      },
+      {
+        "test": "Network restored after recovery Sign out",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:24:05Z"
+      },
+      {
+        "test": "Native fictional OTP request user0",
+        "status": "PASS",
+        "detail": "Local Firebase Auth emulator, no SMS delivery",
+        "at": "2026-10-16T20:24:15Z"
+      },
+      {
+        "test": "Native Firebase sign-in user0",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:24:26Z"
+      },
+      {
+        "test": "Native sign-in after recovery Sign out",
+        "status": "PASS",
+        "detail": "Local Firebase Auth emulator flow",
+        "at": "2026-10-16T20:24:26Z"
+      },
+      {
+        "test": "Android animations enabled for navigation smoke",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:24:27Z"
+      },
+      {
+        "test": "Native animations-enabled navigation smoke",
+        "status": "PASS",
+        "detail": "Two chats/settings/connect cycles with scales at 1; no physical-device animation quality or FPS certification",
+        "at": "2026-10-16T20:24:40Z"
+      },
+      {
+        "test": "Native accessibility uses observed 440x880 override and font scale2",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:24:41Z"
+      },
+      {
+        "test": "Native large-text bottom navigation labels remain complete single lines",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:24:46Z"
+      },
+      {
+        "test": "Native large-text code and cancellation remain reachable",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:24:55Z"
+      },
+      {
+        "test": "Native full four-character code stays on one visible line",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:24:55Z"
+      },
+      {
+        "test": "Native large-text consent labels remain complete single lines",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:25:26Z"
+      },
+      {
+        "test": "Native small-display large-text request accepted",
+        "status": "PASS",
+        "detail": "Actual Android440x880 override at density220 with both profiles fontScale2; real isolated pairing; screenshot retained",
+        "at": "2026-10-16T20:25:28Z"
+      },
+      {
+        "test": "Native profile rename persists in Firestore",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:25:48Z"
+      },
+      {
+        "test": "Native profile rename survives navigation",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:25:53Z"
+      },
+      {
+        "test": "Native Cancel code deactivates the exact server code",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:26:07Z"
+      },
+      {
+        "test": "Native canceled-code redemption creates no pending request",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:26:25Z"
+      },
+      {
+        "test": "Native Android Back cancels the owned server code",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:26:40Z"
+      },
+      {
+        "test": "Native expired-code response creates no pending request",
+        "status": "PASS",
+        "detail": "Only owned demo server expiry injected; real five-minute UI countdown not accelerated or certified",
+        "at": "2026-10-16T20:27:07Z"
+      },
+      {
+        "test": "Native decline commits one declined request without a new active chat",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:27:51Z"
+      },
+      {
+        "test": "Native declined peer returns to editable code form",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:27:56Z"
+      },
+      {
+        "test": "Native block records a person block and closes all selected-pair chats",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:28:37Z"
+      },
+      {
+        "test": "Native blocked re-pairing is rejected without consuming generator code",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:29:08Z"
+      },
+      {
+        "test": "Native fictional OTP request user10",
+        "status": "PASS",
+        "detail": "Local Firebase Auth emulator, no SMS delivery",
+        "at": "2026-10-16T20:29:40Z"
+      },
+      {
+        "test": "Native age disclosure explains retained eligibility date",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:29:49Z"
+      },
+      {
+        "test": "Native Firebase sign-in user10",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:30:01Z"
+      },
+      {
+        "test": "Native report persists exactly one report and blocks the selected pair",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:30:46Z"
+      },
+      {
+        "test": "Native report establishes extended server evidence retention",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:30:46Z"
+      },
+      {
+        "test": "Native fictional OTP request user10",
+        "status": "PASS",
+        "detail": "Local Firebase Auth emulator, no SMS delivery",
+        "at": "2026-10-16T20:31:08Z"
+      },
+      {
+        "test": "Native age disclosure explains retained eligibility date",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:31:18Z"
+      },
+      {
+        "test": "Native end-to-end run",
+        "status": "FAIL",
+        "detail": "Native probe failed at age-continue: INSTRUMENTATION_RESULT: longMsg=Process ProcessRecord{e0cc425 32399:com.passway.nativeprobe/u10a193} failed to attach\nINSTRUMENTATION_RESULT: shortMsg=failed to attach\nINSTRUMENTATION_CODE: 0\n",
+        "at": "2026-10-16T20:31:38Z"
+      }
+    ],
+    "coordinator": {
+      "exit_code": 1,
+      "duration_seconds": 822.85,
+      "passed": false,
+      "scope": "current-source isolated emulators; one attempt; no live patching"
+    }
+  },
+  "android16": {
+    "run": 38960258153,
+    "results": [
+      {
+        "test": "Android test-location providers seeded",
+        "status": "PASS",
+        "detail": "OS test providers; simulated Delhi location, not physical proximity certification",
+        "at": "2026-10-16T20:18:31Z"
+      },
+      {
+        "test": "Second isolated Android user created",
+        "status": "PASS",
+        "detail": "Success: created user id 10\n",
+        "at": "2026-10-16T20:18:38Z"
+      },
+      {
+        "test": "Native onboarding all four pages",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:19:22Z"
+      },
+      {
+        "test": "Native invalid phone rejected",
+        "status": "PASS",
+        "detail": "                                    PASSWAY          Your phone number  Used only to sign in. It is never shown to anyone you connect with.  Internal diagnostic build: crash reports and screen/keyboard timing help investigate freezing. Phone numbers and chat text are not added to diagnostic logs.  Indian mobile number (+91)  111 Indian mobile number (+91) Enter a 10 digit Indian mobile number     Send code Send code          Never shown to people you connect with.  Passway is for people aged 18 and over.     How Passway works How Passway works ",
+        "at": "2026-10-16T20:19:33Z"
+      },
+      {
+        "test": "Native fictional OTP request user0",
+        "status": "PASS",
+        "detail": "Local Firebase Auth emulator, no SMS delivery",
+        "at": "2026-10-16T20:19:44Z"
+      },
+      {
+        "test": "Native wrong OTP rejected",
+        "status": "PASS",
+        "detail": "                                    PASSWAY          Enter the code  We sent a 6 digit code to 9999900001  Verification code  000000 verification code That code did not match. Try again.     Verify Verify     Send another code Send another code     Use another number Use another number ",
+        "at": "2026-10-16T20:19:59Z"
+      },
+      {
+        "test": "Native age disclosure explains retained eligibility date",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:20:09Z"
+      },
+      {
+        "test": "Native Firebase sign-in user0",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:20:21Z"
+      },
+      {
+        "test": "Native fictional OTP request user10",
+        "status": "PASS",
+        "detail": "Local Firebase Auth emulator, no SMS delivery",
+        "at": "2026-10-16T20:21:31Z"
+      },
+      {
+        "test": "Native age disclosure explains retained eligibility date",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:21:48Z"
+      },
+      {
+        "test": "Native Firebase sign-in user10",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:22:16Z"
+      },
+      {
+        "test": "Native generation form input verified",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:22:38Z"
+      },
+      {
+        "test": "Native code generated",
+        "status": "PASS",
+        "detail": "Four-character code rendered",
+        "at": "2026-10-16T20:22:43Z"
+      },
+      {
+        "test": "Native peer redeemed code",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:23:07Z"
+      },
+      {
+        "test": "Native request acceptance",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:23:16Z"
+      },
+      {
+        "test": "Native composer and send button above keyboard native-composer-keyboard",
+        "status": "PASS",
+        "detail": "Input bottom 770, send bottom 769, IME top 783",
+        "at": "2026-10-16T20:23:22Z"
+      },
+      {
+        "test": "Native A to native B delivery",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:23:34Z"
+      },
+      {
+        "test": "Native B to native A delivery",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:23:55Z"
+      },
+      {
+        "test": "Native soft keyboard visible",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:24:02Z"
+      },
+      {
+        "test": "Native composer and send button above keyboard keyboard-cycle-0",
+        "status": "PASS",
+        "detail": "Input bottom 770, send bottom 769, IME top 783",
+        "at": "2026-10-16T20:24:10Z"
+      },
+      {
+        "test": "Native keyboard typed character 0",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:24:12Z"
+      },
+      {
+        "test": "Native composer and send button above keyboard keyboard-cycle-1",
+        "status": "PASS",
+        "detail": "Input bottom 770, send bottom 769, IME top 783",
+        "at": "2026-10-16T20:24:20Z"
+      },
+      {
+        "test": "Native keyboard typed character 1",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:24:21Z"
+      },
+      {
+        "test": "Native composer and send button above keyboard keyboard-cycle-2",
+        "status": "PASS",
+        "detail": "Input bottom 770, send bottom 769, IME top 783",
+        "at": "2026-10-16T20:24:28Z"
+      },
+      {
+        "test": "Native keyboard typed character 2",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:24:29Z"
+      },
+      {
+        "test": "Native keyboard edit and dismissal cycles",
+        "status": "PASS",
+        "detail": "Three cycles; emulator results do not certify Oppo keyboard behavior",
+        "at": "2026-10-16T20:24:31Z"
+      },
+      {
+        "test": "Native private note saved",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:24:40Z"
+      },
+      {
+        "test": "Native report sheet and cancellation",
+        "status": "PASS",
+        "detail": "No report filed against a real user",
+        "at": "2026-10-16T20:24:47Z"
+      },
+      {
+        "test": "Native chat list navigation",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:24:50Z"
+      },
+      {
+        "test": "Native settings navigation",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:24:53Z"
+      },
+      {
+        "test": "Native end connection",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:25:02Z"
+      },
+      {
+        "test": "Native return after ending connection",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:25:05Z"
+      },
+      {
+        "test": "Native session survives relaunch",
+        "status": "PASS",
+        "detail": "Authenticated screen ready after 4.71 seconds; no fixed three-second assumption",
+        "at": "2026-10-16T20:25:10Z"
+      },
+      {
+        "test": "Emulator has no active default network",
+        "status": "PASS",
+        "detail": "Wi-Fi and mobile data disabled on test emulator only",
+        "at": "2026-10-16T20:25:11Z"
+      },
+      {
+        "test": "Native offline startup offers Retry",
+        "status": "PASS",
+        "detail": "Recovery UI reached after 2.3 seconds; SDK errors may surface before the 20-second watchdog",
+        "at": "2026-10-16T20:25:13Z"
+      },
+      {
+        "test": "Emulator network restored",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:25:15Z"
+      },
+      {
+        "test": "Native startup Retry recovers authenticated UI",
+        "status": "PASS",
+        "detail": "Real network restoration; no fictional-number reauthentication required",
+        "at": "2026-10-16T20:25:19Z"
+      },
+      {
+        "test": "Second offline startup network verified",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:25:20Z"
+      },
+      {
+        "test": "Native offline recovery Sign out reaches sign-in",
+        "status": "PASS",
+        "detail": "Actual signed-out UI, not an ignored auth callback",
+        "at": "2026-10-16T20:25:25Z"
+      },
+      {
+        "test": "Network restored after recovery Sign out",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:25:26Z"
+      },
+      {
+        "test": "Native fictional OTP request user0",
+        "status": "PASS",
+        "detail": "Local Firebase Auth emulator, no SMS delivery",
+        "at": "2026-10-16T20:25:37Z"
+      },
+      {
+        "test": "Native Firebase sign-in user0",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:25:48Z"
+      },
+      {
+        "test": "Native sign-in after recovery Sign out",
+        "status": "PASS",
+        "detail": "Local Firebase Auth emulator flow",
+        "at": "2026-10-16T20:25:48Z"
+      },
+      {
+        "test": "Android animations enabled for navigation smoke",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:25:48Z"
+      },
+      {
+        "test": "Native animations-enabled navigation smoke",
+        "status": "PASS",
+        "detail": "Two chats/settings/connect cycles with scales at 1; no physical-device animation quality or FPS certification",
+        "at": "2026-10-16T20:26:03Z"
+      },
+      {
+        "test": "Native accessibility uses observed 440x880 override and font scale2",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:26:04Z"
+      },
+      {
+        "test": "Native large-text bottom navigation labels remain complete single lines",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:26:09Z"
+      },
+      {
+        "test": "Native large-text code and cancellation remain reachable",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:26:18Z"
+      },
+      {
+        "test": "Native full four-character code stays on one visible line",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:26:18Z"
+      },
+      {
+        "test": "Native large-text consent labels remain complete single lines",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:26:54Z"
+      },
+      {
+        "test": "Native small-display large-text request accepted",
+        "status": "PASS",
+        "detail": "Actual Android440x880 override at density220 with both profiles fontScale2; real isolated pairing; screenshot retained",
+        "at": "2026-10-16T20:26:57Z"
+      },
+      {
+        "test": "Native profile rename persists in Firestore",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:27:19Z"
+      },
+      {
+        "test": "Native profile rename survives navigation",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:27:23Z"
+      },
+      {
+        "test": "Native Cancel code deactivates the exact server code",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:27:39Z"
+      },
+      {
+        "test": "Native canceled-code redemption creates no pending request",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:27:58Z"
+      },
+      {
+        "test": "Native Android Back cancels the owned server code",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:28:17Z"
+      },
+      {
+        "test": "Native expired-code response creates no pending request",
+        "status": "PASS",
+        "detail": "Only owned demo server expiry injected; real five-minute UI countdown not accelerated or certified",
+        "at": "2026-10-16T20:28:46Z"
+      },
+      {
+        "test": "Native decline commits one declined request without a new active chat",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:29:33Z"
+      },
+      {
+        "test": "Native declined peer returns to editable code form",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:29:38Z"
+      },
+      {
+        "test": "Native block records a person block and closes all selected-pair chats",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:30:26Z"
+      },
+      {
+        "test": "Native blocked re-pairing is rejected without consuming generator code",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:30:59Z"
+      },
+      {
+        "test": "Native fictional OTP request user10",
+        "status": "PASS",
+        "detail": "Local Firebase Auth emulator, no SMS delivery",
+        "at": "2026-10-16T20:31:30Z"
+      },
+      {
+        "test": "Native age disclosure explains retained eligibility date",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:31:40Z"
+      },
+      {
+        "test": "Native Firebase sign-in user10",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:31:53Z"
+      },
+      {
+        "test": "Native report persists exactly one report and blocks the selected pair",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:32:46Z"
+      },
+      {
+        "test": "Native report establishes extended server evidence retention",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:32:46Z"
+      },
+      {
+        "test": "Native fictional OTP request user10",
+        "status": "PASS",
+        "detail": "Local Firebase Auth emulator, no SMS delivery",
+        "at": "2026-10-16T20:33:11Z"
+      },
+      {
+        "test": "Native age disclosure explains retained eligibility date",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:33:21Z"
+      },
+      {
+        "test": "Native Firebase sign-in user10",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:33:35Z"
+      },
+      {
+        "test": "Native deletion confirmation Cancel preserves account and active chat",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:34:28Z"
+      },
+      {
+        "test": "Native account deletion removes Auth/profile and completes durable job",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:34:34Z"
+      },
+      {
+        "test": "Native account deletion closes the unrelated active chat",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:34:34Z"
+      },
+      {
+        "test": "Native peer observes deletion closure with no message composer",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:34:39Z"
+      },
+      {
+        "test": "Native fictional OTP request user0",
+        "status": "PASS",
+        "detail": "Local Firebase Auth emulator, no SMS delivery",
+        "at": "2026-10-16T20:34:52Z"
+      },
+      {
+        "test": "Native age disclosure explains retained eligibility date",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:35:03Z"
+      },
+      {
+        "test": "Native Firebase sign-in user0",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:35:17Z"
+      },
+      {
+        "test": "Native re-registration after deletion receives a new eligible Firebase identity",
+        "status": "PASS",
+        "detail": "",
+        "at": "2026-10-16T20:35:18Z"
+      },
+      {
+        "test": "Extended native destructive journeys completed",
+        "status": "PASS",
+        "detail": "Four fictional Firebase identities on two Android users; local services only; no block reset or production mutation",
+        "at": "2026-10-16T20:35:19Z"
+      },
+      {
+        "test": "Native permission requests remain bounded",
+        "status": "PASS",
+        "detail": "Permission activity launches captured: 0; prior build captured hundreds",
+        "at": "2026-10-16T20:35:20Z"
+      },
+      {
+        "test": "No Passway Java fatal exception captured",
+        "status": "PASS",
+        "detail": "Captured-log check, not a long-duration or physical-device certification",
+        "at": "2026-10-16T20:35:20Z"
+      },
+      {
+        "test": "No Passway ANR captured during this flow",
+        "status": "PASS",
+        "detail": "Not an Oppo physical-device or long-duration stability certification",
+        "at": "2026-10-16T20:35:20Z"
+      }
+    ],
+    "coordinator": {
+      "exit_code": 0,
+      "duration_seconds": 1009.67,
+      "passed": true,
+      "scope": "current-source isolated emulators; one attempt; no live patching"
+    }
+  },
+  "correction": "Only a complete Android process failed to attach result permits one bounded pre-dispatch probe relaunch. Unknown action outcomes, crashes and timeouts are never replayed."
+}

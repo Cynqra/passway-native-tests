@@ -1,0 +1,37 @@
+{
+  "architecture": {
+    "status": "completed",
+    "conclusion": "success",
+    "headSha": "6cffe32ef4f1f3d9f178ae4a106f38bb1cce84a3",
+    "url": "https://github.com/Cynqra/passway-native-tests/actions/runs/38963743840",
+    "activeSteps": []
+  },
+  "static": {
+    "status": "completed",
+    "conclusion": "success",
+    "headSha": "6cffe32ef4f1f3d9f178ae4a106f38bb1cce84a3",
+    "url": "https://github.com/Cynqra/passway-native-tests/actions/runs/38963747764",
+    "activeSteps": []
+  },
+  "android14": {
+    "status": "completed",
+    "conclusion": "success",
+    "headSha": "6cffe32ef4f1f3d9f178ae4a106f38bb1cce84a3",
+    "url": "https://github.com/Cynqra/passway-native-tests/actions/runs/38963751495",
+    "activeSteps": []
+  },
+  "android16": {
+    "status": "completed",
+    "conclusion": "success",
+    "headSha": "6cffe32ef4f1f3d9f178ae4a106f38bb1cce84a3",
+    "url": "https://github.com/Cynqra/passway-native-tests/actions/runs/38963754894",
+    "activeSteps": []
+  },
+  "signed": {
+    "status": "completed",
+    "conclusion": "success",
+    "headSha": "6cffe32ef4f1f3d9f178ae4a106f38bb1cce84a3",
+    "url": "https://github.com/Cynqra/passway-native-tests/actions/runs/38963758738",
+    "activeSteps": []
+  }
+}

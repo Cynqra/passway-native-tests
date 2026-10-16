@@ -1,0 +1,15 @@
+{
+  "model": "gemini-4-argon-high",
+  "effort": "high",
+  "sourceCommit": "bbdfe0735cedc07c5a401ae147cb9abe76f2e6e1",
+  "scope": "Review of source included maintenance coordination change only; no reviewer test execution",
+  "response": "None found.\n",
+  "durationSeconds": 42.604689182,
+  "usage": {
+    "input_tokens": 15544,
+    "output_tokens": 3864,
+    "thinking_tokens": 3857,
+    "cache_read_tokens": 0,
+    "total_tokens": 19408
+  }
+}

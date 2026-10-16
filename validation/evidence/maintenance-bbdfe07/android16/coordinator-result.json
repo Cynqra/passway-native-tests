@@ -1,0 +1,6 @@
+{
+  "exit_code": 0,
+  "duration_seconds": 976.53,
+  "passed": true,
+  "scope": "current-source isolated emulators; one attempt; no live patching"
+}
