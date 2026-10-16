@@ -1,0 +1,23 @@
+{
+  "at": "2026-10-16T12:18:13.487673+00:00",
+  "scope": "Genuine physical Google Play installation acceptance attempt",
+  "reservation": "2w42kxvim794m",
+  "device": "Pixel9 API35",
+  "intendedVersion": 8,
+  "testerAccountRecognized": true,
+  "credentialAssociationConfirmedByUser": true,
+  "credentialAttempts": 1,
+  "googleResult": "Wrong password. Try again or click Forgot password for more options.",
+  "credentialAccepted": false,
+  "passwordResetAttempted": false,
+  "passwayInstalled": false,
+  "genuineStoreInstallationVerified": false,
+  "positiveAttestationVerified": false,
+  "smsSent": false,
+  "productionChanged": false,
+  "productionReady": false,
+  "nextRequirement": "Correct Google tester credential or another supported authentication method; no further attempts made",
+  "credentialPrintedToCommandOutput": false,
+  "reservationReleased": true,
+  "activeReservationsAfter": 0
+}
