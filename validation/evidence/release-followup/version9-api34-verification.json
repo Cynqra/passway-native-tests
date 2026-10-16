@@ -1,0 +1,25 @@
+{
+  "run": 38914206123,
+  "runUrl": "https://github.com/Cynqra/passway-native-tests/actions/runs/38914206123",
+  "harnessCommit": "f1811082d3222b0375f8195e0056d778082f9aac",
+  "sourceCommit": "fbc13efb9ce8ea0322ae455e1694d164a163af76",
+  "archiveSha256": "5a4b1cabbf5b5e589d580ff8e1d478a0fe0bee9cd92ee7efd724b1e7c582d656",
+  "observedAndroidApi": 34,
+  "assertions": 75,
+  "statusCounts": {
+    "PASS": 75
+  },
+  "coordinator": {
+    "exit_code": 0,
+    "duration_seconds": 834.17,
+    "passed": true,
+    "scope": "current-source isolated emulators; one attempt; no live patching"
+  },
+  "bothCompletionMarkersVerified": true,
+  "scope": "Fresh candidate-source Android build with a test-only local emulator routing overlay; two isolated Android users; local Firebase Auth/Firestore and candidate HTTP handlers; keyboard occlusion and startup recovery; no production, real SMS, store attestation or physical-device certification",
+  "previousAttempt": {
+    "run": 38911663287,
+    "conclusion": "failure",
+    "cause": "New harness SDK guard used cross-line shell variables, lost because emulator action executes lines separately. Failed before app installation. Replaced with one-process Python verifier plus regressions."
+  }
+}

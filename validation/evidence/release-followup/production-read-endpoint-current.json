@@ -1,0 +1,6 @@
+{
+  "at": "2026-10-16T13:57:13.137Z",
+  "route": "getMessages",
+  "status": 404,
+  "scope": "Empty unauthenticated request; no SMS or authenticated mutations; response body deliberately not retained"
+}

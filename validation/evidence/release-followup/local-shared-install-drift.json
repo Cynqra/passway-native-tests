@@ -1,0 +1,51 @@
+{
+  "at": "2026-10-16T13:50:26.640135+00:00",
+  "sourceCommit": "fbc13efb9ce8ea0322ae455e1694d164a163af76",
+  "nodeModulesIsSymlink": true,
+  "resolvedDependencyRoot": "/data/passway-recovered/passway-app/node_modules",
+  "findings": [
+    {
+      "package": "node-forge",
+      "file": "lib/rsa.js",
+      "instance": "node_modules/node-forge",
+      "matchesReviewedReplacement": false,
+      "matchesUpstreamOriginal": true
+    },
+    {
+      "package": "braces",
+      "file": "lib/assert-depth.js",
+      "instance": "node_modules/braces",
+      "matchesReviewedReplacement": false,
+      "matchesUpstreamOriginal": true
+    },
+    {
+      "package": "braces",
+      "file": "lib/compile.js",
+      "instance": "node_modules/braces",
+      "matchesReviewedReplacement": false,
+      "matchesUpstreamOriginal": true
+    },
+    {
+      "package": "braces",
+      "file": "lib/expand.js",
+      "instance": "node_modules/braces",
+      "matchesReviewedReplacement": false,
+      "matchesUpstreamOriginal": true
+    },
+    {
+      "package": "braces",
+      "file": "lib/parse.js",
+      "instance": "node_modules/braces",
+      "matchesReviewedReplacement": false,
+      "matchesUpstreamOriginal": true
+    },
+    {
+      "package": "braces",
+      "file": "lib/stringify.js",
+      "instance": "node_modules/braces",
+      "matchesReviewedReplacement": false,
+      "matchesUpstreamOriginal": true
+    }
+  ],
+  "scope": "Local installed dependency state only. Not evidence that immutable completed CI changed. No installed package files modified."
+}

@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-16T13:52:37.761Z",
+  "scope": "Read-only IAM capability check; no grants, API enablement, billing changes or tests",
+  "requestedPermissions": [
+    "cloudtestservice.matrices.create",
+    "cloudtestservice.matrices.get",
+    "cloudtestservice.matrices.update",
+    "serviceusage.services.use",
+    "serviceusage.services.enable",
+    "resourcemanager.projects.getIamPolicy",
+    "resourcemanager.projects.setIamPolicy",
+    "storage.buckets.create"
+  ],
+  "status": 200,
+  "grantedPermissions": [
+    "storage.buckets.create"
+  ]
+}

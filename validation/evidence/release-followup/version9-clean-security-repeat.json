@@ -1,0 +1,12 @@
+{
+  "sourceCommit": "fbc13efb9ce8ea0322ae455e1694d164a163af76",
+  "regressionRun": 38911026391,
+  "staticRun": 38911031074,
+  "rawRegistryHighEntries": 21,
+  "installedFileHashesVerified": true,
+  "exploitRegressionsPassed": true,
+  "rawRegistryAuditClean": false,
+  "staticSarifFindings": 0,
+  "localSharedInstallAccepted": false,
+  "scope": "Fresh clean CI verification, not a local dependency repair or production acceptance"
+}
