@@ -57,8 +57,8 @@ jobs:
           GCLOUD_PROJECT: demo-passway
           METADATA_SERVER_DETECTION: none
         run: |
-          npx --yes firebase-tools@15.32.1 emulators:exec --only firestore --project demo-passway \
-            "npm run test:rules && npm run test:integration --prefix functions && node ../../harness/bounded_backend_workload.cjs"
+          npx --yes firebase-tools@15.32.1 emulators:exec --only auth,firestore --project demo-passway \
+            "npm run test:rules && npm run test:integration --prefix functions && node ../../harness/bounded_backend_workload.cjs && npm run test:auth:integration --prefix functions"
       - run: npx --no-install expo export --platform all --output-dir dist-ci
       - name: Exercise controlled build-only web preview helper
         env:

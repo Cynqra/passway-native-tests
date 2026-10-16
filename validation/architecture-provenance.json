@@ -1,8 +1,8 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "d58e411b5355bede342c94b52b9075b9a3614b0b",
-  "archiveSha256": "b5885f6f1e52b5bc75fdedf782c19952dfc8a6c9940fdb720691899e1e320517",
-  "createdAt": "2026-10-16T15:34:14.081269+00:00",
-  "scope": "Phase1 verified CI alignment, automatic PR/main gates and build-only non-production preview hardening. Complete tracked source; no inherited native/signed/production acceptance.",
+  "sourceCommit": "7f460ed01dc8b19f239a214bc718764bb1f889bf",
+  "archiveSha256": "fc955f2e2a4bc1215e1927c064b3bd1bc729d9dca72a0a1841771f8260f0047f",
+  "createdAt": "2026-10-16T15:46:07.755943+00:00",
+  "scope": "Phase2 full actual-HTTP production boundary matrix and real local Auth/Firestore OTP custom-token bridge. No real SMS, licensed Store or production acceptance.",
   "fullTrackedSourceArchive": true
 }
