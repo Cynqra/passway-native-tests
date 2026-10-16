@@ -1,0 +1,14 @@
+{
+  "versionCode": 9,
+  "readbackRun": 38909909885,
+  "apkRun": 38909913894,
+  "harnessCommit": "b144576caf9230a4835ef827843ad2220ea8dce4",
+  "actualApkSha256": "1029b6356a47139d727e75f73d32a8468cea1d31a05516e644e2afedd9f86863",
+  "actualApkBytes": 96545280,
+  "actualApkPackageAndVersionVerified": true,
+  "ciCryptographicSignatureVerified": true,
+  "localCryptographicSignatureRecheck": false,
+  "internalVersion9ReadbackVerified": true,
+  "publicProductionReleasePresent": false,
+  "storeInstallationOrPositiveAttestationVerified": false
+}

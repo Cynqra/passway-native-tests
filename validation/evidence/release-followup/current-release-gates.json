@@ -1,5 +1,5 @@
 {
-  "at": "2026-10-16T13:23:38.454856+00:00",
+  "at": "2026-10-16T13:45:16.358781+00:00",
   "candidate": {
     "sourceCommit": "fbc13efb9ce8ea0322ae455e1694d164a163af76",
     "versionName": "0.3.3",
@@ -10,12 +10,13 @@
     "regressionCases": 467,
     "staticFindings": 0,
     "signedCandidate": true,
-    "manifestAndHashVerified": true
+    "manifestAndHashVerified": true,
+    "freshNativeAssertions": 75,
+    "freshCompletionMarkersVerified": true,
+    "internalVersion9Published": true,
+    "internalPlayReadbackAndSignedApk": true
   },
-  "pending": [
-    "Fresh version9 two-user native test completion",
-    "Same-revision internal-only publication and Play readback"
-  ],
+  "pending": [],
   "productionBlocked": [
     "Genuine Play-installed licensed device positive attestation and current production two-user/SMS acceptance not established",
     "Candidate API/client/rules migration not deployed as a verified coordinated release",
@@ -26,5 +27,11 @@
     "googleTestLab": "403 Not authorized for project passway-2ddc8"
   },
   "zeroBugsClaimed": false,
-  "publicProductionRollout": false
+  "publicProductionRollout": false,
+  "postReleaseHarnessUpdate": {
+    "commit": "2fc6bd0",
+    "change": "Only isolated test modes keyed by source revision; cloud/release modes retain shared serialization",
+    "harnessUnitTests": 72,
+    "nativePerformanceMeasured": false
+  }
 }

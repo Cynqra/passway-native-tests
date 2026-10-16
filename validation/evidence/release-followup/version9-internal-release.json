@@ -1,0 +1,9 @@
+{
+  "package": "com.passway.app",
+  "versionCode": 9,
+  "sha256": "a878b7bb96312679b62c69be0a587209d03535a08cdb6a2e3de71af75d843dab",
+  "track": "internal",
+  "editCommitted": true,
+  "publicProductionRollout": false,
+  "storeInstallationOrPositiveAttestationVerified": false
+}

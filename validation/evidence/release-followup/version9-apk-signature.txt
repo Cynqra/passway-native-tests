@@ -1,0 +1,47 @@
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): true
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v3.2 scheme (APK Signature Scheme v3.2): true
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: true
+Number of signers: 1
+V3.2 Hybrid Classical Signer: (minSdkVersion=37, maxSdkVersion=2147483647) certificate DN: CN=Android, OU=Android, O=Google Inc., L=Mountain View, ST=California, C=US
+V3.2 Hybrid Classical Signer: (minSdkVersion=37, maxSdkVersion=2147483647) certificate SHA-256 digest: 135552a1200e206e837d3a00fedfd37b91e2da9d0b4bb82fd16358b14e3a1b3f
+V3.2 Hybrid Classical Signer: (minSdkVersion=37, maxSdkVersion=2147483647) certificate SHA-1 digest: 13b9b2b48b892f2fd39fda3e5ccc9aac7b312a29
+V3.2 Hybrid Classical Signer: (minSdkVersion=37, maxSdkVersion=2147483647) certificate MD5 digest: ff5673feeb28eb007804461976b475ce
+V3.2 Hybrid Classical Signer: (minSdkVersion=37, maxSdkVersion=2147483647) key algorithm: RSA
+V3.2 Hybrid Classical Signer: (minSdkVersion=37, maxSdkVersion=2147483647) key size (bits): 4096
+V3.2 Hybrid Classical Signer: (minSdkVersion=37, maxSdkVersion=2147483647) public key SHA-256 digest: c1f1caa3cb739175a44dbf6a55f81d6ed436184448d21a89c3a335d39dc44f8e
+V3.2 Hybrid Classical Signer: (minSdkVersion=37, maxSdkVersion=2147483647) public key SHA-1 digest: 347c0e57f5d8c98bcdcafaf7c22656439a1b5bcb
+V3.2 Hybrid Classical Signer: (minSdkVersion=37, maxSdkVersion=2147483647) public key MD5 digest: c96ee77df224e6c3b337d32a67445722
+V3.2 Hybrid PQC Signer: (minSdkVersion=37, maxSdkVersion=2147483647) certificate DN: CN=Android, OU=Android, O=Google Inc., L=Mountain View, ST=California, C=US
+V3.2 Hybrid PQC Signer: (minSdkVersion=37, maxSdkVersion=2147483647) certificate SHA-256 digest: 5bfc6479de3b66f6551ada88952b591cfe8bba09fa813c8af4b249cb0abe56cc
+V3.2 Hybrid PQC Signer: (minSdkVersion=37, maxSdkVersion=2147483647) certificate SHA-1 digest: 23cb27d35f1d3c7d37117f9aa268433be66d7623
+V3.2 Hybrid PQC Signer: (minSdkVersion=37, maxSdkVersion=2147483647) certificate MD5 digest: cd6761fa57de9a5ce81fb81613e3b882
+V3.2 Hybrid PQC Signer: (minSdkVersion=37, maxSdkVersion=2147483647) key algorithm: ML-DSA
+V3.2 Hybrid PQC Signer: (minSdkVersion=37, maxSdkVersion=2147483647) key size (bits): n/a
+V3.2 Hybrid PQC Signer: (minSdkVersion=37, maxSdkVersion=2147483647) public key SHA-256 digest: e3a0ed5f24384a7f52795c0fa14a3eb86b129824fe5dae31465a853a6686821e
+V3.2 Hybrid PQC Signer: (minSdkVersion=37, maxSdkVersion=2147483647) public key SHA-1 digest: c2e943761dba6780e896e0c696a781bfe392dc0f
+V3.2 Hybrid PQC Signer: (minSdkVersion=37, maxSdkVersion=2147483647) public key MD5 digest: cd476e945e42703b1f4e65b0cea12379
+V3.0 Signer: certificate DN: CN=Android, OU=Android, O=Google Inc., L=Mountain View, ST=California, C=US
+V3.0 Signer: certificate SHA-256 digest: 5f97b4bfe27bdbf3aade7fd1e2e7b323cfdde1cd8d7feaa536ea1db31ef963f2
+V3.0 Signer: certificate SHA-1 digest: 2cd6c9ebc66f23cac166d814addf60c1abaaad23
+V3.0 Signer: certificate MD5 digest: a842bed2389f0927af4fe2d05baf0cdc
+V3.0 Signer: key algorithm: RSA
+V3.0 Signer: key size (bits): 4096
+V3.0 Signer: public key SHA-256 digest: 5ad51f6f621990a7353f16c944fe547f26a121113e0f1be1d3519f29cb66835d
+V3.0 Signer: public key SHA-1 digest: 63dd9ec079cd15d1d5f9a6afe2f5bc72622f9b6a
+V3.0 Signer: public key MD5 digest: fbecdca79afa98b465c832c0daea28ec
+Source Stamp Signer: certificate DN: CN=Android, OU=Android, O=Google Inc., L=Mountain View, ST=California, C=US
+Source Stamp Signer: certificate SHA-256 digest: 3257d599a49d2c961a471ca9843f59d341a405884583fc087df4237b733bbd6d
+Source Stamp Signer: certificate SHA-1 digest: b1af3a0bf998aeede1a8716a539e5a59da1d86d6
+Source Stamp Signer: certificate MD5 digest: 577b8a9fbc7e308321aec6411169d2fb
+Source Stamp Signer: key algorithm: RSA
+Source Stamp Signer: key size (bits): 4096
+Source Stamp Signer: public key SHA-256 digest: 4c53c1d28f2ecceadcb1351603f0b702615b3454b6e30070de759359f241b802
+Source Stamp Signer: public key SHA-1 digest: 188b067a9ee881bde55dabe0f8f7ecb320b1a091
+Source Stamp Signer: public key MD5 digest: 965afac83f033aa037a54482eb6922d5
+Source Stamp Timestamp: 1792158073
+WARNING: APK Signature Scheme v3 signer #1: Unknown additional attribute: ID 0x9f06b79c

@@ -1,0 +1,16 @@
+{
+  "sourceCommit": "fbc13efb9ce8ea0322ae455e1694d164a163af76",
+  "archiveSha256": "5a4b1cabbf5b5e589d580ff8e1d478a0fe0bee9cd92ee7efd724b1e7c582d656",
+  "harnessCommit": "b144576caf9230a4835ef827843ad2220ea8dce4",
+  "nativeRun": 38905444007,
+  "assertions": 75,
+  "allPassed": true,
+  "freshCompletionMarkersVerified": true,
+  "coordinator": {
+    "exit_code": 0,
+    "duration_seconds": 823.93,
+    "passed": true,
+    "scope": "current-source isolated emulators; one attempt; no live patching"
+  },
+  "productionRealSmsStoreAttestationClaimed": false
+}
