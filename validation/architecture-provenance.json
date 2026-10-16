@@ -1,7 +1,7 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "bc5a5918719cb22ea6e915e09c5d7281a5d15ca7",
-  "archiveSha256": "03b889404d9497f52a13fb07d1597fdc8e40e132108c17f037a214ec48500c56",
-  "createdAt": "2026-10-16T08:13:06.335569+00:00",
-  "scope": "Backend-only message timestamp correction: five prior unit and five real Firestore failures reproduced; full local 421 regression cases and exports pass. No inherited current-source native pass or production acceptance claim."
+  "sourceCommit": "5f89b86fa1862b8566666de3749bd170aa458436",
+  "archiveSha256": "071965eba4906815237128480be33c3216861bc59dea636f453020c6d0c7cde8",
+  "createdAt": "2026-10-16T10:07:24.681951+00:00",
+  "scope": "Backend-only persisted pairing-expiry correction: 15 unit plus 15 real Firestore failures reproduced; full local 451 regression cases and exports pass. No inherited current-source native/live pass or production acceptance claim."
 }
