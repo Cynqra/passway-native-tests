@@ -1,0 +1,6 @@
+{
+  "status": "FAILED",
+  "error": "Play capability check rejected request (HTTP 400; FAILED_PRECONDITION)",
+  "releaseTracksChanged": false,
+  "positiveStoreAttestationVerified": false
+}

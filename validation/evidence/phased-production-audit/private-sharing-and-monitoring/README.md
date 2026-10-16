@@ -1,0 +1,9 @@
+# Private sharing and operational visibility
+
+Two immutable private internal-app-sharing uploads were rejected by Google (38951510564,38952597008). Exact encrypted diagnostic confirms HTTP400 FAILED_PRECONDITION: `NOT_PUBLISHED`. No release track changed. This is a delivery failure, not a passed app/device test. A completed internal-track metadata record does not prove tester availability or physical Play acceptance. Google documentation describes listing/test-track access requirements: https://support.google.com/googleplay/android-developer/answer/9844679?hl=en . No public production rollout was used to bypass this precondition.
+
+Distribution harness2dcb385:107Python and10SMS-assertion tests pass; these numbers describe harness tests only. Fixes include shared cross-mode release concurrency and encrypted-only private error diagnostics. Existing accepted ec65e82 app/archive/bundle remains unchanged. Private installation URLs and raw errors are not published.
+
+Hourly credential-free public API security monitoring merged through PR5, commitb5d8936890328185fb690a75357d62663e37cd6c. Four monitor tests and all four CodeQL language analyses passed. First actual run38953069130 FAILED0/8, correctly exposing the old live API contract: OTP400, generate401wrongcontract, getMessages404. No response bodies, credentials, real phone/OTP, SMS sends or authenticated mutations. This is not positive attestation/authenticated uptime/backlog monitoring. GitHub notifications depend on subscriber configuration; email delivery not tested.
+
+The unpromoted production-configured candidate passed its earlier8negative and4controlled-token checks plus actual SMS login. Public API aliases remain old; no coordinated migration or Store attestation acceptance is claimed. Do not deploy deny-body-read rules alone or weaken attestation to force green.

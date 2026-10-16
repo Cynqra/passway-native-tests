@@ -1,0 +1,10 @@
+{
+  "httpStatus": 400,
+  "status": "FAILED_PRECONDITION",
+  "message": "UploadException: NOT_PUBLISHED [[]] (com.passway.app)",
+  "runId": 38952597008,
+  "releaseTracksChanged": false,
+  "positiveStoreAttestationVerified": false,
+  "harnessUnitTestsPassed": 107,
+  "smsAssertionTestsPassed": 10
+}
