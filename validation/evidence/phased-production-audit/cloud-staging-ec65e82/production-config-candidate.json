@@ -1,0 +1,69 @@
+{
+  "checkedAt": "2026-10-16T18:27:22.224Z",
+  "sourceCommit": "ec65e826e456f406a9087da843c4d4d6425d886d",
+  "candidateDeploymentId": "dpl_2hWYWikzCJmK5vchMXNRgh9rwQWa",
+  "candidateUrl": "https://passway-omauwz0q8-naveenbharti310s-projects.vercel.app",
+  "environment": "production",
+  "readyState": "READY",
+  "liveAliasDeploymentId": "dpl_HwzmiRmbLnjuwvZTnWYPpZFooKEe",
+  "liveAliasUnchanged": true,
+  "sourceAndEntryAndConfigMatch": true,
+  "productionEnvironmentNegativeChecks": {
+    "scope": "Negative attestation rejection only; no SMS or authenticated mutations.",
+    "target": "https://passway-omauwz0q8-naveenbharti310s-projects.vercel.app",
+    "pass": true,
+    "checks": [
+      {
+        "route": "otpSend",
+        "token": "missing",
+        "status": 401,
+        "pass": true
+      },
+      {
+        "route": "otpSend",
+        "token": "invalid",
+        "status": 401,
+        "pass": true
+      },
+      {
+        "route": "otpVerify",
+        "token": "missing",
+        "status": 401,
+        "pass": true
+      },
+      {
+        "route": "otpVerify",
+        "token": "invalid",
+        "status": 401,
+        "pass": true
+      },
+      {
+        "route": "generateTid",
+        "token": "missing",
+        "status": 401,
+        "pass": true
+      },
+      {
+        "route": "generateTid",
+        "token": "invalid",
+        "status": 401,
+        "pass": true
+      },
+      {
+        "route": "getMessages",
+        "token": "missing",
+        "status": 401,
+        "pass": true
+      },
+      {
+        "route": "getMessages",
+        "token": "invalid",
+        "status": 401,
+        "pass": true
+      }
+    ]
+  },
+  "automaticPromotion": false,
+  "productionReady": false,
+  "positiveStoreAttestationVerified": false
+}

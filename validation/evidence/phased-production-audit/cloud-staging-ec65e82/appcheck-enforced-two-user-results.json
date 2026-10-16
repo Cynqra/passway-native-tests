@@ -1,0 +1,220 @@
+{
+  "scope": "Isolated hosted HTTP/Auth/Firestore with App Check ENFORCED and actual Firebase-issued ADMIN custom token; disposable accounts only. NOT real SMS, native UI, Play Integrity or Store-installed attestation",
+  "rows": [
+    {
+      "name": "Two isolated synthetic users authenticate with live Firebase",
+      "pass": true,
+      "detail": "Custom-token fixture authentication; not OTP delivery"
+    },
+    {
+      "name": "Authenticated fixture with missing App Check is denied",
+      "pass": true,
+      "detail": "HTTP 401"
+    },
+    {
+      "name": "Authenticated fixture with invalid App Check is denied",
+      "pass": true,
+      "detail": "HTTP 401"
+    },
+    {
+      "name": "Enforced App Check uses actual Firebase-issued admin test token",
+      "pass": true,
+      "detail": "Token verification active; NOT Play Integrity or Store-installed attestation"
+    },
+    {
+      "name": "First code generation",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Own-code redemption denied",
+      "pass": true,
+      "detail": "HTTP 400"
+    },
+    {
+      "name": "Remote-location redemption denied",
+      "pass": true,
+      "detail": "HTTP 404"
+    },
+    {
+      "name": "Lost redemption ACK: four concurrent retries recover one request",
+      "pass": true,
+      "detail": "Stored requests 1"
+    },
+    {
+      "name": "Redemption key cannot silently change identity",
+      "pass": true,
+      "detail": "HTTP 404"
+    },
+    {
+      "name": "First peer redemption",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "First request acceptance",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Redemption retry recovers after acceptance",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Acceptance retry is idempotent",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Message retry creates exactly one stored message",
+      "pass": true,
+      "detail": "HTTP 200/200; stored copies 1"
+    },
+    {
+      "name": "Both live HTTP participants persist messages",
+      "pass": true,
+      "detail": "Persistence checked using Admin; not a native display check"
+    },
+    {
+      "name": "Current message-read API is deployed",
+      "pass": true,
+      "detail": "HTTP 200; result"
+    },
+    {
+      "name": "Both participants receive exact live message contents",
+      "pass": true,
+      "detail": "Server response bodies checked"
+    },
+    {
+      "name": "Recipient reads both message directions",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Latest-message query returns one message",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Retry-key content conflict is denied",
+      "pass": true,
+      "detail": "HTTP 400"
+    },
+    {
+      "name": "Malformed read selector denied",
+      "pass": true,
+      "detail": "HTTP 400"
+    },
+    {
+      "name": "Eight concurrent retries create one message",
+      "pass": true,
+      "detail": "Successful requests 8/8; stored copies 1"
+    },
+    {
+      "name": "Expired persisted message is excluded from reads",
+      "pass": true,
+      "detail": "Synthetic expired record remains stored but inaccessible via API"
+    },
+    {
+      "name": "Reply to expired message denied",
+      "pass": true,
+      "detail": "HTTP 400"
+    },
+    {
+      "name": "Fresh reply stores reference without quoted-content copy",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Unknown recipient state denies live sends and reads",
+      "pass": true,
+      "detail": "HTTP 403/403"
+    },
+    {
+      "name": "Malformed age metadata cannot authorize live reads",
+      "pass": true,
+      "detail": "HTTP 400"
+    },
+    {
+      "name": "Under-minimum flag overrides stale age confirmation live",
+      "pass": true,
+      "detail": "HTTP 400"
+    },
+    {
+      "name": "Review state is not incorrectly treated as a live ban",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Invalid authentication denied",
+      "pass": true,
+      "detail": "HTTP 401"
+    },
+    {
+      "name": "Preview cannot send SMS",
+      "pass": true,
+      "detail": "OTP route denied before handler"
+    },
+    {
+      "name": "Second code generation",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Second peer redemption",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Second request acceptance",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Alternate channel works before block",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Live block closes selected connection",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Person-level block denies another active channel",
+      "pass": true,
+      "detail": "HTTP 404; NOT_FOUND"
+    },
+    {
+      "name": "Committed retry cannot bypass a later person block",
+      "pass": true,
+      "detail": "HTTP 404"
+    },
+    {
+      "name": "Block denies reads through another active channel",
+      "pass": true,
+      "detail": "HTTP 404"
+    },
+    {
+      "name": "Live connection ending",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Disposable account 0 deletion",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Disposable account 1 deletion",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Disposable fixture cleanup",
+      "pass": true,
+      "detail": "Only unique probe-owned IDs targeted"
+    }
+  ]
+}

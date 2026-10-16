@@ -1,0 +1,84 @@
+{
+  "checkedAt": "2026-10-16T18:34:06.675Z",
+  "sourceCommit": "ec65e826e456f406a9087da843c4d4d6425d886d",
+  "indexes": [
+    {
+      "collectionGroup": "connectionRequests",
+      "ready": true
+    },
+    {
+      "collectionGroup": "connections",
+      "ready": true
+    },
+    {
+      "collectionGroup": "accountDeletions",
+      "ready": true
+    }
+  ],
+  "ttl": {
+    "name": "projects/passway-2ddc8/databases/(default)/collectionGroups/messages/fields/deleteAt",
+    "indexConfig": {
+      "indexes": [
+        {
+          "queryScope": "COLLECTION",
+          "fields": [
+            {
+              "fieldPath": "deleteAt",
+              "order": "ASCENDING"
+            }
+          ],
+          "state": "READY"
+        },
+        {
+          "queryScope": "COLLECTION_GROUP",
+          "fields": [
+            {
+              "fieldPath": "deleteAt",
+              "order": "ASCENDING"
+            }
+          ],
+          "state": "READY"
+        }
+      ],
+      "ancestorField": "projects/passway-2ddc8/databases/(default)/collectionGroups/__default__/fields/*"
+    }
+  },
+  "exactSourceModules": {
+    "passway-candidate-staging": true,
+    "passway-fixture-staging": true,
+    "passway-appcheck-fixture-staging": true
+  },
+  "fixtureCleanup": [
+    {
+      "authAbsent": true,
+      "userAbsent": true,
+      "deletionJobAbsent": true,
+      "ownedDocumentCounts": {
+        "connections:userA": 0,
+        "connections:userB": 0,
+        "connectionRequests:generatorId": 0,
+        "connectionRequests:requesterId": 0,
+        "tids:generatorId": 0
+      },
+      "pass": true
+    },
+    {
+      "authAbsent": true,
+      "userAbsent": true,
+      "deletionJobAbsent": true,
+      "ownedDocumentCounts": {
+        "connections:userA": 0,
+        "connections:userB": 0,
+        "connectionRequests:generatorId": 0,
+        "connectionRequests:requesterId": 0,
+        "tids:generatorId": 0
+      },
+      "pass": true
+    }
+  ],
+  "fixturePreviewRetired": true,
+  "fixtureDeployment": "dpl_9t3sdC9gWiY9cdHTZoEtJnK89Fb4",
+  "productionDeploymentId": "dpl_HwzmiRmbLnjuwvZTnWYPpZFooKEe",
+  "productionUnchanged": true,
+  "scope": "Read-only cloud readiness, owned-fixture cleanup verification and retirement of this test preview. No production mutation, SMS, or positive Store attestation."
+}

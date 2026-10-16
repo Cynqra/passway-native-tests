@@ -1,0 +1,104 @@
+{
+  "sourceCommit": "ec65e826e456f406a9087da843c4d4d6425d886d",
+  "url": "https://passway-15a8iq5ki-naveenbharti310s-projects.vercel.app",
+  "scope": "Original API entrypoint, enforced App Check negative cases; OTP disabled; no positive attestation or SMS proof",
+  "rows": [
+    {
+      "route": "generateTid",
+      "token": "missing",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "generateTid",
+      "token": "invalid",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "redeemTid",
+      "token": "missing",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "redeemTid",
+      "token": "invalid",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "respondToRequest",
+      "token": "missing",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "respondToRequest",
+      "token": "invalid",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "sendMessage",
+      "token": "missing",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "sendMessage",
+      "token": "invalid",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "getMessages",
+      "token": "missing",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "getMessages",
+      "token": "invalid",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "deleteAccount",
+      "token": "missing",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "deleteAccount",
+      "token": "invalid",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "otpSend",
+      "status": 404,
+      "scope": "SMS intentionally disabled on staging",
+      "pass": true
+    },
+    {
+      "route": "otpVerify",
+      "status": 404,
+      "scope": "SMS intentionally disabled on staging",
+      "pass": true
+    },
+    {
+      "route": "testOtpSend",
+      "status": 404,
+      "scope": "SMS intentionally disabled on staging",
+      "pass": true
+    },
+    {
+      "route": "testOtpVerify",
+      "status": 404,
+      "scope": "SMS intentionally disabled on staging",
+      "pass": true
+    }
+  ],
+  "pass": true
+}

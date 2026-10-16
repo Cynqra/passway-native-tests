@@ -1,3 +1,17 @@
+# Production-readiness progress — ec65e82; public release remains BLOCKED
+
+- **43/43 hosted two-user HTTP/Auth/Firestore assertions with App Check enforced and real ADMIN test tokens**; all disposable fixtures independently removed and preview retired. This repeats earlier40-case diagnostic coverage, not83 unique cases.
+- **16/16** protected original-entry negative/SMS-disabled checks.
+- **8/8** negative and **4/4** controlled-token auth/input checks on the full, unpromoted **production-configuration candidate** `dpl_2hWYWikzCJmK5vchMXNRgh9rwQWa`.
+- All required live composite indexes READY. Candidate source remains unchanged; earlier634-case clean and Android14/16 81-case gates still refer to the same archive.
+- The actual public API was NOT cut over; both live aliases are verified on the old deployment. Genuine Play-installed positive attestation, real SMS acceptance, coordinated client/API/rules migration, operational monitoring and residual dependency risk remain gates. Admin tokens are not Store attestation.
+
+Details, retained diagnostic failure, cleanup and alias proofs: [cloud-staging-ec65e82](cloud-staging-ec65e82/README.md).
+
+---
+
+## Earlier isolated/source acceptance (before cloud staging)
+
 # Latest rigorous audit: ec65e82 isolated gates passed; production BLOCKED
 
 ## Exact latest candidate

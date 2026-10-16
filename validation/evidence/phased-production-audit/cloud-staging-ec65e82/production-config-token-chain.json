@@ -1,0 +1,34 @@
+{
+  "checkedAt": "2026-10-16T18:29:25.445Z",
+  "sourceCommit": "ec65e826e456f406a9087da843c4d4d6425d886d",
+  "candidateDeploymentId": "dpl_2hWYWikzCJmK5vchMXNRgh9rwQWa",
+  "scope": "Admin-issued custom App Check token exchanged by official Firebase service; tests server token verification and next auth/input gates only. NOT Play Integrity, Store licensing, native-device attestation, real SMS delivery, or authenticated user-flow acceptance. No Auth users, SMS, or Firestore records created.",
+  "checks": [
+    {
+      "route": "getMessages",
+      "case": "missing Firebase authentication",
+      "httpStatus": 401,
+      "pass": true
+    },
+    {
+      "route": "getMessages",
+      "case": "invalid Firebase ID token",
+      "httpStatus": 401,
+      "pass": true
+    },
+    {
+      "route": "otpSend",
+      "case": "invalid OTP input before SMS/database work",
+      "httpStatus": 400,
+      "pass": true
+    },
+    {
+      "route": "otpVerify",
+      "case": "invalid OTP input before SMS/database work",
+      "httpStatus": 400,
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "positiveStoreAttestationVerified": false
+}

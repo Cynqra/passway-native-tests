@@ -1,0 +1,10 @@
+{
+  "checkedAt": "2026-10-16T18:28:45.128Z",
+  "scope": "Admin-issued custom App Check token exchange; NOT Play Integrity test",
+  "httpStatus": 403,
+  "status": "PERMISSION_DENIED",
+  "message": "App attestation failed.",
+  "details": [],
+  "pass": false,
+  "positiveStoreAttestationVerified": false
+}

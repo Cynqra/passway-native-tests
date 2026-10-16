@@ -1,0 +1,33 @@
+{
+  "sourceCommit": "ec65e826e456f406a9087da843c4d4d6425d886d",
+  "scope": "Protected preview; original callable and OTP entrypoints; SMS disabled; cron route omitted; no production promotion",
+  "sourceModuleSha256": {
+    "src/config.ts": "ac27c4535867c486612c134e15cb0e3a0f1258a2c4b9181ac5c263d1bae76a02",
+    "src/constants.ts": "99156c3b9484348fbdf9c50433c38e2b4e34b8a64b3e0b0ac0b0b4c7407dbc2d",
+    "src/geo.ts": "7a583db4fc28dee7a7621b737b9f3cb6af84acfce0a082c2508dc1d64d208e1a",
+    "src/handlers/accounts.ts": "f79bcb58761e64fb3042f0c21e09d5cf1d831932254ce1472870c52b82b7cd86",
+    "src/handlers/connections.ts": "c53650b54c78f9959941b88fb10288d6310ca845e072b5d651ed00f2a041e098",
+    "src/handlers/messages.ts": "0dd1800595bcb40316fda5951f85e799ee019eae8a462ccfa76be8c609123e95",
+    "src/handlers/reports.ts": "6968cc3fabfb218b97c26c97811b1ee660d13a12a9806d79edffd30a02b80f73",
+    "src/handlers/retention.ts": "24e3ab0114873c47c7ade51bd04ea60b94fefe6132e7b30f5e74859aef37bbcd",
+    "src/handlers/tids.ts": "53783db334fe346743304f80245a11e918e2d1409e904d03cff580402614067e",
+    "src/http/request.ts": "96fbda51d8715cca0fa610fd502d0103fff12a40873f267129ad75de8ad1bd3b",
+    "src/http/server.ts": "8b76947081d492ba2352dc2a673b5e12feb1ef1b658818bdc83ec58ef2428164",
+    "src/http/testOtp.ts": "6ae21ea9f8092d4a560fd02cccbd43b13acc7a47749211c54b380f622b8b82f0",
+    "src/index.ts": "0ec669619643da413020c16ccbe8a0af32146f8d6caae54606e2b590e57b5f91",
+    "src/lib/accounts.ts": "330050f14abb9ca7b0f2f1857a019d336b4913a407f118c31c41aac0a0c93b8a",
+    "src/lib/blocks.ts": "c7d6f7e0280ae7c92916f6f9af6a41b15800f92db40174ebad847353dbd97028",
+    "src/lib/callable.ts": "265f8371977b11d8bfc9097238a2535807a535d8a5317ede34d955ae093a4b9f",
+    "src/lib/firebase.ts": "dbe7981a221b14b5d46764f5de9bb8dc7ddcb6fd4115fe6d99a6c5c1abec24ed",
+    "src/lib/logger.ts": "94b1c009dd1ec3a8adf35b37720fa6c2f744643f5fb1ac929b1e842498800870",
+    "src/lib/rateLimits.ts": "3489486241b428cfe2bc52a4d0925c26f8172046181f63694c30058b182cd933",
+    "src/lib/retention.ts": "61f9e787d12473f51a472b6beaf9bc06df7643209469232c8f24027e0ab5c67d",
+    "src/lib/tid.ts": "df64c7ae50b58dc6b3ea498f75e2224ce68a17bb72f6bd9787a6bd2b30d84845",
+    "src/lib/validation.ts": "9babe28b89e9808742b33f1e66bdd07337ba73d2ff38463c0af766e69a608c41",
+    "src/moderation.ts": "9c57beaece45058bb1c454f2638582df664fbe5bd340df0ea901c0ced2d8b7a7",
+    "src/push.ts": "79a8ed4ecc30f29d7285a93b7c2f14e6b968b2afe0769b95dd785a79e6e6da97",
+    "src/services/accountDeletion.ts": "950ce8048dcdc70b59fbb2a699d7908504db958e7e08251a85c8e1985cb3300e",
+    "src/services/cleanup.ts": "ffae6d39691374fa5e3b9f7e86e62964eac7a3597a203f15c52cc62e833c5c38",
+    "src/services/connections.ts": "fcf1ff8e00b82fa01d94f33f6dcbb47f037a7f0e8b8c127d7b56cd93788c47d3"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "checkedAt": "2026-10-16T18:16:55.078Z",
+  "androidApps": {
+    "apps": [
+      {
+        "name": "projects/passway-2ddc8/androidApps/1:657281875911:android:d5b5541cc8fef840eea3e2",
+        "appId": "1:657281875911:android:d5b5541cc8fef840eea3e2",
+        "displayName": "Passway",
+        "projectId": "passway-2ddc8",
+        "packageName": "com.passway.app",
+        "apiKeyId": "e9c41f1a-056f-47f3-b388-94a4eba17064",
+        "state": "ACTIVE",
+        "sha1Hashes": [
+          "fa63261418db375837121cd8d5975a4e32032ac3",
+          "2cd6c9ebc66f23cac166d814addf60c1abaaad23"
+        ],
+        "sha256Hashes": [
+          "9815dfc7d9035559f2189cb00c061df722b8dbe88b092f6279de782a3ffe3acc",
+          "5f97b4bfe27bdbf3aade7fd1e2e7b323cfdde1cd8d7feaa536ea1db31ef963f2"
+        ],
+        "expireTime": "1970-01-01T00:00:00Z",
+        "etag": "1_baa4b779-1644-4ac5-a409-adfa9e8b0263"
+      }
+    ]
+  },
+  "playIntegrity": {
+    "name": "projects/657281875911/apps/1:657281875911:android:d5b5541cc8fef840eea3e2/playIntegrityConfig",
+    "tokenTtl": "3600s",
+    "deviceIntegrity": {
+      "minDeviceRecognitionLevel": "NO_INTEGRITY"
+    }
+  },
+  "certificates": {
+    "certificates": [
+      {
+        "name": "projects/passway-2ddc8/androidApps/1:657281875911:android:d5b5541cc8fef840eea3e2/sha/86f4e8b6e238e4c3",
+        "shaHash": "fa63261418db375837121cd8d5975a4e32032ac3",
+        "certType": "SHA_1"
+      },
+      {
+        "name": "projects/passway-2ddc8/androidApps/1:657281875911:android:d5b5541cc8fef840eea3e2/sha/90ba94fd2b025ef6",
+        "shaHash": "2cd6c9ebc66f23cac166d814addf60c1abaaad23",
+        "certType": "SHA_1"
+      },
+      {
+        "name": "projects/passway-2ddc8/androidApps/1:657281875911:android:d5b5541cc8fef840eea3e2/sha/89e7b72e8ba74fa5",
+        "shaHash": "9815dfc7d9035559f2189cb00c061df722b8dbe88b092f6279de782a3ffe3acc",
+        "certType": "SHA_256"
+      },
+      {
+        "name": "projects/passway-2ddc8/androidApps/1:657281875911:android:d5b5541cc8fef840eea3e2/sha/564b10d3c24bd54e",
+        "shaHash": "5f97b4bfe27bdbf3aade7fd1e2e7b323cfdde1cd8d7feaa536ea1db31ef963f2",
+        "certType": "SHA_256"
+      }
+    ]
+  }
+}
