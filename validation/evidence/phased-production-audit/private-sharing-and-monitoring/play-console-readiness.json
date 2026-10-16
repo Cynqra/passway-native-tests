@@ -1,0 +1,41 @@
+{
+  "scope": "Observed Play Console state after user phone approval; no public release or track change",
+  "package": "com.passway.app",
+  "appStatus": "Draft",
+  "normalInternalRelease": {
+    "versionCode": 9,
+    "versionName": "0.3.3",
+    "availableToInternalTesters": true,
+    "reviewed": false,
+    "configuredTesterCount": 5
+  },
+  "sharing": {
+    "initiallyUninitialized": true,
+    "keyRegistrationStarted": true,
+    "keyRegistrationCompleted": true,
+    "sha256": "48:26:99:0E:D9:42:CA:40:C4:5B:A8:C0:0F:2A:C5:DD:9B:46:EA:1F:C7:33:61:43:4F:14:DA:F3:3A:A9:87:86",
+    "access": "Restricted to existing tester email list",
+    "configuredTesterCount": 5,
+    "newUploaderRightsGranted": false,
+    "retryRunId": 38956613236,
+    "retryResult": "FAILED_PRECONDITION NOT_PUBLISHED",
+    "firebaseCertificateRegistered": false
+  },
+  "savedNotSubmittedDeclarations": [
+    "No ads",
+    "No advertising ID",
+    "Non-government app",
+    "No financial features",
+    "No health features"
+  ],
+  "remainingAppContentDeclarations": [
+    "Privacy policy",
+    "Reviewer sign-in details",
+    "Content ratings",
+    "Target audience",
+    "Data safety"
+  ],
+  "audienceFormRequiresReviewerSignInDetails": true,
+  "publicProductionRelease": false,
+  "apiCutoverPerformed": false
+}
