@@ -106,4 +106,11 @@ class HarnessTests(unittest.TestCase):
   d=load('driver');t=d.ET.fromstring('<hierarchy>'+''.join('<node resource-id="code-box-'+str(i)+'" text="'+c+'"/>' for i,c in enumerate('AB12'))+'</hierarchy>')
   with patch.object(d,'tap'),patch.object(d,'probe',return_value=(t,'fresh')),patch.object(d,'dump',side_effect=AssertionError('Unnecessary read')),patch.object(d.time,'sleep'):
    d.fill('code-box-0','AB12')
+ def test_isolated_revisions_do_not_serialize_but_release_modes_keep_shared_key(self):
+  text=(HARNESS.parent/'.github/workflows/passway-fresh-native-smoke.yml').read_text()
+  group=next(line for line in text.splitlines() if line.startswith('  group:'))
+  self.assertIn("(inputs.mode == 'isolated-native' || inputs.mode == 'isolated-extended' || inputs.mode == '') && github.sha || 'shared-release'",group)
+  self.assertIn('  cancel-in-progress: false',text)
+  for cloud_mode in ['internal-candidate','signed-release','play-api-check','store-apk-download']:
+   self.assertNotIn("inputs.mode == '"+cloud_mode+"'",group)
 if __name__=='__main__':unittest.main()

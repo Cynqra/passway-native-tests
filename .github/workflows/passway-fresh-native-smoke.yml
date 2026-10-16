@@ -31,7 +31,9 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: passway-native-${{ inputs.mode || 'isolated-native' }}
+  # Only isolated, per-run emulators can run across revisions concurrently.
+  # Keep a shared key for every release/cloud mutation mode.
+  group: passway-native-${{ inputs.mode || 'isolated-native' }}-${{ (inputs.mode == 'isolated-native' || inputs.mode == 'isolated-extended' || inputs.mode == '') && github.sha || 'shared-release' }}
   cancel-in-progress: false
 jobs:
   isolated-native:
