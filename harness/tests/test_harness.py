@@ -109,9 +109,23 @@ class HarnessTests(unittest.TestCase):
  def test_isolated_revisions_do_not_serialize_but_release_modes_keep_shared_key(self):
   text=(HARNESS.parent/'.github/workflows/passway-fresh-native-smoke.yml').read_text()
   group=next(line for line in text.splitlines() if line.startswith('  group:'))
-  self.assertIn("(inputs.mode == 'isolated-native' || inputs.mode == 'isolated-extended' || inputs.mode == '') && format('{0}-api{1}', github.sha, inputs.android_api_level || '36') || 'shared-release'",group)
+  import re
+  # No mode-dependent prefix may sit outside the expression: that formerly
+  # gave each release operation a different lock despite the shared suffix.
+  self.assertTrue(group.strip().startswith('group: ${{ '))
+  self.assertTrue(group.strip().endswith(' }}'))
+  isolated=re.search(r"format\('([^']+)', github.sha, inputs.android_api_level \|\| '36'\)",group)
+  release=re.search(r"\|\| '([^']+)' \}\}$",group)
+  self.assertIsNotNone(isolated);self.assertIsNotNone(release)
+  self.assertIn("inputs.mode == 'isolated-native' || inputs.mode == 'isolated-extended' || inputs.mode == ''",group)
+  self.assertEqual(release.group(1),'passway-native-shared-release')
+  release_modes=['internal-candidate','internal-sharing-candidate','signed-release','play-api-check','store-apk-download','store-release-offline-ui']
+  keys={release.group(1) for mode in release_modes}
+  self.assertEqual(len(keys),1)
+  self.assertNotEqual(isolated.group(1).format('a'*40,'34'),isolated.group(1).format('b'*40,'34'))
+  self.assertNotEqual(isolated.group(1).format('a'*40,'34'),isolated.group(1).format('a'*40,'36'))
   self.assertIn('  cancel-in-progress: false',text)
-  for cloud_mode in ['internal-candidate','signed-release','play-api-check','store-apk-download']:
+  for cloud_mode in release_modes:
    self.assertNotIn("inputs.mode == '"+cloud_mode+"'",group)
  def test_current_source_android_api_choices_are_explicit_and_runtime_checked(self):
   text=(HARNESS.parent/'.github/workflows/passway-fresh-native-smoke.yml').read_text()
