@@ -1,7 +1,7 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "fbc13efb9ce8ea0322ae455e1694d164a163af76",
-  "archiveSha256": "5a4b1cabbf5b5e589d580ff8e1d478a0fe0bee9cd92ee7efd724b1e7c582d656",
-  "createdAt": "2026-10-16T13:07:13.863811+00:00",
-  "scope": "Internal 0.3.3 / version9 retention-disclosure correction plus version metadata and regression expectations. Exact-source regression/static/signing/fresh native gates required; no production promotion or inherited client/native evidence."
+  "sourceCommit": "abd9ae23df7261bbb446c0484545492c63bbafcc",
+  "archiveSha256": "d48bf333dd22e0c5f72a7ae7615f0588b29d106f877318129a17699a382580c0",
+  "createdAt": "2026-10-16T14:57:17.761299+00:00",
+  "scope": "Unsiged clock-skew correction source; no new release, deployment or inherited native acceptance. Existing version metadata retained pending a future release candidate. Exact-source gates required."
 }
