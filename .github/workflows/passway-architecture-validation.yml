@@ -68,7 +68,7 @@ jobs:
           retention-days: 3
   dependency-security:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 10
     defaults:
       run:
         working-directory: validation-source/passway-app
@@ -88,7 +88,23 @@ jobs:
           node-version: '22'
       - name: Backend production dependency audit
         run: npm audit --package-lock-only --omit=dev --prefix functions --audit-level=high
-      # Deliberately blocking while upstream build-tool advisories remain open.
-      # Do not hide this with continue-on-error or downgrade Expo across majors.
-      - name: Mobile and build-tool dependency audit
-        run: npm audit --package-lock-only --audit-level=high
+      - name: Install exact dependencies and hash-bound reviewed build-tool fixes
+        run: npm ci
+      # This does NOT suppress npm findings or relabel vulnerable package versions.
+      # Preserve raw audit; require exact installed hashes, exploit rejection and
+      # unchanged advisory records. Any new/changed high finding blocks the job.
+      - name: Verify actual installed remediation and preserve raw registry audit
+        env:
+          PASSWAY_SECURITY_OUTPUT: ${{ github.workspace }}/dependency-results
+        run: npm run security:audit
+      - name: Run complete pinned upstream suites against installed patched code
+        env:
+          PASSWAY_SECURITY_OUTPUT: ${{ github.workspace }}/dependency-results
+        run: npm run security:conformance
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: dependency-remediation-proof-with-raw-audit
+          path: dependency-results
+          retention-days: 3
+          if-no-files-found: error

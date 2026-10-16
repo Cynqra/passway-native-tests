@@ -1,7 +1,7 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "45d2e89739f65de51ba838aff7a4a775bab4de98",
-  "archiveSha256": "3a1e10ad3b961008c540d6f3018f43a1efba8043bc4b71f8400bb87125f31343",
-  "createdAt": "2026-10-16T06:18:25.571871+00:00",
-  "scope": "Version 7 (0.3.1) signed candidate with callable-error, loading accessibility and location fixes. No production promotion, store installation or positive attestation claimed."
+  "sourceCommit": "04a26edefcc8857c8df7db93df0ede4dc40ffd5c",
+  "archiveSha256": "a3e6797c89eabc42126dbc89aec346e62a2574f38e4d86f9874c1fe1e7a4c2c5",
+  "createdAt": "2026-10-16T06:59:34.889029+00:00",
+  "scope": "Version 7 candidate with maintained hash-bound local build-tool fixes, independent exploit regression, complete upstream conformance. Raw npm findings retained. No public rollout or positive store attestation claimed."
 }

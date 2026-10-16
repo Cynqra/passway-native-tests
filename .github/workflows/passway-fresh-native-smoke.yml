@@ -12,6 +12,15 @@ on:
           - isolated-extended
           - signed-release
           - play-api-check
+          - internal-candidate
+      candidate_run_id:
+        description: Successful same-revision signed candidate run (internal-candidate only)
+        type: string
+        required: false
+      native_run_id:
+        description: Successful same-revision extended native run (internal-candidate only)
+        type: string
+        required: false
 permissions:
   contents: read
 concurrency:
@@ -313,3 +322,37 @@ jobs:
           path: play-api-access.json
           retention-days: 14
           if-no-files-found: ignore
+
+  internal-candidate:
+    if: ${{ inputs.mode == 'internal-candidate' }}
+    name: Publish verified candidate to internal testing ONLY
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: passway-play-internal
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PASSWAY_SIGNED_RUN_ID: ${{ inputs.candidate_run_id }}
+      PASSWAY_NATIVE_RUN_ID: ${{ inputs.native_run_id }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Verify release boundaries before cloud mutation
+        run: python3 -m unittest discover -s harness/tests -p test_internal_release.py -v
+      - name: Require exact-source acceptance and publish internal candidate
+        run: python3 harness/internal_release.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: internal-candidate-release-result
+          path: internal-release-result.json
+          retention-days: 3
+          if-no-files-found: error
