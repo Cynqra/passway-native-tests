@@ -1,8 +1,8 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "835beedc825ba0f4a2c37f6a5741436eb9d16adb",
-  "archiveSha256": "d9750c0662e0aa0c9b869f330e154046842a331d0f4f5f92e104c3df553a2e17",
-  "createdAt": "2026-10-16T16:11:45.971116+00:00",
-  "scope": "Late Phase3 external-service follow-up: configured Firebase credential, whole-operation moderation deadline and no late content request. Native/client inputs unchanged from8bd269b; no inherited whole-source native or production acceptance.",
+  "sourceCommit": "caf76f7364fc10449d3e6b448fa5f3566122c538",
+  "archiveSha256": "2b85468f06f585b427340a4dca868ef5016726d1cf034f1def10946fc6327e95",
+  "createdAt": "2026-10-16T16:14:57.206481+00:00",
+  "scope": "Unpublished candidate0.3.4/code10: all phase1-4 fixes including moderation deadline and immediate generation lock. Exact-current-source tests required; no inherited production acceptance.",
   "fullTrackedSourceArchive": true
 }
