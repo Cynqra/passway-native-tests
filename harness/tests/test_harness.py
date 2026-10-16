@@ -213,3 +213,41 @@ class NativeTextTargetTests(unittest.TestCase):
   with patch.dict(sys.modules,{'driver':load('driver')}):m=load('native_accessibility_journey')
   t=m.dump.__globals__['ET'].fromstring('<hierarchy><node class="android.widget.Button" content-desc="Accept" visible-to-user="true" bounds="[33,675][407,815]"><node class="android.widget.TextView" text="Accept" visible-to-user="true" bounds="[140,700][300,763]"/></node></hierarchy>')
   self.assertTrue(m.visible_single_line(t,'Accept',80))
+
+class ProbeStartupTests(unittest.TestCase):
+ setUp=HarnessTests.setUp
+ FAILED='INSTRUMENTATION_RESULT: longMsg=Process ProcessRecord{e0cc425 32399:com.passway.nativeprobe/u10a193} failed to attach\nINSTRUMENTATION_RESULT: shortMsg=failed to attach\nINSTRUMENTATION_CODE: 0\n'
+ def good(self):
+  import base64
+  return 'INSTRUMENTATION_RESULT: hierarchy='+base64.b64encode(b'<hierarchy><node/></hierarchy>').decode()+'\nINSTRUMENTATION_RESULT: action_result=performed\nINSTRUMENTATION_CODE: 0\n'
+ def test_exact_android_unattached_process_can_relaunch_once_before_dispatch(self):
+  d=load('driver')
+  with patch.object(d,'shell',return_value='10'),patch.object(d,'adb',side_effect=[self.FAILED,self.good()]) as adb,patch.object(d.time,'sleep'):
+   d.probe('age-continue','touch');self.assertEqual(adb.call_count,2)
+  import json
+  row=json.loads((self.root/'probe-startup-recovery.jsonl').read_text());self.assertIs(row['actionDispatched'],False)
+ def test_unattached_retry_is_bounded(self):
+  d=load('driver')
+  with patch.object(d,'shell',return_value='10'),patch.object(d,'adb',return_value=self.FAILED) as adb,patch.object(d.time,'sleep'):
+   with self.assertRaises(RuntimeError):d.probe('age-continue','touch')
+   self.assertEqual(adb.call_count,2)
+ def test_timeout_or_uncertain_dispatch_never_retries(self):
+  for output in [self.FAILED+'INSTRUMENTATION_RESULT: action_result=performed\n',self.FAILED+'INSTRUMENTATION_RESULT: probe_error=touch up rejected\n',self.FAILED.replace('com.passway.nativeprobe','com.passway.app'),self.FAILED.replace('u10a193','u0a193'),'INSTRUMENTATION_RESULT: shortMsg=Process crashed.\n']:
+   d=load('driver')
+   with patch.object(d,'shell',return_value='10'),patch.object(d,'adb',return_value=output) as adb:
+    with self.assertRaises(RuntimeError):d.probe('age-continue','touch')
+    self.assertEqual(adb.call_count,1)
+  d=load('driver')
+  with patch.object(d,'shell',return_value='10'),patch.object(d,'adb',side_effect=subprocess.TimeoutExpired('adb',45)) as adb:
+   with self.assertRaises(subprocess.TimeoutExpired):d.probe('age-continue','touch')
+   self.assertEqual(adb.call_count,1)
+ def test_user_switch_prevents_retry(self):
+  d=load('driver')
+  with patch.object(d,'shell',side_effect=['10','0']),patch.object(d,'adb',return_value=self.FAILED) as adb,patch.object(d.time,'sleep'):
+   with self.assertRaisesRegex(RuntimeError,'user changed'):d.probe('age-continue','touch')
+   self.assertEqual(adb.call_count,1)
+ def test_shared_outer_deadline_still_bounds_startup_recovery(self):
+  d=load('driver')
+  with patch.object(d,'shell',return_value='10'),patch.object(d,'adb',return_value=self.FAILED) as adb,patch.object(d.time,'sleep',side_effect=TimeoutError('budget exhausted')):
+   with self.assertRaises(TimeoutError):d.probe('age-continue','touch')
+   self.assertEqual(adb.call_count,1)

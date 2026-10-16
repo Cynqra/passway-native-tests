@@ -32,7 +32,21 @@ def probe(selector=None,action=None,value=''):
  if action:
   args+=['-e','action',action,'-e','selectorB64',base64.b64encode(selector.encode()).decode()]
   if action=='setText':args+=['-e','valueB64',base64.b64encode(value.encode()).decode()]
- t=time.monotonic();out=adb(*args,'com.passway.nativeprobe/.Probe',timeout=45)
+ t=time.monotonic()
+ # Android's exact failed-to-attach result means this probe process never
+ # attached to ActivityManager, before Instrumentation.onCreate/onStart or UI
+ # dispatch. Relaunch once ONLY for that complete OS result and the same user.
+ # Timeouts, crashes, partial injection and unknown output remain fatal.
+ with deadline(45):
+  for startup in range(2):
+   out=adb(*args,'com.passway.nativeprobe/.Probe',timeout=45)
+   never_attached=(uid.isdigit() and re.fullmatch(
+    r'\s*INSTRUMENTATION_RESULT: longMsg=Process ProcessRecord\{[a-fA-F0-9]+ [0-9]+:com\.passway\.nativeprobe/u'+re.escape(uid)+r'a[0-9]+\} failed to attach\r?\n'
+    r'INSTRUMENTATION_RESULT: shortMsg=failed to attach\r?\nINSTRUMENTATION_CODE: 0\s*',out) is not None)
+   if not never_attached or startup==1:break
+   with (ROOT/'probe-startup-recovery.jsonl').open('a') as f:f.write(json.dumps({'user':uid,'selector':selector,'attempt':startup+1,'actionDispatched':False,'reason':'android_process_never_attached'})+'\n')
+   time.sleep(remaining_timeout(.2))
+   if shell('am','get-current-user').strip()!=uid:raise RuntimeError('Native user changed before probe startup recovery')
  with (ROOT/'probe-timing.jsonl').open('a') as f:f.write(json.dumps({'action':action or 'read','selector':selector,'seconds':round(time.monotonic()-t,2)})+'\n')
  m=re.search(r'INSTRUMENTATION_RESULT: hierarchy=([^\r\n]+)',out)
  if action=='touch' and 'action_result=performed' not in out and re.search(r'^INSTRUMENTATION_RESULT: probe_error=java\.lang\.Exception: Visible action target missing: '+re.escape(selector or '')+r'\r?$',out,re.M):
