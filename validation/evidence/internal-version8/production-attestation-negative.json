@@ -1,0 +1,44 @@
+{
+  "at": "2026-10-16T12:05:19.169Z",
+  "scope": "Negative attestation only: empty request bodies, no phone, OTP, auth token, or authenticated mutation; not positive Store attestation.",
+  "target": "https://passway-api.vercel.app",
+  "pass": false,
+  "checks": [
+    {
+      "route": "otpSend",
+      "token": "missing",
+      "status": 400,
+      "pass": false
+    },
+    {
+      "route": "otpSend",
+      "token": "invalid",
+      "status": 400,
+      "pass": false
+    },
+    {
+      "route": "otpVerify",
+      "token": "missing",
+      "status": 400,
+      "pass": false
+    },
+    {
+      "route": "otpVerify",
+      "token": "invalid",
+      "status": 400,
+      "pass": false
+    },
+    {
+      "route": "generateTid",
+      "token": "missing",
+      "status": 401,
+      "pass": false
+    },
+    {
+      "route": "generateTid",
+      "token": "invalid",
+      "status": 401,
+      "pass": false
+    }
+  ]
+}

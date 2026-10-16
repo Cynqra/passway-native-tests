@@ -1,0 +1,8 @@
+{
+  "sourceCommit": "8a6d79da24454e5373e5b89d34df279b067a1993",
+  "versionCode": 8,
+  "versionName": "0.3.2",
+  "aabSha256": "128627281ed9cca3655ce9f32494a504d2afd78c64feb9a9e83cf3a745bf1aad",
+  "manifestSecurityChecksPassed": true,
+  "scope": "Signed upload bundle only, not Store-installed attestation or public rollout"
+}

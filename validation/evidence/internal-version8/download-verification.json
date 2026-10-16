@@ -1,0 +1,10 @@
+{
+  "package": "com.passway.app",
+  "versionCode": 8,
+  "sha256": "6bcc69919bed10d4e1178ff96abd9eda52cdc84a9f708bee8637567b92f4e63c",
+  "bytes": 96545280,
+  "expectedPlaySigningCertificateSha256": "5F97B4BFE27BDBF3AADE7FD1E2E7B323CFDDE1CD8D7FEAA536EA1DB31EF963F2",
+  "source": "Authenticated Google Play generatedApks API",
+  "mutationsAttempted": false,
+  "storeInstallationOrAttestationClaimed": false
+}

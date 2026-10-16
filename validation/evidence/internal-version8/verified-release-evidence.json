@@ -1,0 +1,149 @@
+{
+  "sourceCommit": "8a6d79da24454e5373e5b89d34df279b067a1993",
+  "validationRevision": "d9450fddf19c4e80866698f8858a4a6cdbb9cd3c",
+  "scope": "Internal candidate evidence; public production acceptance remains blocked",
+  "regression": {
+    "mobile": 127,
+    "backend": 223,
+    "rules": 35,
+    "realFirestore": 80,
+    "total": 465,
+    "run": 38894440223
+  },
+  "static": {
+    "sarifFindings": 0,
+    "run": 38894443506
+  },
+  "native": {
+    "assertions": 75,
+    "allPass": true,
+    "run": 38894446875,
+    "coordinatorExitCode": 0,
+    "realSms": false,
+    "positiveStoreAttestation": false
+  },
+  "signedBundle": {
+    "sourceCommit": "8a6d79da24454e5373e5b89d34df279b067a1993",
+    "versionCode": 8,
+    "versionName": "0.3.2",
+    "aabSha256": "128627281ed9cca3655ce9f32494a504d2afd78c64feb9a9e83cf3a745bf1aad",
+    "manifestSecurityChecksPassed": true,
+    "scope": "Signed upload bundle only, not Store-installed attestation or public rollout"
+  },
+  "internalRelease": {
+    "package": "com.passway.app",
+    "versionCode": 8,
+    "sha256": "128627281ed9cca3655ce9f32494a504d2afd78c64feb9a9e83cf3a745bf1aad",
+    "track": "internal",
+    "editCommitted": true,
+    "publicProductionRollout": false,
+    "storeInstallationOrPositiveAttestationVerified": false
+  },
+  "productionNegativeAttestation": {
+    "at": "2026-10-16T12:05:19.169Z",
+    "scope": "Negative attestation only: empty request bodies, no phone, OTP, auth token, or authenticated mutation; not positive Store attestation.",
+    "target": "https://passway-api.vercel.app",
+    "pass": false,
+    "checks": [
+      {
+        "route": "otpSend",
+        "token": "missing",
+        "status": 400,
+        "pass": false
+      },
+      {
+        "route": "otpSend",
+        "token": "invalid",
+        "status": 400,
+        "pass": false
+      },
+      {
+        "route": "otpVerify",
+        "token": "missing",
+        "status": 400,
+        "pass": false
+      },
+      {
+        "route": "otpVerify",
+        "token": "invalid",
+        "status": 400,
+        "pass": false
+      },
+      {
+        "route": "generateTid",
+        "token": "missing",
+        "status": 401,
+        "pass": false
+      },
+      {
+        "route": "generateTid",
+        "token": "invalid",
+        "status": 401,
+        "pass": false
+      }
+    ]
+  },
+  "backendEvidence": {
+    "previousExecutedSource": "5f89b86fa1862b8566666de3749bd170aa458436",
+    "currentSource": "8a6d79da24454e5373e5b89d34df279b067a1993",
+    "entireBackendTreeIdentical": true,
+    "backendGitTree": "0651723168ebc806aa25e9e523bd168d372ec259",
+    "matchedDeployedSourceHashes": 27,
+    "scope": "Retain only previously executed 57 live backend + 3 isolation/cleanup + 6 negative-attestation results by byte equivalence. No native/client/positive attestation inheritance."
+  },
+  "performance": {
+    "coordinatorSeconds": 1037.54,
+    "instrumentationCalls": 779,
+    "instrumentationSeconds": 644.34,
+    "byAction": {
+      "read": {
+        "calls": 542,
+        "totalSeconds": 340.71,
+        "medianSeconds": 0.56,
+        "p95Seconds": 1.24
+      },
+      "touch": {
+        "calls": 174,
+        "totalSeconds": 229.67,
+        "medianSeconds": 1.21,
+        "p95Seconds": 1.89
+      },
+      "setText": {
+        "calls": 63,
+        "totalSeconds": 73.96,
+        "medianSeconds": 1.07,
+        "p95Seconds": 1.94
+      }
+    },
+    "scope": "Instrumentation cost, not measured application response latency. No speedup claim.",
+    "instrumentationFraction": 0.621
+  },
+  "productionReady": false,
+  "remainingGates": [
+    "Genuine Play-installed version8 and positive Play Integrity/App Check verification",
+    "Authenticated real-SMS two-user acceptance against intended deployment",
+    "Coordinated production API, client and Firestore rules migration; current production does not meet attestation contract",
+    "Operational/load/device acceptance and unresolved upstream dependency advisory visibility"
+  ],
+  "dependencyScope": "Raw npm audit still reports 21 propagated high entries from 2 roots; reviewed hash-bound local patches/exploit/conformance gates pass. Do not describe registry audit as clean.",
+  "playReadback": {
+    "run": 38898138210,
+    "verified": true,
+    "internalVersion": 8,
+    "publicProductionReleasePresent": false
+  },
+  "playDownload": {
+    "run": 38898141494,
+    "package": "com.passway.app",
+    "versionCode": 8,
+    "sha256": "6bcc69919bed10d4e1178ff96abd9eda52cdc84a9f708bee8637567b92f4e63c",
+    "bytes": 96545280,
+    "expectedPlaySigningCertificateSha256": "5F97B4BFE27BDBF3AADE7FD1E2E7B323CFDDE1CD8D7FEAA536EA1DB31EF963F2",
+    "source": "Authenticated Google Play generatedApks API",
+    "mutationsAttempted": false,
+    "storeInstallationOrAttestationClaimed": false,
+    "actualHashMatched": true,
+    "packageAndVersionVerified": true,
+    "ciCryptographicSignatureVerified": true
+  }
+}
