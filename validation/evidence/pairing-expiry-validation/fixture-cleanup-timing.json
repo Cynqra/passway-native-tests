@@ -1,0 +1,6 @@
+{
+  "scope": "Disposable synthetic fixture cleanup only, not production retention code",
+  "milliseconds": 13237,
+  "messageDeleteBatchCount": 3,
+  "maximumWritesPerBatch": 200
+}
