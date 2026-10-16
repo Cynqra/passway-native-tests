@@ -1,0 +1,81 @@
+{
+  "sourceCommit": "d58e411b5355bede342c94b52b9075b9a3614b0b",
+  "archiveSha256": "b5885f6f1e52b5bc75fdedf782c19952dfc8a6c9940fdb720691899e1e320517",
+  "harnessCommit": "5b556aa857525ed79b3d042972d9a943e9f47288",
+  "centralRun": 38925364553,
+  "sourceRun": 38925025247,
+  "staticRun": 38925370757,
+  "suiteTotals": {
+    "workflowPolicy": 4,
+    "mobile": 152,
+    "backend": 225,
+    "rules": 35,
+    "realFirestoreIntegration": 80
+  },
+  "assertionsPerRun": 496,
+  "sourceRunnerStartupBlockNowObserved": false,
+  "bothRegressionRunsVerified": true,
+  "dependencyProofs": {
+    "38925364553": {
+      "status": "locally-remediated-build-tools; registry audit is NOT clean",
+      "counts": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 21,
+        "critical": 0,
+        "total": 21
+      },
+      "installedFileHashesVerified": true,
+      "exploitRegressionsPassed": true,
+      "upstream": {
+        "forge": {
+          "passed": 829,
+          "failed": 0,
+          "pending": 4
+        },
+        "braces": {
+          "passed": 899,
+          "failed": 0,
+          "pending": 0
+        }
+      }
+    },
+    "38925025247": {
+      "status": "locally-remediated-build-tools; registry audit is NOT clean",
+      "counts": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 21,
+        "critical": 0,
+        "total": 21
+      },
+      "installedFileHashesVerified": true,
+      "exploitRegressionsPassed": true,
+      "upstream": {
+        "forge": {
+          "passed": 829,
+          "failed": 0,
+          "pending": 4
+        },
+        "braces": {
+          "passed": 899,
+          "failed": 0,
+          "pending": 0
+        }
+      }
+    }
+  },
+  "staticSarifFindings": 0,
+  "liveProductionNegativeGate": {
+    "pass": false,
+    "passing": 0,
+    "total": 8,
+    "getMessagesStatus": 404
+  },
+  "scope": "Phase1 clean engineering gates only. Raw registry audit NOT clean. No new signed artifact, native acceptance, real SMS/Play attestation or production deployment. Baseline abd9ae2 native75/75 remains separate.",
+  "controlledPreviewBuildPassedInBothRuns": true,
+  "offlineGitleaksFindings": 0,
+  "verifiedAt": "2026-10-16T15:41:45.682055+00:00"
+}

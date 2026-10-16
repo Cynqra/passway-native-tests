@@ -1,0 +1,63 @@
+{
+  "auditStartedAt": "2026-10-16T15:14:03.228889+00:00",
+  "baselineSource": "abd9ae23df7261bbb446c0484545492c63bbafcc",
+  "model": "Gemini 4 Argon",
+  "thinking": "High (Extra thorough), verified in actual web control",
+  "phases": [
+    {
+      "id": 1,
+      "name": "Build/dependencies/configuration/CI access/deployment provenance",
+      "status": "engineering_gates_passed_with_explicit_release_blockers",
+      "confirmedFixCandidates": [
+        "Source/central installed dependency policy alignment and safe automatic PR/main checks",
+        "Negative deployment gate now requires getMessages",
+        "Legacy preview helper requires controlled explicit configuration and builds only"
+      ],
+      "residualBlockers": [
+        "Two upstream build-tool advisories still no patched npm version; raw audit NOT CLEAN",
+        "Local shared dependency installation drift unaccepted",
+        "Production deployment lacks source commit metadata and differs from candidate API"
+      ],
+      "evidence": "496 clean assertions per source/central run, both typechecks, all exports, actual controlled build-only preview, hash/exploit/conformance proofs passed; zero SARIF and offline secret matches. No production acceptance.",
+      "hostedRuns": [
+        38925364553,
+        38925370757,
+        38925025247
+      ],
+      "liveProductionNegativeGate": {
+        "pass": false,
+        "passingChecks": 0,
+        "totalChecks": 8,
+        "getMessagesStatus": 404
+      }
+    },
+    {
+      "id": 2,
+      "name": "Auth/authorization/data security",
+      "status": "active"
+    },
+    {
+      "id": 3,
+      "name": "Backend transactions/retries/deletion/retention",
+      "status": "not_started",
+      "backlog": "Argon High deletion lifecycle response saved for independent validation later; no patch applied."
+    },
+    {
+      "id": 4,
+      "name": "Client/offline/performance/accessibility",
+      "status": "not_started"
+    },
+    {
+      "id": 5,
+      "name": "Native two-user and production release acceptance",
+      "status": "not_started",
+      "parallelBaselineRun": 38920011786,
+      "baselineRunScope": "Pre-existing exact-current-source isolated native regression run remains running; not production acceptance.",
+      "parallelBaselineRunConclusion": "success, verified75/75 for baseline abd9ae2 only; not inherited by phase1 commit"
+    }
+  ],
+  "gatePolicy": "Do not advance a phase as complete with untested fixes or unclassified blockers. Reproduce failures before minimal changes, validate concurrently independent fixes together, and retain raw failures. Production cannot be labeled zero-bugs or accepted without licensed store attestation and real production acceptance.",
+  "phase1Source": "d58e411b5355bede342c94b52b9075b9a3614b0b",
+  "modelAvailability": "Argon High requests blocked: provider disabled4Argon until Oct16,2:54PM (display timezone not established); no fallback or paid upgrades.",
+  "phase1PromotionPolicy": "All confirmed phase1 engineering defects fixed and clean tested; deployment mismatch and unpatched upstream advisory risks remain explicit release blockers for coordinated phase5 acceptance, not falsely marked fixed."
+}
