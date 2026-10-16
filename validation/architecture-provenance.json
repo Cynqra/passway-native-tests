@@ -1,8 +1,8 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "2ffec5fd702824ec5d4f1b200ac28102fd8b2a4b",
-  "archiveSha256": "38b34906d1dcf6b5b0fa61cbc9cdd9ffed7a60534f741fd3cfd1151aca4ea048",
-  "createdAt": "2026-10-16T16:52:24.625603+00:00",
-  "scope": "Candidate10 native-observed visual accessibility fixes; full code single line, responsive consent actions, complete navigation labels. New native geometry requirements; no inherited production acceptance.",
+  "sourceCommit": "ec65e826e456f406a9087da843c4d4d6425d886d",
+  "archiveSha256": "b6b17bd4f65dec104f2c7287e297722884695b4351e639ea99642a1b5b563daf",
+  "createdAt": "2026-10-16T17:36:32.245033+00:00",
+  "scope": "Authenticated redemption ACK recovery, synchronous UI intent serialization, failure-path regressions, and exact Android validation",
   "fullTrackedSourceArchive": true
 }
