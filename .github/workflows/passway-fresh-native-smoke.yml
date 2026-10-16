@@ -61,6 +61,7 @@ jobs:
       PASSWAY_RESULTS: ${{ github.workspace }}/native-results
       JAVA_TOOL_OPTIONS: -Xmx768m
       METADATA_SERVER_DETECTION: none
+      PASSWAY_NATIVE_ACCESSIBILITY: '1'
       PASSWAY_NATIVE_EXTENDED: ${{ inputs.mode == 'isolated-extended' && '1' || '0' }}
       PASSWAY_EXPECTED_ANDROID_API: ${{ inputs.android_api_level || '36' }}
     steps:

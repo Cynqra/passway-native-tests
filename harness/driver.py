@@ -50,11 +50,20 @@ def tapnode(n):
  s=n.get('resource-id') or n.get('text') or n.get('content-desc')
  # Probe already waits for dispatch and returns a fresh post-action hierarchy.
  tree,_=probe(s,'touch');return tree
+def swipe_viewport(tree):
+ # Derive gesture coordinates from the actual inspected display, never a
+ # hardcoded 540x1200 skin. Small-display accessibility runs must really scroll.
+ root=next(tree.iter('node'),None)
+ values=re.findall(r'-?\d+',root.get('bounds','') if root is not None else '')
+ if len(values)!=4:raise RuntimeError('Cannot scroll without observed viewport bounds')
+ left,top,right,bottom=map(int,values);width=right-left;height=bottom-top
+ if width<100 or height<100:raise RuntimeError('Invalid observed viewport bounds')
+ shell('input','swipe',str(left+width//2),str(top+int(height*.8)),str(left+width//2),str(top+int(height*.3)),'450')
 def tap(s,scroll=True):
  for _ in range(7 if scroll else 1):
-  n=find(s)
+  tree=dump();n=find(s,tree)
   if n is not None and n.get('visible-to-user')=='true' and n.get('enabled')=='true':return tapnode(n)
-  if scroll:shell('input','swipe','270','970','270','380','450');time.sleep(.7)
+  if scroll:swipe_viewport(tree);time.sleep(.7)
  raise RuntimeError('Visible actionable control not found: '+s)
 def fill(s,value):
  tap(s);t,_=probe(s,'setText',value)

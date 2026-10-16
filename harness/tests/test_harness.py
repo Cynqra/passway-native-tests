@@ -88,7 +88,7 @@ class HarnessTests(unittest.TestCase):
    self.assertIs(d.tapnode({'resource-id':'field'}),t);probe.assert_called_once_with('field','touch');sleep.assert_not_called()
  def test_tap_returns_post_action_snapshot(self):
   d=load('driver');t=self.tree(d);n={'resource-id':'field','visible-to-user':'true','enabled':'true'}
-  with patch.object(d,'find',return_value=n),patch.object(d,'tapnode',return_value=t):self.assertIs(d.tap('field'),t)
+  with patch.object(d,'dump',return_value=t),patch.object(d,'find',return_value=n),patch.object(d,'tapnode',return_value=t):self.assertIs(d.tap('field'),t)
  def test_fill_verifies_fresh_settext_snapshot_without_redundant_read_or_sleep(self):
   d=load('driver');t=self.tree(d)
   with patch.object(d,'tap'),patch.object(d,'probe',return_value=(t,'fresh')) as probe,patch.object(d,'dump',side_effect=AssertionError('Unnecessary read')),patch.object(d.time,'sleep') as sleep:
@@ -121,3 +121,26 @@ class HarnessTests(unittest.TestCase):
   self.assertIn('            python3 harness/verify_android_api.py\n',text)
   self.assertNotIn('actual_api=$(',text)
 if __name__=='__main__':unittest.main()
+
+class AdaptiveGestureTests(unittest.TestCase):
+ def test_small_display_swipe_stays_in_observed_viewport(self):
+  d=load('driver');t=d.ET.fromstring('<hierarchy><node bounds="[0,0][440,880]"/></hierarchy>')
+  with patch.object(d,'shell') as shell:d.swipe_viewport(t)
+  self.assertEqual(shell.call_args.args,('input','swipe','220','704','220','264','450'))
+ def test_offset_display_swipe_uses_observed_origin(self):
+  d=load('driver');t=d.ET.fromstring('<hierarchy><node bounds="[10,20][550,1220]"/></hierarchy>')
+  with patch.object(d,'shell') as shell:d.swipe_viewport(t)
+  self.assertEqual(shell.call_args.args,('input','swipe','280','980','280','380','450'))
+ def test_unknown_viewport_fails_instead_of_inventing_coordinates(self):
+  d=load('driver');t=d.ET.fromstring('<hierarchy><node/></hierarchy>')
+  with patch.object(d,'shell') as shell:
+   with self.assertRaises(RuntimeError):d.swipe_viewport(t)
+  shell.assert_not_called()
+
+class AccessibilityMarkerTests(unittest.TestCase):
+ setUp=HarnessTests.setUp
+ def test_accessibility_mode_requires_fresh_independent_completion_marker(self):
+  c=load('isolated_coordinator');(self.root/'accessibility-complete.json').write_text('{}')
+  def finish(*a,**k):(self.root/'complete.json').write_text('{}');return types.SimpleNamespace(returncode=0)
+  with patch.dict('os.environ',{'PASSWAY_NATIVE_ACCESSIBILITY':'1','PASSWAY_NATIVE_EXTENDED':'0'}),patch.object(c.subprocess,'run',side_effect=finish):self.assertEqual(c.main(),1)
+  self.assertFalse((self.root/'accessibility-complete.json').exists())

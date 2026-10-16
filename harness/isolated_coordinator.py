@@ -5,6 +5,7 @@ from status import publish, ROOT
 def main():
  ROOT.mkdir(exist_ok=True, parents=True)
  # A stale success marker must never turn a later run into a pass.
+ (ROOT/'accessibility-complete.json').unlink(missing_ok=True)
  (ROOT/'complete.json').unlink(missing_ok=True)
  (ROOT/'extended-complete.json').unlink(missing_ok=True)
  os.environ['PASSWAY_ATTEMPT']='1'
@@ -18,7 +19,7 @@ def main():
  except subprocess.TimeoutExpired:
   code=124
  complete=ROOT/'complete.json'
- passed=code==0 and complete.is_file() and (
+ passed=code==0 and complete.is_file() and (os.environ.get('PASSWAY_NATIVE_ACCESSIBILITY')!='1' or (ROOT/'accessibility-complete.json').is_file()) and (
   os.environ.get('PASSWAY_NATIVE_EXTENDED')!='1' or (ROOT/'extended-complete.json').is_file())
  details={'exit_code':code,'duration_seconds':round(time.monotonic()-started,2),
           'passed':passed,'scope':'current-source isolated emulators; one attempt; no live patching'}

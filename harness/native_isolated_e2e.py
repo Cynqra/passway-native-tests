@@ -230,6 +230,9 @@ try:
   tap('open-chats');waitfor('new-connection');tap('You');waitfor('settings-name');snap('motion-settings-'+str(cycle));tap('Connect');waitfor('name-input')
  (ROOT/'animations-enabled-gfxinfo.txt').write_text(shell('dumpsys','gfxinfo',PKG))
  record('Native animations-enabled navigation smoke','PASS','Two chats/settings/connect cycles with scales at 1; no physical-device animation quality or FPS certification')
+ if os.environ.get('PASSWAY_NATIVE_ACCESSIBILITY')=='1':
+  from native_accessibility_journey import run as run_accessibility
+  run_accessibility(globals(),peer)
  if os.environ.get('PASSWAY_NATIVE_EXTENDED')=='1':
   from native_extended_journeys import run as run_extended
   run_extended(globals(),peer)
