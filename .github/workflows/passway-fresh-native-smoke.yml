@@ -15,6 +15,12 @@ on:
           - internal-candidate
           - store-apk-download
           - store-release-offline-ui
+      android_api_level:
+        description: Android API for isolated native tests only; release modes ignore it
+        type: choice
+        required: false
+        default: '36'
+        options: ['34', '35', '36']
       candidate_run_id:
         description: Successful same-revision signed candidate run (internal-candidate only)
         type: string
@@ -33,7 +39,7 @@ permissions:
 concurrency:
   # Only isolated, per-run emulators can run across revisions concurrently.
   # Keep a shared key for every release/cloud mutation mode.
-  group: passway-native-${{ inputs.mode || 'isolated-native' }}-${{ (inputs.mode == 'isolated-native' || inputs.mode == 'isolated-extended' || inputs.mode == '') && github.sha || 'shared-release' }}
+  group: passway-native-${{ inputs.mode || 'isolated-native' }}-${{ (inputs.mode == 'isolated-native' || inputs.mode == 'isolated-extended' || inputs.mode == '') && format('{0}-api{1}', github.sha, inputs.android_api_level || '36') || 'shared-release' }}
   cancel-in-progress: false
 jobs:
   isolated-native:
@@ -56,6 +62,7 @@ jobs:
       JAVA_TOOL_OPTIONS: -Xmx768m
       METADATA_SERVER_DETECTION: none
       PASSWAY_NATIVE_EXTENDED: ${{ inputs.mode == 'isolated-extended' && '1' || '0' }}
+      PASSWAY_EXPECTED_ANDROID_API: ${{ inputs.android_api_level || '36' }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -131,7 +138,7 @@ jobs:
       - name: Exercise current-source native UI with two isolated Android users
         uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
         with:
-          api-level: 36
+          api-level: ${{ inputs.android_api_level || '36' }}
           arch: x86_64
           target: google_apis
           profile: pixel_2
@@ -147,6 +154,9 @@ jobs:
           pre-emulator-launch-script: PASSWAY_AVD_NAME=passway-isolated python3 harness/configure_avd.py
           script: |
             set -eu
+            actual_api=$(adb shell getprop ro.build.version.sdk | tr -d '\r')
+            printf '%s\n' "$actual_api" | tee native-results/android-api.txt
+            test "$actual_api" = "$PASSWAY_EXPECTED_ANDROID_API"
             adb shell wm size | tee native-results/display-size.txt
             adb shell wm density | tee native-results/display-density.txt
             grep -qx "Physical size: 540x1200" native-results/display-size.txt

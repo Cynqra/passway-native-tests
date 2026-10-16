@@ -109,8 +109,15 @@ class HarnessTests(unittest.TestCase):
  def test_isolated_revisions_do_not_serialize_but_release_modes_keep_shared_key(self):
   text=(HARNESS.parent/'.github/workflows/passway-fresh-native-smoke.yml').read_text()
   group=next(line for line in text.splitlines() if line.startswith('  group:'))
-  self.assertIn("(inputs.mode == 'isolated-native' || inputs.mode == 'isolated-extended' || inputs.mode == '') && github.sha || 'shared-release'",group)
+  self.assertIn("(inputs.mode == 'isolated-native' || inputs.mode == 'isolated-extended' || inputs.mode == '') && format('{0}-api{1}', github.sha, inputs.android_api_level || '36') || 'shared-release'",group)
   self.assertIn('  cancel-in-progress: false',text)
   for cloud_mode in ['internal-candidate','signed-release','play-api-check','store-apk-download']:
    self.assertNotIn("inputs.mode == '"+cloud_mode+"'",group)
+ def test_current_source_android_api_choices_are_explicit_and_runtime_checked(self):
+  text=(HARNESS.parent/'.github/workflows/passway-fresh-native-smoke.yml').read_text()
+  self.assertIn("android_api_level:\n",text)
+  self.assertIn("options: ['34', '35', '36']",text)
+  self.assertIn("api-level: ${{ inputs.android_api_level || '36' }}",text)
+  self.assertIn('test \"$actual_api\" = \"$PASSWAY_EXPECTED_ANDROID_API\"',text)
+  self.assertIn('native-results/android-api.txt',text)
 if __name__=='__main__':unittest.main()
