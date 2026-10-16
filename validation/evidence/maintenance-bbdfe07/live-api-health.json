@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-16T21:11:16.196Z",
+  "scope": "Negative attestation rejection only; no SMS or authenticated mutations.",
+  "target": "https://passway-api.vercel.app",
+  "pass": false,
+  "checks": [
+    {
+      "route": "otpSend",
+      "token": "missing",
+      "status": 400,
+      "pass": false,
+      "durationMs": 1698
+    },
+    {
+      "route": "otpSend",
+      "token": "invalid",
+      "status": 400,
+      "pass": false,
+      "durationMs": 439
+    },
+    {
+      "route": "otpVerify",
+      "token": "missing",
+      "status": 400,
+      "pass": false,
+      "durationMs": 382
+    },
+    {
+      "route": "otpVerify",
+      "token": "invalid",
+      "status": 400,
+      "pass": false,
+      "durationMs": 273
+    },
+    {
+      "route": "generateTid",
+      "token": "missing",
+      "status": 401,
+      "pass": false,
+      "durationMs": 281
+    },
+    {
+      "route": "generateTid",
+      "token": "invalid",
+      "status": 401,
+      "pass": false,
+      "durationMs": 301
+    },
+    {
+      "route": "getMessages",
+      "token": "missing",
+      "status": 404,
+      "pass": false,
+      "durationMs": 280
+    },
+    {
+      "route": "getMessages",
+      "token": "invalid",
+      "status": 404,
+      "pass": false,
+      "durationMs": 273
+    }
+  ],
+  "limitations": "Negative App Check contract only. Not positive attestation, SMS delivery, authenticated health, uptime SLA or production certification."
+}
