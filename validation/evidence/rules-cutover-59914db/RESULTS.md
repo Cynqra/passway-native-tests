@@ -48,3 +48,9 @@ PR15 merged through successful required checks as e78759090dad915af2df495b113da9
 Read-only Firebase configuration confirms package com.passway.app and both Play app-signing and upload SHA256 certificates registered. Official provider defaults still require PLAY_RECOGNIZED even with NO_INTEGRITY as the explicit device threshold. License enforcement defaults false. No provider policy was changed and no genuine device verdict is claimed.
 
 The live maintenance endpoint separately rejected missing and invalid credentials2/2. No authorized sweep, deletion job execution or cleanup SLA was exercised by those negative checks.
+
+## Completed merged-main verification
+
+Merged-main run39000055054 completed successfully: regression and dependency-security both pass. This includes the credential-free suites, both backend typechecks, database emulator suites, all-platform exports and the build-only web preview check. It is still not a real Store/device acceptance test.
+
+Read-only production App Check inventory returned zero registered debug tokens with no additional page. No debug registration was revoked or changed. Cloud Functions v1/v2 inventory APIs returned SERVICE_DISABLED. No API was enabled or billing changed; that response is not asserted to prove no historical endpoint exists in any region.

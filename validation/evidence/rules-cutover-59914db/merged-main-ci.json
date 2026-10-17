@@ -1,1 +1,1 @@
-{"conclusion":"","headSha":"e78759090dad915af2df495b113da931acc20068","jobs":[{"conclusion":"","name":"regression","status":"in_progress"},{"conclusion":"success","name":"dependency-security","status":"completed"}],"status":"in_progress"}
+{"conclusion":"success","headSha":"e78759090dad915af2df495b113da931acc20068","jobs":[{"conclusion":"success","name":"regression","status":"completed"},{"conclusion":"success","name":"dependency-security","status":"completed"}],"status":"completed"}

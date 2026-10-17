@@ -1,0 +1,22 @@
+{
+  "checkedAt": "2026-10-17T03:49:40.228Z",
+  "scope": "Read-only alternate function inventory; environment variables, secrets, build configuration and user data are not retained. No service enabled or deployment changed.",
+  "rows": [
+    {
+      "apiVersion": "v1",
+      "httpStatus": 403,
+      "errorStatus": "PERMISSION_DENIED",
+      "reasons": [
+        "SERVICE_DISABLED"
+      ]
+    },
+    {
+      "apiVersion": "v2",
+      "httpStatus": 403,
+      "errorStatus": "PERMISSION_DENIED",
+      "reasons": [
+        "SERVICE_DISABLED"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "checkedAt": "2026-10-17T03:50:17.979Z",
+  "httpStatus": 200,
+  "scope": "Read-only debug-token registration inventory; token values and personal device labels are neither retained nor printed. No tokens revoked.",
+  "registeredTokenCount": 0,
+  "hasAdditionalPage": false
+}
