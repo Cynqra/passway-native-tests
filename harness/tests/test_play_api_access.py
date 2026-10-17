@@ -1,6 +1,8 @@
 import importlib.util
+import sys
 from pathlib import Path
 import unittest
+sys.path.insert(0,str(Path(__file__).parents[1]))
 
 spec = importlib.util.spec_from_file_location(
     "play_api_access", Path(__file__).parents[1] / "play_api_access.py"
