@@ -17,7 +17,7 @@ class PublicDraftTests(unittest.TestCase):
    if '/images/' in url:
     if variant=='official-schema':raise SafeError('Synthetic official schema 404')
     return {'images':[]}
-   if any(url.endswith('/listings/en-US/'+kind) for kind in images):return {'images':images[url.rsplit('/',1)[1]]}
+   if any(url.endswith('/listings/en-US/'+kind) for kind in images):return {'images':list(images[url.rsplit('/',1)[1]])}
    if '/listings/en-US' in url and method=='PUT':
     if variant=='listing-error':raise SafeError('Synthetic listing failure')
     return {}
