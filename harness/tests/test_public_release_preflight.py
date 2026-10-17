@@ -9,13 +9,13 @@ class PublicPreflightTests(unittest.TestCase):
    calls.append((url,method,body));self.assertNotIn(':commit',url);self.assertNotIn('/upload/',url)
    if url==m.PUBLISHER:return {'id':'123'}
    if method=='DELETE':return {}
-   if url.endswith('/tracks'):return {'tracks':[{'track':'internal','releases':[{'status':'completed','versionCodes':['12' if variant=='changed-internal' else '15']}]},{'track':'production','releases':[{'status':'completed'}] if variant=='existing-production' else []}]}
-   if url.endswith('/bundles'):return {'bundles':[{'versionCode':15,'sha256':'wrong' if variant=='wrong-hash' else m.BUNDLE_SHA}]}
+   if url.endswith('/tracks'):return {'tracks':[{'track':'internal','releases':[{'status':'completed','versionCodes':['12' if variant=='changed-internal' else '16']}]},{'track':'production','releases':[{'status':'completed'}] if variant=='existing-production' else []}]}
+   if url.endswith('/bundles'):return {'bundles':[{'versionCode':16,'sha256':'wrong' if variant=='wrong-hash' else m.BUNDLE_SHA}]}
    if url.endswith('/details'):return {'defaultLanguage':'en-US','contactEmail':'synthetic@example.invalid'}
    if url.endswith('/listings'):return {'listings':[{'title':'Passway','shortDescription':'Synthetic','fullDescription':'Synthetic'}]}
    if url.endswith('/tracks/production'):
     if variant=='google-draft-block':error_observer(400,json.dumps({'error':{'message':'Only releases with status draft may be created on draft app.'}}).encode());raise SafeError('Play capability check rejected request (HTTP 400)')
-    self.assertEqual(body['releases'][0]['versionCodes'],['15']);return {}
+    self.assertEqual(body['releases'][0]['versionCodes'],['16']);return {}
    if url.endswith(':validate'):
     if variant=='validation-error':raise SafeError('Synthetic validation failure')
     return {}
@@ -30,7 +30,7 @@ class PublicPreflightTests(unittest.TestCase):
  def test_changed_internal_is_not_promoted(self):
   r,c=self.execute('changed-internal');self.assertFalse(r['validated']);self.assertTrue(r['temporaryEditDeleted']);self.assertFalse(any(x[1]=='PUT' for x in c))
  def test_google_draft_restriction_is_reported_not_bypassed(self):
-  r,c=self.execute('google-draft-block');self.assertFalse(r['validated']);self.assertEqual(r['googleRequirement']['requirement'],'APP_SETUP_REQUIRED');self.assertTrue(r['temporaryEditDeleted'])
+  r,c=self.execute('google-draft-block');self.assertFalse(r['validated']);self.assertEqual(r['googleRequirement']['requirement'],'DRAFT_APP_REQUIRES_CONSOLE_COMPLETION');self.assertTrue(r['temporaryEditDeleted'])
  def test_validation_error_still_cleans_up(self):
   r,c=self.execute('validation-error');self.assertFalse(r['validated']);self.assertEqual(c[-1][1],'DELETE')
  def test_provider_text_and_tokens_are_never_retained(self):
