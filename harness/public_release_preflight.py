@@ -13,6 +13,19 @@ def reason_from_error(status,raw):
     groups=[('APP_SETUP_REQUIRED',('only releases with status draft','draft app')),('PRODUCTION_ACCESS_REQUIRED',('production access','access to production')),('PRODUCTION_PERMISSION_REQUIRED',('permission','not authorized','not authorised')),('STORE_DECLARATIONS_REQUIRED',('declaration','privacy policy','data safety','content rating','target audience')),('STORE_LISTING_REQUIRED',('store listing','listing','screenshots','short description','full description')),('REVIEW_REQUIRED',('sent for review','send for review','changesnotsentforreview'))]
     return {'httpStatus':status,'requirement':next((name for name,patterns in groups if any(p in text for p in patterns)),'GOOGLE_VALIDATION_REJECTED')}
 
+def verified_candidate(call,edit):
+    tracks=call(PUBLISHER+'/'+edit+'/tracks').get('tracks',[])
+    internal=next((t for t in tracks if t.get('track')=='internal'),{})
+    if not any(r.get('status')=='completed' and r.get('versionCodes')==[str(VERSION)] for r in internal.get('releases',[])):raise SafeError('Expected verified internal candidate is not current')
+    production=next((t for t in tracks if t.get('track')=='production'),{})
+    if production.get('releases'):raise SafeError('Production track changed; existing releases will not be overwritten')
+    bundles=call(PUBLISHER+'/'+edit+'/bundles').get('bundles',[])
+    matches=[b for b in bundles if b.get('versionCode')==VERSION and b.get('sha256','').lower()==BUNDLE_SHA]
+    if len(matches)!=1:raise SafeError('Verified existing bundle hash unavailable; no upload attempted')
+    details=call(PUBLISHER+'/'+edit+'/details')
+    listing=call(PUBLISHER+'/'+edit+'/listings').get('listings',[])
+    return details,listing
+
 def preflight(token,request=send):
     headers={'Authorization':'Bearer '+token};edit=None;report={'package':'com.passway.app','versionCode':VERSION,'publicProductionRollout':False,'commitAttempted':False,'uploadAttempted':False,'scope':'Uncommitted production edit validation only; not Google review approval, live public availability, attestation or SMS proof'}
     def observed(status,raw):report['googleRequirement']=reason_from_error(status,raw)
@@ -20,16 +33,7 @@ def preflight(token,request=send):
     try:
         edit=call(PUBLISHER,method='POST',body={}).get('id')
         if not isinstance(edit,str) or not edit.isdigit():raise SafeError('Invalid temporary edit identifier')
-        tracks=call(PUBLISHER+'/'+edit+'/tracks').get('tracks',[])
-        internal=next((t for t in tracks if t.get('track')=='internal'),{})
-        if not any(r.get('status')=='completed' and r.get('versionCodes')==[str(VERSION)] for r in internal.get('releases',[])):raise SafeError('Expected verified internal candidate is not current')
-        production=next((t for t in tracks if t.get('track')=='production'),{})
-        if production.get('releases'):raise SafeError('Production track changed; existing releases will not be overwritten')
-        bundles=call(PUBLISHER+'/'+edit+'/bundles').get('bundles',[])
-        matches=[b for b in bundles if b.get('versionCode')==VERSION and b.get('sha256','').lower()==BUNDLE_SHA]
-        if len(matches)!=1:raise SafeError('Verified existing bundle hash unavailable; no upload attempted')
-        details=call(PUBLISHER+'/'+edit+'/details')
-        listing=call(PUBLISHER+'/'+edit+'/listings').get('listings',[])
+        details,listing=verified_candidate(call,edit)
         report['storeMetadata']={'defaultLanguagePresent':bool(details.get('defaultLanguage')),'contactEmailPresent':bool(details.get('contactEmail')),'listingCount':len(listing),'completeTextListings':sum(bool(x.get('title') and x.get('shortDescription') and x.get('fullDescription')) for x in listing)}
         call(PUBLISHER+'/'+edit+'/tracks/production',method='PUT',body={'track':'production','releases':[{'name':'0.3.7 (13)','versionCodes':[str(VERSION)],'status':'completed'}]})
         report['temporaryProductionEditPrepared']=True
