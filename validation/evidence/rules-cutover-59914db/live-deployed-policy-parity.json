@@ -1,0 +1,30 @@
+{
+  "checkedAt": "2026-10-17T03:41:43.142Z",
+  "project": "passway-2ddc8",
+  "scope": "Read-only deployed rule-byte and required composite-index parity. Not native attestation, SMS, retention SLA, or full production acceptance.",
+  "pass": true,
+  "expectedRulesSha256": "59914db6e5de3b2837a9c0d01327b8a777660c8809d43937832731ff6edb3f06",
+  "deployedRulesSha256": "59914db6e5de3b2837a9c0d01327b8a777660c8809d43937832731ff6edb3f06",
+  "rows": [
+    {
+      "name": "Deployed Firestore rule bytes match reviewed local source",
+      "pass": true
+    },
+    {
+      "name": "Required connectionRequests composite index is READY",
+      "pass": true
+    },
+    {
+      "name": "Required connections composite index is READY",
+      "pass": true
+    },
+    {
+      "name": "Required accountDeletions composite index is READY",
+      "pass": true
+    },
+    {
+      "name": "Release binding remained stable throughout observation",
+      "pass": true
+    }
+  ]
+}

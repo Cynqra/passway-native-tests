@@ -1,0 +1,98 @@
+{
+  "checkedAt": "2026-10-17T03:37:04.195Z",
+  "pass": true,
+  "applied": true,
+  "scope": "Deployed security-rule migration and real Firebase/API verification using only disposable audit fixtures and ADMIN-issued App Check. No SMS, positive native/Store attestation, public rollout or prior user-data mutation.",
+  "rows": [
+    {
+      "name": "Exact accepted rules compiled as unpublished immutable ruleset",
+      "pass": true
+    },
+    {
+      "name": "Fresh canonical API boundaries passed",
+      "pass": true
+    },
+    {
+      "name": "Compatible internal client available and no public legacy release",
+      "pass": true
+    },
+    {
+      "name": "Immutable ruleset hash verified immediately before use",
+      "pass": true
+    },
+    {
+      "name": "Accepted production rule binding verified for independent postchecks",
+      "pass": true
+    },
+    {
+      "name": "Expired direct read now denied",
+      "pass": true,
+      "detail": "HTTP 403"
+    },
+    {
+      "name": "Fresh direct body read requires server path",
+      "pass": true,
+      "detail": "HTTP 403"
+    },
+    {
+      "name": "Participant connection metadata remains readable",
+      "pass": true
+    },
+    {
+      "name": "Own profile remains readable",
+      "pass": true
+    },
+    {
+      "name": "Peer profile remains private",
+      "pass": true
+    },
+    {
+      "name": "Nonparticipant metadata read denied",
+      "pass": true
+    },
+    {
+      "name": "Deletion job remains server private",
+      "pass": true
+    },
+    {
+      "name": "Profile recreation behind tombstone now denied",
+      "pass": true
+    },
+    {
+      "name": "Client message writes remain denied",
+      "pass": true
+    },
+    {
+      "name": "Active owner can update display name",
+      "pass": true
+    },
+    {
+      "name": "Active owner can save private note",
+      "pass": true
+    },
+    {
+      "name": "Peer cannot read private note",
+      "pass": true
+    },
+    {
+      "name": "Deleting account profile mutation now denied",
+      "pass": true
+    },
+    {
+      "name": "Deleting account note mutation now denied",
+      "pass": true
+    },
+    {
+      "name": "Current API still returns fresh message after migration",
+      "pass": true
+    },
+    {
+      "name": "Production release still points at accepted immutable ruleset",
+      "pass": true
+    },
+    {
+      "name": "Only audit-owned fixtures cleaned and absence verified",
+      "pass": true
+    }
+  ]
+}

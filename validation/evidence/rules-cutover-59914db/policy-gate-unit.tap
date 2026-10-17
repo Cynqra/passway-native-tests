@@ -1,0 +1,35 @@
+✔ exact reviewed policy and READY composite index pass (5.923692ms)
+✔ old deployed rule bytes fail despite working API (0.685916ms)
+✔ missing source files fail closed (0.218144ms)
+✔ extra source files cannot hide rule drift (0.21549ms)
+✔ wrong rule filename is not accepted (0.227693ms)
+✔ building index fails readiness (0.194008ms)
+✔ missing index fails readiness (0.39635ms)
+✔ wrong collection scope fails (0.196295ms)
+✔ different project index is rejected (0.274196ms)
+✔ field order remains significant (2.153405ms)
+✔ wrong field direction fails (0.386786ms)
+✔ different array configuration fails (0.25981ms)
+✔ implicit document-name direction cannot hide index drift (0.223844ms)
+✔ required index can be found on next page (0.478713ms)
+✔ wildcard index listing does not send unsupported explicit pageSize (0.564347ms)
+✔ endless pagination is bounded (1.31197ms)
+✔ foreign ruleset binding cannot redirect credentialed request (0.225362ms)
+✔ ruleset path traversal cannot redirect credentialed request (0.222999ms)
+✔ invalid local manifests fail before network access (0.264682ms)
+✔ transport errors propagate to failed operator gate (0.230651ms)
+✔ concurrent release change fails the parity gate (0.433215ms)
+✔ invalid provider index shape fails closed (0.210236ms)
+✔ successful report has no rule body or credential fields (0.267708ms)
+✔ non-JSON provider response fails closed (32.39125ms)
+✔ provider authorization failure fails closed (0.619435ms)
+✔ oversized provider payload is bounded (4.827551ms)
+✔ small JSON provider response is accepted (1.889541ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 213.274472

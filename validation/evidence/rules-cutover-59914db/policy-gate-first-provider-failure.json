@@ -1,0 +1,7 @@
+{
+  "scope": "Operator tooling failure, not application runtime failure",
+  "httpStatus": 400,
+  "errorStatus": "INVALID_ARGUMENT",
+  "cause": "Explicit pageSize=100 unsupported for wildcard collection-group index listing; provider accepts omitted/default size only.",
+  "liveRulesChangedByChecker": false
+}

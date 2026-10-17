@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-17T03:32:52.367Z",
+  "httpStatus": 200,
+  "scope": "Permission observation only; no roles or policies changed",
+  "requestedPermissions": [
+    "firebaserules.rulesets.create",
+    "firebaserules.rulesets.test",
+    "firebaserules.releases.update",
+    "resourcemanager.projects.setIamPolicy"
+  ],
+  "grantedPermissions": [
+    "firebaserules.releases.update",
+    "firebaserules.rulesets.create"
+  ]
+}

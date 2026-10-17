@@ -1,0 +1,22 @@
+PASS Exact accepted rules compiled as unpublished immutable ruleset
+PASS Fresh canonical API boundaries passed
+PASS Compatible internal client available and no public legacy release
+PASS Immutable ruleset hash verified immediately before use
+PASS Accepted production rule binding verified for independent postchecks
+PASS Expired direct read now denied HTTP 403
+PASS Fresh direct body read requires server path HTTP 403
+PASS Participant connection metadata remains readable
+PASS Own profile remains readable
+PASS Peer profile remains private
+PASS Nonparticipant metadata read denied
+PASS Deletion job remains server private
+PASS Profile recreation behind tombstone now denied
+PASS Client message writes remain denied
+PASS Active owner can update display name
+PASS Active owner can save private note
+PASS Peer cannot read private note
+PASS Deleting account profile mutation now denied
+PASS Deleting account note mutation now denied
+PASS Current API still returns fresh message after migration
+PASS Production release still points at accepted immutable ruleset
+{"pass":true,"assertions":22,"applied":true,"cleanup":true}

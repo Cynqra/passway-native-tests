@@ -1,0 +1,72 @@
+{
+  "checkedAt": "2026-10-17T03:35:46.437Z",
+  "pass": false,
+  "applied": true,
+  "scope": "Deployed security-rule migration and real Firebase/API verification using only disposable audit fixtures and ADMIN-issued App Check. No SMS, positive native/Store attestation, public rollout or prior user-data mutation.",
+  "rows": [
+    {
+      "name": "Exact accepted rules compiled as unpublished immutable ruleset",
+      "pass": true
+    },
+    {
+      "name": "Fresh canonical API boundaries passed",
+      "pass": true
+    },
+    {
+      "name": "Compatible internal client available and no public legacy release",
+      "pass": true
+    },
+    {
+      "name": "Immutable ruleset hash verified immediately before use",
+      "pass": true
+    },
+    {
+      "name": "Old deployed rule bypass reproduced on owned expired body",
+      "pass": true,
+      "detail": "HTTP 200; body not retained"
+    },
+    {
+      "name": "Current API hides expired fixture before rules migration",
+      "pass": true
+    },
+    {
+      "name": "Old rules permit profile recreation behind deletion tombstone",
+      "pass": true
+    },
+    {
+      "name": "Old rules permit deleting-profile update",
+      "pass": true
+    },
+    {
+      "name": "Old rules permit note write during deletion",
+      "pass": true
+    },
+    {
+      "name": "Live release binding unchanged since preparation",
+      "pass": true
+    },
+    {
+      "name": "Exact tested rules published to production binding",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Expired direct read now denied",
+      "pass": true,
+      "detail": "HTTP 403"
+    },
+    {
+      "name": "Fresh direct body read requires server path",
+      "pass": false
+    },
+    {
+      "name": "Controlled migration execution",
+      "pass": false,
+      "detail": "Failed; scoped assertions retained, no credentials or response bodies logged. No automatic rollback to insecure rules."
+    },
+    {
+      "name": "Only audit-owned fixtures cleaned and absence verified",
+      "pass": true
+    }
+  ]
+}

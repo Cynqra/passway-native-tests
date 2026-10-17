@@ -1,0 +1,56 @@
+✔ exact reviewed policy and READY composite index pass (4.51195ms)
+✔ old deployed rule bytes fail despite working API (0.704957ms)
+✔ missing source files fail closed (0.192346ms)
+✔ extra source files cannot hide rule drift (0.157354ms)
+✔ wrong rule filename is not accepted (0.18928ms)
+✔ building index fails readiness (0.228332ms)
+✔ missing index fails readiness (0.433414ms)
+✔ wrong collection scope fails (0.166255ms)
+✔ different project index is rejected (0.236943ms)
+✔ field order remains significant (0.703581ms)
+✔ wrong field direction fails (0.350107ms)
+✔ different array configuration fails (0.217655ms)
+✔ implicit document-name direction cannot hide index drift (0.185822ms)
+✔ required index can be found on next page (0.452978ms)
+✖ wildcard index listing does not send unsupported explicit pageSize (1.403566ms)
+✔ endless pagination is bounded (0.897379ms)
+✔ foreign ruleset binding cannot redirect credentialed request (0.183036ms)
+✔ ruleset path traversal cannot redirect credentialed request (0.226194ms)
+✔ invalid local manifests fail before network access (0.252272ms)
+✔ transport errors propagate to failed operator gate (0.163539ms)
+✔ concurrent release change fails the parity gate (0.550592ms)
+✔ invalid provider index shape fails closed (0.165012ms)
+✔ successful report has no rule body or credential fields (0.233335ms)
+✔ non-JSON provider response fails closed (25.349572ms)
+✔ provider authorization failure fails closed (0.646043ms)
+✔ oversized provider payload is bounded (3.885138ms)
+✔ small JSON provider response is accepted (1.419835ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 26
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 196.322253
+
+✖ failing tests:
+
+test at passway-rules-resume/source/passway-app/functions/test/deployed-policy.test.cjs:38:1
+✖ wildcard index listing does not send unsupported explicit pageSize (1.403566ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at request (/data/passway-rules-resume/source/passway-app/functions/test/deployed-policy.test.cjs:43:63)
+      at runCheck (/data/passway-rules-resume/source/passway-app/functions/scripts/check-deployed-policy.cjs:55:26)
+      at async TestContext.<anonymous> (/data/passway-rules-resume/source/passway-app/functions/test/deployed-policy.test.cjs:40:18)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

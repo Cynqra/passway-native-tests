@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-17T03:42:45.289385+00:00",
+  "scope": "Registry version availability only, not proof advisories are resolved or packages installed",
+  "packages": [
+    {
+      "name": "braces",
+      "latest": "3.0.3"
+    },
+    {
+      "name": "node-forge",
+      "latest": "1.4.0"
+    }
+  ]
+}

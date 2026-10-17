@@ -1,0 +1,9 @@
+{
+  "checkedAt": "2026-10-17T03:34:04.359Z",
+  "pass": true,
+  "httpStatus": 200,
+  "acceptedSourceSha256": "59914db6e5de3b2837a9c0d01327b8a777660c8809d43937832731ff6edb3f06",
+  "previousDeployedSha256": "74f5ff0a79cc9965f9aad1aa417ccefecf3df73f7a5e6c1e34a336b5e9c1579e",
+  "createdRuleset": "projects/passway-2ddc8/rulesets/81dfe9a4-10ea-4567-85c8-f84713307d8e",
+  "scope": "Official compiler validation by immutable ruleset creation; no live release binding changed. Separate rule simulation permission is unavailable."
+}

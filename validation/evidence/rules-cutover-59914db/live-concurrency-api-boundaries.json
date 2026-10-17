@@ -1,0 +1,189 @@
+{
+  "scope": "Negative attestation rejection only; no SMS or authenticated mutations.",
+  "target": "https://passway-api.vercel.app",
+  "pass": true,
+  "checks": [
+    {
+      "route": "otpSend",
+      "token": "missing",
+      "status": 401,
+      "pass": true,
+      "durationMs": 379
+    },
+    {
+      "route": "otpSend",
+      "token": "invalid",
+      "status": 401,
+      "pass": true,
+      "durationMs": 312
+    },
+    {
+      "route": "otpVerify",
+      "token": "missing",
+      "status": 401,
+      "pass": true,
+      "durationMs": 333
+    },
+    {
+      "route": "otpVerify",
+      "token": "invalid",
+      "status": 401,
+      "pass": true,
+      "durationMs": 369
+    },
+    {
+      "route": "generateTid",
+      "token": "missing",
+      "status": 401,
+      "pass": true,
+      "durationMs": 1078
+    },
+    {
+      "route": "generateTid",
+      "token": "invalid",
+      "status": 401,
+      "pass": true,
+      "durationMs": 216
+    },
+    {
+      "route": "redeemTid",
+      "token": "missing",
+      "status": 401,
+      "pass": true,
+      "durationMs": 222
+    },
+    {
+      "route": "redeemTid",
+      "token": "invalid",
+      "status": 401,
+      "pass": true,
+      "durationMs": 427
+    },
+    {
+      "route": "deactivateTid",
+      "token": "missing",
+      "status": 401,
+      "pass": true,
+      "durationMs": 221
+    },
+    {
+      "route": "deactivateTid",
+      "token": "invalid",
+      "status": 401,
+      "pass": true,
+      "durationMs": 210
+    },
+    {
+      "route": "respondToRequest",
+      "token": "missing",
+      "status": 401,
+      "pass": true,
+      "durationMs": 252
+    },
+    {
+      "route": "respondToRequest",
+      "token": "invalid",
+      "status": 401,
+      "pass": true,
+      "durationMs": 617
+    },
+    {
+      "route": "endConnection",
+      "token": "missing",
+      "status": 401,
+      "pass": true,
+      "durationMs": 620
+    },
+    {
+      "route": "endConnection",
+      "token": "invalid",
+      "status": 401,
+      "pass": true,
+      "durationMs": 210
+    },
+    {
+      "route": "sendMessage",
+      "token": "missing",
+      "status": 401,
+      "pass": true,
+      "durationMs": 218
+    },
+    {
+      "route": "sendMessage",
+      "token": "invalid",
+      "status": 401,
+      "pass": true,
+      "durationMs": 226
+    },
+    {
+      "route": "getMessages",
+      "token": "missing",
+      "status": 401,
+      "pass": true,
+      "durationMs": 210
+    },
+    {
+      "route": "getMessages",
+      "token": "invalid",
+      "status": 401,
+      "pass": true,
+      "durationMs": 219
+    },
+    {
+      "route": "fileReport",
+      "token": "missing",
+      "status": 401,
+      "pass": true,
+      "durationMs": 214
+    },
+    {
+      "route": "fileReport",
+      "token": "invalid",
+      "status": 401,
+      "pass": true,
+      "durationMs": 216
+    },
+    {
+      "route": "blockUser",
+      "token": "missing",
+      "status": 401,
+      "pass": true,
+      "durationMs": 226
+    },
+    {
+      "route": "blockUser",
+      "token": "invalid",
+      "status": 401,
+      "pass": true,
+      "durationMs": 213
+    },
+    {
+      "route": "confirmAge",
+      "token": "missing",
+      "status": 401,
+      "pass": true,
+      "durationMs": 207
+    },
+    {
+      "route": "confirmAge",
+      "token": "invalid",
+      "status": 401,
+      "pass": true,
+      "durationMs": 218
+    },
+    {
+      "route": "deleteAccount",
+      "token": "missing",
+      "status": 401,
+      "pass": true,
+      "durationMs": 214
+    },
+    {
+      "route": "deleteAccount",
+      "token": "invalid",
+      "status": 401,
+      "pass": true,
+      "durationMs": 214
+    }
+  ]
+}

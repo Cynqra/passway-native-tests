@@ -1,0 +1,14 @@
+PASS Exact accepted rules compiled as unpublished immutable ruleset
+PASS Fresh canonical API boundaries passed
+PASS Compatible internal client available and no public legacy release
+PASS Immutable ruleset hash verified immediately before use
+PASS Old deployed rule bypass reproduced on owned expired body HTTP 200; body not retained
+PASS Current API hides expired fixture before rules migration
+PASS Old rules permit profile recreation behind deletion tombstone
+PASS Old rules permit deleting-profile update
+PASS Old rules permit note write during deletion
+PASS Live release binding unchanged since preparation
+PASS Exact tested rules published to production binding HTTP 200
+PASS Expired direct read now denied HTTP 403
+FAIL Fresh direct body read requires server path
+{"pass":false,"assertions":15,"applied":true,"cleanup":true}
