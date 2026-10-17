@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "scope": "Native UI plus independently read Auth/Firestore emulator state",
+  "fixturePhones": [
+    "9999900001",
+    "9999900002",
+    "9999900003",
+    "9999900004"
+  ],
+  "productionChanged": false,
+  "realSmsTested": false,
+  "storeAttestationTested": false,
+  "expiry": "Owned demo server record fault injection, not an accelerated five-minute UI timer"
+}

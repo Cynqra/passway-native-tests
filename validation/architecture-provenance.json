@@ -1,8 +1,9 @@
 {
-  "source_repo": "naveenbharti310/Paasway",
-  "source_commit": "e5624c49f35d168f49a813ec16ef92b3bfc83a20",
-  "archive_sha256": "4d4b19d93555c5ec8598e72d5942cc3a5b4786d68529d536b422cfda73ce7c43",
-  "application_tree": "9de5060a5ec15f2146d136bc60deffe2d14bffc6",
-  "native_application_source": "822b0a15299a539e4c8e6850817a2416f703fa26",
-  "scope": "Backend person-level block fix; unchanged native client; no deployment or production E2E claim"
+  "sourceRepository": "naveenbharti310/Paasway",
+  "sourceCommit": "fd9baeb7aa44cc0c17e683e8a68cdb2ea4c18c5e",
+  "sourceTree": "2a49a203a641a79d3b043686f7ed36970659498e",
+  "archiveSha256": "99944daf8756d0a6bc58001b2a1b12ecf8a3d77d451867fcd81c494ea9972e57",
+  "createdAt": "2026-10-17T14:32:47.826804+00:00",
+  "scope": "Unpublished version 0.3.7 code 13; merged verified phone participation policy and rendered account-scoped safety disclosure. Fresh native and signed acceptance pending.",
+  "fullTrackedSourceArchive": true
 }

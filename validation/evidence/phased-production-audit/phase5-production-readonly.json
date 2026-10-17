@@ -1,0 +1,12 @@
+{
+  "at": "2026-10-16T16:04:49.468Z",
+  "scope": "Read-only exact production alias/deployment metadata; no environment values, credentials or deployment changes",
+  "target": "passway-api.vercel.app",
+  "projectMatched": true,
+  "deploymentId": "dpl_HwzmiRmbLnjuwvZTnWYPpZFooKEe",
+  "targetEnvironment": "production",
+  "readyState": "READY",
+  "createdAt": 1791966741301,
+  "gitCommit": null,
+  "records": []
+}

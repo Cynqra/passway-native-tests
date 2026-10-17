@@ -47,14 +47,34 @@ jobs:
           java-version: '21'
       - run: npm ci
       - run: npm ci --prefix functions
+      - name: Verify archived source dependency-gate policy
+        run: node --test ../.github/tests/dependency-gate.test.cjs
       - run: npm run test:mobile
       - run: npm run typecheck && npm run typecheck --prefix functions
       - run: npm test --prefix functions
-      - run: npm run test:emulator
+      - name: Rules, transaction regressions and bounded parallel workload
+        env:
+          GCLOUD_PROJECT: demo-passway
+          METADATA_SERVER_DETECTION: none
+        run: |
+          npx --yes firebase-tools@15.32.1 emulators:exec --only auth,firestore --project demo-passway \
+            "npm run test:rules && npm run test:integration --prefix functions && node ../../harness/bounded_backend_workload.cjs && npm run test:auth:integration --prefix functions"
       - run: npx --no-install expo export --platform all --output-dir dist-ci
+      - name: Exercise controlled build-only web preview helper
+        env:
+          EXPO_PUBLIC_API_URL: http://127.0.0.1:8787
+        run: npm run preview:web
+      - name: Preserve bounded-workload measurements and scope
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: bounded-backend-workload
+          path: validation-source/passway-app/bounded-workload-results.json
+          if-no-files-found: warn
+          retention-days: 3
   dependency-security:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 10
     defaults:
       run:
         working-directory: validation-source/passway-app
@@ -74,7 +94,23 @@ jobs:
           node-version: '22'
       - name: Backend production dependency audit
         run: npm audit --package-lock-only --omit=dev --prefix functions --audit-level=high
-      # Deliberately blocking while upstream build-tool advisories remain open.
-      # Do not hide this with continue-on-error or downgrade Expo across majors.
-      - name: Mobile and build-tool dependency audit
-        run: npm audit --package-lock-only --audit-level=high
+      - name: Install exact dependencies and hash-bound reviewed build-tool fixes
+        run: npm ci
+      # This does NOT suppress npm findings or relabel vulnerable package versions.
+      # Preserve raw audit; require exact installed hashes, exploit rejection and
+      # unchanged advisory records. Any new/changed high finding blocks the job.
+      - name: Verify actual installed remediation and preserve raw registry audit
+        env:
+          PASSWAY_SECURITY_OUTPUT: ${{ github.workspace }}/dependency-results
+        run: npm run security:audit
+      - name: Run complete pinned upstream suites against installed patched code
+        env:
+          PASSWAY_SECURITY_OUTPUT: ${{ github.workspace }}/dependency-results
+        run: npm run security:conformance
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: dependency-remediation-proof-with-raw-audit
+          path: dependency-results
+          retention-days: 3
+          if-no-files-found: error

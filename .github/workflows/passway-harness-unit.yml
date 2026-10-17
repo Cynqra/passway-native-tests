@@ -1,0 +1,36 @@
+name: Passway fast harness regression
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'harness/**'
+      - '.github/workflows/passway-harness-unit.yml'
+  pull_request:
+    paths:
+      - 'harness/**'
+      - '.github/workflows/passway-harness-unit.yml'
+permissions:
+  contents: read
+concurrency:
+  group: harness-unit-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  harness-unit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Test harness without an emulator, credentials, or an app rebuild
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s harness/tests -v 2>&1 | tee harness-unit-results.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: harness-unit-regression
+          path: harness-unit-results.txt
+          retention-days: 3
+          if-no-files-found: error

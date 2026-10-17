@@ -1,0 +1,250 @@
+{
+  "scope": "Synthetic preview HTTP requests including cold starts/network/Auth/Firestore; not native or production latency SLO",
+  "requests": [
+    {
+      "name": "generateTid",
+      "status": 200,
+      "milliseconds": 1917
+    },
+    {
+      "name": "redeemTid",
+      "status": 400,
+      "milliseconds": 1365
+    },
+    {
+      "name": "redeemTid",
+      "status": 404,
+      "milliseconds": 1090
+    },
+    {
+      "name": "redeemTid",
+      "status": 200,
+      "milliseconds": 1195
+    },
+    {
+      "name": "respondToRequest",
+      "status": 200,
+      "milliseconds": 1001
+    },
+    {
+      "name": "respondToRequest",
+      "status": 200,
+      "milliseconds": 1003
+    },
+    {
+      "name": "sendMessage",
+      "status": 200,
+      "milliseconds": 1129
+    },
+    {
+      "name": "sendMessage",
+      "status": 200,
+      "milliseconds": 1054
+    },
+    {
+      "name": "sendMessage",
+      "status": 200,
+      "milliseconds": 1067
+    },
+    {
+      "name": "getMessages",
+      "status": 200,
+      "milliseconds": 1079
+    },
+    {
+      "name": "getMessages",
+      "status": 200,
+      "milliseconds": 1050
+    },
+    {
+      "name": "getMessages",
+      "status": 200,
+      "milliseconds": 1049
+    },
+    {
+      "name": "sendMessage",
+      "status": 400,
+      "milliseconds": 1193
+    },
+    {
+      "name": "getMessages",
+      "status": 400,
+      "milliseconds": 898
+    },
+    {
+      "name": "sendMessage",
+      "status": 200,
+      "milliseconds": 1070
+    },
+    {
+      "name": "sendMessage",
+      "status": 200,
+      "milliseconds": 1177
+    },
+    {
+      "name": "sendMessage",
+      "status": 200,
+      "milliseconds": 1537
+    },
+    {
+      "name": "sendMessage",
+      "status": 200,
+      "milliseconds": 1618
+    },
+    {
+      "name": "sendMessage",
+      "status": 200,
+      "milliseconds": 1792
+    },
+    {
+      "name": "sendMessage",
+      "status": 200,
+      "milliseconds": 1829
+    },
+    {
+      "name": "sendMessage",
+      "status": 200,
+      "milliseconds": 2986
+    },
+    {
+      "name": "sendMessage",
+      "status": 200,
+      "milliseconds": 3002
+    },
+    {
+      "name": "getMessages",
+      "status": 200,
+      "milliseconds": 1440
+    },
+    {
+      "name": "sendMessage",
+      "status": 400,
+      "milliseconds": 1201
+    },
+    {
+      "name": "sendMessage",
+      "status": 200,
+      "milliseconds": 1655
+    },
+    {
+      "name": "getMessages",
+      "status": 200,
+      "milliseconds": 1064
+    },
+    {
+      "name": "sendMessage",
+      "status": 400,
+      "milliseconds": 1126
+    },
+    {
+      "name": "sendMessage",
+      "status": 400,
+      "milliseconds": 1093
+    },
+    {
+      "name": "sendMessage",
+      "status": 400,
+      "milliseconds": 1189
+    },
+    {
+      "name": "getMessages",
+      "status": 200,
+      "milliseconds": 1041
+    },
+    {
+      "name": "getMessages",
+      "status": 200,
+      "milliseconds": 1011
+    },
+    {
+      "name": "sendMessage",
+      "status": 403,
+      "milliseconds": 960
+    },
+    {
+      "name": "getMessages",
+      "status": 403,
+      "milliseconds": 955
+    },
+    {
+      "name": "getMessages",
+      "status": 400,
+      "milliseconds": 1001
+    },
+    {
+      "name": "getMessages",
+      "status": 400,
+      "milliseconds": 1678
+    },
+    {
+      "name": "getMessages",
+      "status": 200,
+      "milliseconds": 1082
+    },
+    {
+      "name": "getMessages",
+      "status": 401,
+      "milliseconds": 231
+    },
+    {
+      "name": "otpSend",
+      "status": 404,
+      "milliseconds": 235
+    },
+    {
+      "name": "generateTid",
+      "status": 200,
+      "milliseconds": 967
+    },
+    {
+      "name": "redeemTid",
+      "status": 200,
+      "milliseconds": 1006
+    },
+    {
+      "name": "respondToRequest",
+      "status": 200,
+      "milliseconds": 957
+    },
+    {
+      "name": "sendMessage",
+      "status": 200,
+      "milliseconds": 1071
+    },
+    {
+      "name": "blockUser",
+      "status": 200,
+      "milliseconds": 1539
+    },
+    {
+      "name": "sendMessage",
+      "status": 404,
+      "milliseconds": 1015
+    },
+    {
+      "name": "sendMessage",
+      "status": 404,
+      "milliseconds": 1032
+    },
+    {
+      "name": "getMessages",
+      "status": 404,
+      "milliseconds": 971
+    },
+    {
+      "name": "endConnection",
+      "status": 200,
+      "milliseconds": 960
+    },
+    {
+      "name": "deleteAccount",
+      "status": 200,
+      "milliseconds": 1737
+    },
+    {
+      "name": "deleteAccount",
+      "status": 200,
+      "milliseconds": 1756
+    }
+  ]
+}

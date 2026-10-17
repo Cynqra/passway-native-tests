@@ -1,31 +1,98 @@
-name: Passway fresh-source Android build and cold-start smoke
+name: Passway current-source isolated native two-user E2E
 on:
   workflow_dispatch:
+    inputs:
+      mode:
+        description: Isolated native testing or signed store-bundle validation
+        required: true
+        default: isolated-native
+        type: choice
+        options:
+          - isolated-native
+          - isolated-extended
+          - signed-release
+          - play-api-check
+          - public-release-preflight
+          - prepare-public-draft
+          - internal-candidate
+          - internal-sharing-candidate
+          - store-apk-download
+          - store-release-offline-ui
+      android_api_level:
+        description: Android API for isolated native tests only; release modes ignore it
+        type: choice
+        required: false
+        default: '36'
+        options: ['34', '35', '36']
+      candidate_run_id:
+        description: Successful same-revision signed candidate run (internal-candidate only)
+        type: string
+        required: false
+      native_run_id:
+        description: Successful same-revision extended native run (internal-candidate only)
+        type: string
+        required: false
+      store_download_run_id:
+        description: Successful same-revision authenticated Play APK download run (offline UI only)
+        type: string
+        required: false
+      store_apk_sha256:
+        description: Exact authenticated Play download APK SHA256 (offline UI only)
+        type: string
+        required: false
+      store_version_code:
+        description: Published internal version to download (read-only; numeric validation enforced)
+        type: string
+        required: false
+        default: '7'
 permissions:
   contents: read
 concurrency:
-  group: passway-fresh-native-smoke
+  # Only isolated, per-run emulators can run across revisions concurrently.
+  # Keep a shared key for every release/cloud mutation mode.
+  group: ${{ (inputs.mode == 'isolated-native' || inputs.mode == 'isolated-extended' || inputs.mode == '') && format('passway-native-{0}-api{1}', github.sha, inputs.android_api_level || '36') || 'passway-native-shared-release' }}
   cancel-in-progress: false
 jobs:
-  fresh-native:
+  isolated-native:
+    if: ${{ inputs.mode == 'isolated-native' || inputs.mode == 'isolated-extended' || inputs.mode == '' }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
+    timeout-minutes: 45
     env:
       CI: '1'
       EAS_BUILD_PROFILE: play-diagnostics
       EXPO_PUBLIC_APP_CHECK: 'off'
-      EXPO_PUBLIC_DIAGNOSTICS: '0'
-      EXPO_PUBLIC_OTP_PROVIDER: 2factor
-      EXPO_PUBLIC_API_URL: https://example.invalid
+      EXPO_PUBLIC_DIAGNOSTICS: '1'
+      EXPO_PUBLIC_OTP_PROVIDER: firebase
+      EXPO_PUBLIC_API_URL: http://10.0.2.2:8787
+      GCLOUD_PROJECT: demo-passway
+      FIRESTORE_EMULATOR_HOST: 127.0.0.1:8080
+      FIREBASE_AUTH_EMULATOR_HOST: 127.0.0.1:9099
+      ENFORCE_APP_CHECK: 'false'
+      MODERATION_PROVIDER: rules
+      PASSWAY_RESULTS: ${{ github.workspace }}/native-results
+      JAVA_TOOL_OPTIONS: -Xmx768m
+      METADATA_SERVER_DETECTION: none
+      PASSWAY_NATIVE_ACCESSIBILITY: '1'
+      PASSWAY_NATIVE_EXTENDED: ${{ inputs.mode == 'isolated-extended' && '1' || '0' }}
+      PASSWAY_EXPECTED_ANDROID_API: ${{ inputs.android_api_level || '36' }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
+      - name: Verify and unpack immutable candidate source before cache lookup
+        run: |
+          set -eu
+          sha256sum -c validation/architecture-source.sha256
+          mkdir validation-source native-results
+          tar -xzf validation/architecture-source.tar.gz -C validation-source
+          cp validation/architecture-provenance.json native-results/source-provenance.json
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '22'
           cache: npm
-          cache-dependency-path: validation/architecture-source.sha256
+          cache-dependency-path: |
+            validation-source/passway-app/package-lock.json
+            validation-source/passway-app/functions/package-lock.json
       - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
         with:
           distribution: temurin
@@ -37,20 +104,10 @@ jobs:
           cache-read-only: ${{ github.event_name != 'workflow_dispatch' }}
       - name: Native harness unit tests
         run: python3 -m unittest discover -s harness/tests -v
-      - name: Verify source and generate synthetic demo-only Firebase config
+      - name: Verify source and apply explicit emulator-only test overlay
         run: |
           set -eu
-          sha256sum -c validation/architecture-source.sha256
-          mkdir validation-source native-smoke
-          tar -xzf validation/architecture-source.tar.gz -C validation-source
-          cp validation/architecture-provenance.json native-smoke/source-provenance.json
-          python3 - <<'PY'
-          import json,pathlib
-          app=pathlib.Path('validation-source/passway-app')
-          config={'project_info':{'project_number':'123456789012','project_id':'demo-passway','storage_bucket':'demo-passway.firebasestorage.app'},'client':[{'client_info':{'mobilesdk_app_id':'1:123456789012:android:abcdef0123456789','android_client_info':{'package_name':'com.passway.app'}},'api_key':[{'current_key':'AIza'+'A'*35}]}],'configuration_version':'1'}
-          (app/'google-services.json').write_text(json.dumps(config))
-          (app/'firebase.json').write_text(json.dumps({'react-native':{'crashlytics_auto_collection_enabled':False,'analytics_auto_collection_enabled':False}}))
-          PY
+          python3 harness/prepare_isolated_native.py
           sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost /opt/hostedtoolcache/CodeQL
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
@@ -60,47 +117,481 @@ jobs:
         working-directory: validation-source/passway-app
         run: |
           npm ci
+          npm ci --prefix functions
+          npm run typecheck
+          npm run typecheck --prefix functions
+          npm run build --prefix functions
           npx --no-install expo prebuild --platform android --clean --no-install
+      - name: Preinstall pinned Firebase CLI before starting services
+        timeout-minutes: 4
+        run: npx --yes firebase-tools@15.32.1 --version
+      - name: Start isolated Firebase services and original candidate HTTP handlers
+        timeout-minutes: 5
+        run: |
+          set -eu
+          trap 'tail -n 70 native-results/firebase-emulators.log; tail -n 40 native-results/isolated-api.log 2>/dev/null || true' ERR
+          cd validation-source/passway-app
+          nohup npx --yes firebase-tools@15.32.1 emulators:start --only auth,firestore --project demo-passway > ../../native-results/firebase-emulators.log 2>&1 &
+          cd ../..
+          python3 harness/wait_isolated_services.py services
+          nohup node harness/isolated_api.cjs > native-results/isolated-api.log 2>&1 &
+          python3 harness/wait_isolated_services.py api
       - name: Compile fresh native release APK with local diagnostic signing
         working-directory: validation-source/passway-app/android
         run: |
           chmod +x gradlew
           ./gradlew :app:assembleRelease --build-cache -PreactNativeArchitectures=x86_64 --max-workers=2 -Dorg.gradle.jvmargs='-Xmx4g -XX:MaxMetaspaceSize=1g' --stacktrace
           ./gradlew --stop
-          sha256sum app/build/outputs/apk/release/*.apk > ../../../native-smoke/apk-sha256.txt
-      - name: Cold-start the freshly compiled APK on Android 16
+          sha256sum app/build/outputs/apk/release/*.apk > ../../../native-results/apk-sha256.txt
+      - name: Build native UI probe without historical patch scripts
+        run: |
+          keytool -genkeypair -keystore debug.keystore -storepass android -keypass android -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 30 -dname 'CN=Passway Isolated Test,O=Internal Test,C=IN'
+          bash harness/probe/build_isolated.sh
+      - name: Exercise current-source native UI with two isolated Android users
         uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
         with:
-          api-level: 36
+          api-level: ${{ inputs.android_api_level || '36' }}
           arch: x86_64
           target: google_apis
           profile: pixel_2
+          avd-name: passway-isolated
           ram-size: 3072M
+          heap-size: 384M
           cores: 2
+          enable-hw-keyboard: false
           disable-animations: true
+          disable-spellchecker: true
           emulator-boot-timeout: 480
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot -camera-back none -camera-front none -memory 3072
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot -camera-back none -camera-front none -skin 540x1200 -memory 3072
+          pre-emulator-launch-script: PASSWAY_AVD_NAME=passway-isolated python3 harness/configure_avd.py
           script: |
+            set -eu
+            python3 harness/verify_android_api.py
+            adb shell wm size | tee native-results/display-size.txt
+            adb shell wm density | tee native-results/display-density.txt
+            grep -qx "Physical size: 540x1200" native-results/display-size.txt
+            grep -qx "Physical density: 220" native-results/display-density.txt
             adb install --no-incremental -r validation-source/passway-app/android/app/build/outputs/apk/release/app-release.apk
+            adb install --no-incremental -r harness/probe/probe.apk
             adb logcat -c
-            adb shell am start -W -n com.passway.app/.MainActivity > native-smoke/launch.txt
-            sleep 25
-            adb shell pidof com.passway.app > native-smoke/pid.txt
-            adb shell uiautomator dump /sdcard/passway-window.xml
-            adb pull /sdcard/passway-window.xml native-smoke/ui.xml
-            adb exec-out screencap -p > native-smoke/screen.png
-            adb logcat -d > native-smoke/logcat.txt
-            python3 -c "import pathlib,re; p=pathlib.Path('native-smoke'); ui=(p/'ui.xml').read_text(); logs=(p/'logcat.txt').read_text(); assert (p/'pid.txt').read_text().strip(); assert re.search(r'meet someone|your phone number|real moments',ui,re.I), 'Expected onboarding UI did not render'; assert not re.search(r'FATAL EXCEPTION|Fatal signal|ANR in com.passway.app',logs); (p/'passed.txt').write_text('Fresh native Android build and signed-out cold-start smoke passed. Synthetic demo config; no production backend or App Check attestation proof. No SMS sent.\n')"
-      - name: Record honest native scope
+            python3 harness/isolated_coordinator.py
+      - name: Record exact scope and fresh success marker
         if: always()
         run: |
-          echo '# Fresh-source Android compilation and onboarding smoke' >> "$GITHUB_STEP_SUMMARY"
+          tail -n 70 native-results/firebase-emulators.log 2>/dev/null || true
+          tail -n 40 native-results/isolated-api.log 2>/dev/null || true
+          echo '# Current-source isolated native two-user E2E' >> "$GITHUB_STEP_SUMMARY"
           cat validation/architecture-provenance.json >> "$GITHUB_STEP_SUMMARY"
-          echo 'Synthetic demo Firebase config; unreachable API endpoint; locally diagnostic-signed APK. Not a production-signed two-user E2E or Play Integrity proof. No SMS, API deployment or billing change.' >> "$GITHUB_STEP_SUMMARY"
-          test ! -f native-smoke/passed.txt || cat native-smoke/passed.txt >> "$GITHUB_STEP_SUMMARY"
+          echo 'Test-only emulator routing/cleartext overlay; demo-passway Auth and Firestore; original candidate HTTP handlers. No production service, SMS, attestation or physical-device proof. No live patches or implicit reruns.' >> "$GITHUB_STEP_SUMMARY"
+          python3 - <<'PYTHON'
+          import json,os,pathlib
+          p=pathlib.Path('native-results')
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:
+           for row in json.loads((p/'results.json').read_text()) if (p/'results.json').exists() else []:out.write('- '+row['status']+' '+row['test']+' — '+row.get('detail','')+'\n')
+           out.write('\nNative flow PASSED\n' if (p/'complete.json').exists() and json.loads((p/'coordinator-result.json').read_text()).get('passed') else '\nNative flow NOT PASSED\n')
+          PYTHON
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
-          name: fresh-native-smoke-evidence
-          path: native-smoke
+          name: isolated-current-native-evidence
+          path: native-results
           retention-days: 3
+          if-no-files-found: warn
+
+  signed-store-bundle:
+    if: ${{ inputs.mode == 'signed-release' }}
+    name: Signed store bundle validation (not a device test or rollout)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    environment: passway-store-signing
+    env:
+      CI: '1'
+      EAS_BUILD_PROFILE: play-attestation
+      EXPO_PUBLIC_APP_CHECK: 'on'
+      EXPO_PUBLIC_DIAGNOSTICS: '0'
+      EXPO_PUBLIC_SHOW_TEST_NUMBERS: '0'
+      EXPO_PUBLIC_OTP_PROVIDER: 2factor
+      EXPO_PUBLIC_API_URL: https://passway-api.vercel.app
+      JAVA_TOOL_OPTIONS: -Xmx768m
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Verify immutable source snapshot
+        run: |
+          sha256sum -c validation/architecture-source.sha256
+          mkdir validation-source signed-results
+          tar -xzf validation/architecture-source.tar.gz -C validation-source
+          cp validation/architecture-provenance.json signed-results/source-provenance.json
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            validation-source/passway-app/package-lock.json
+            validation-source/passway-app/functions/package-lock.json
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@48b5f213c81028ace310571dc5ec0fbbca0b2947
+        with:
+          cache-read-only: true
+      - name: Materialize existing app-scoped signing credential privately
+        env:
+          SIGNING_SECRET: ${{ secrets.PASSWAY_ANDROID_SIGNING }}
+          GOOGLE_CONFIG_SECRET: ${{ secrets.PASSWAY_GOOGLE_SERVICES_JSON }}
+        run: |
+          python3 - <<'PYTHON'
+          import os,json,base64,pathlib
+          private=pathlib.Path(os.environ['RUNNER_TEMP'])/'passway-private'
+          private.mkdir(mode=0o700)
+          signing=json.loads(os.environ['SIGNING_SECRET'])
+          for k in ['keystorePassword','keyAlias','keyPassword']:
+           value=signing[k]
+           assert isinstance(value,str) and value and '\n' not in value and '\r' not in value
+           print('::add-mask::'+value)
+          google=json.loads(os.environ['GOOGLE_CONFIG_SECRET'])
+          assert google['project_info']['project_id']=='passway-2ddc8'
+          assert any(c['client_info']['android_client_info']['package_name']=='com.passway.app' for c in google['client'])
+          (private/'upload.jks').write_bytes(base64.b64decode(signing.pop('keystoreBase64'),validate=True))
+          (private/'signing.json').write_text(json.dumps(signing))
+          (private/'google-services.json').write_text(json.dumps(google))
+          for p in private.iterdir():p.chmod(0o600)
+          with open(os.environ['GITHUB_ENV'],'a') as out:
+           out.write('PASSWAY_KEYSTORE_PATH='+str(private/'upload.jks')+'\n')
+           out.write('PASSWAY_SIGNING_JSON='+str(private/'signing.json')+'\n')
+           out.write('GOOGLE_SERVICES_JSON='+str(private/'google-services.json')+'\n')
+          PYTHON
+      - name: Install pinned dependencies and run application regression
+        working-directory: validation-source/passway-app
+        run: |
+          npm ci
+          npm ci --prefix functions
+          npm run test:mobile
+          npm run typecheck
+          npm run typecheck --prefix functions
+          npx --no-install expo prebuild --platform android --clean --no-install
+      - name: Bind signed candidate metadata to immutable source
+        working-directory: validation-source/passway-app
+        run: |
+          npx --no-install expo config --type public --json > "$RUNNER_TEMP/passway-release-config.json"
+          python3 ../../harness/release_metadata.py "$RUNNER_TEMP/passway-release-config.json" ../../signed-results/source-provenance.json ../../signed-results/release-metadata.json
+      - name: Configure the existing upload signer without persisting passwords in build files
+        run: |
+          python3 -m unittest discover -s harness/tests -p test_signed_build.py -v
+          python3 harness/configure_store_signing.py validation-source/passway-app/android/app/build.gradle
+      - name: Compile hardened signed store bundle on enterprise runner
+        working-directory: validation-source/passway-app/android
+        run: |
+          chmod +x gradlew
+          ./gradlew :app:bundleRelease --no-build-cache --no-configuration-cache --max-workers=2 -Dorg.gradle.jvmargs='-Xmx4g -XX:MaxMetaspaceSize=1g'
+          ./gradlew --stop
+          cp app/build/outputs/bundle/release/app-release.aab ../../../signed-results/passway-release.aab
+      - name: Verify signer and compiled native security settings
+        run: |
+          curl --fail --location --max-time 120 -o "$RUNNER_TEMP/bundletool.jar" https://github.com/google/bundletool/releases/download/1.18.3/bundletool-all-1.18.3.jar
+          echo "a099cfa1543f55593bc2ed16a70a7c67fe54b1747bb7301f37fdfd6d91028e29  $RUNNER_TEMP/bundletool.jar" | sha256sum -c -
+          jarsigner -verify signed-results/passway-release.aab
+          keytool -printcert -jarfile signed-results/passway-release.aab -rfc | openssl x509 -noout -fingerprint -sha256 > signed-results/upload-signer.txt
+          grep -Fq '98:15:DF:C7:D9:03:55:59:F2:18:9C:B0:0C:06:1D:F7:22:B8:DB:E8:8B:09:2F:62:79:DE:78:2A:3F:FE:3A:CC' signed-results/upload-signer.txt
+          java -jar "$RUNNER_TEMP/bundletool.jar" validate --bundle=signed-results/passway-release.aab > signed-results/bundle-validation.txt
+          java -jar "$RUNNER_TEMP/bundletool.jar" dump manifest --bundle=signed-results/passway-release.aab > signed-results/AndroidManifest.xml
+          python3 - <<'PYTHON'
+          import xml.etree.ElementTree as E,pathlib
+          root=E.parse('signed-results/AndroidManifest.xml').getroot()
+          a='{http://schemas.android.com/apk/res/android}';app=root.find('application')
+          assert root.attrib['package']=='com.passway.app'
+          metadata=__import__('json').loads(pathlib.Path('signed-results/release-metadata.json').read_text())
+          assert root.attrib[a+'versionCode']==str(metadata['versionCode'])
+          assert root.attrib[a+'versionName']==metadata['versionName']
+          assert app.attrib.get(a+'debuggable','false')=='false'
+          assert app.attrib.get(a+'allowBackup')=='false'
+          assert app.attrib.get(a+'usesCleartextTraffic','false')=='false'
+          assert a+'dataExtractionRules' in app.attrib and a+'fullBackupContent' in app.attrib
+          permissions={n.attrib[a+'name'] for n in root.findall('uses-permission')}
+          assert not permissions & {'android.permission.SYSTEM_ALERT_WINDOW','android.permission.READ_EXTERNAL_STORAGE','android.permission.WRITE_EXTERNAL_STORAGE','android.permission.READ_SMS','android.permission.READ_CONTACTS'}
+          assert 'FirebaseAppCheckRegistrar' in pathlib.Path('signed-results/AndroidManifest.xml').read_text()
+          print('Compiled release security assertions passed.')
+          PYTHON
+          sha256sum signed-results/passway-release.aab > signed-results/artifact.sha256
+          echo 'Signed internal-testing artifact only. No Play installation, positive attestation, real SMS, backend cutover or public rollout is claimed.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Remove ephemeral signing material
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/passway-private"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: success()
+        with:
+          name: passway-signed-candidate
+          path: signed-results
+          retention-days: 3
+          if-no-files-found: error
+
+  play-api-access:
+    if: ${{ inputs.mode == 'play-api-check' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    environment: passway-play-internal
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Test keyless authentication and cleanup boundaries
+        run: python3 -m unittest discover -s harness/tests -p 'test_play_api_access.py' -v
+      - name: Verify keyless Play access without uploading or changing a release
+        run: python3 harness/play_api_access.py --output play-api-access.json
+      - name: Upload sanitized access evidence only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: passway-keyless-play-access
+          path: play-api-access.json
+          retention-days: 14
+          if-no-files-found: ignore
+
+  internal-candidate:
+    if: ${{ inputs.mode == 'internal-candidate' }}
+    name: Publish verified candidate to internal testing ONLY
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: passway-play-internal
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PASSWAY_SIGNED_RUN_ID: ${{ inputs.candidate_run_id }}
+      PASSWAY_NATIVE_RUN_ID: ${{ inputs.native_run_id }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Verify release boundaries before cloud mutation
+        run: python3 -m unittest discover -s harness/tests -p test_internal_release.py -v
+      - name: Require exact-source acceptance and publish internal candidate
+        run: python3 harness/internal_release.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: internal-candidate-release-result
+          path: internal-release-result.json
+          retention-days: 3
+          if-no-files-found: error
+
+  store-apk-download:
+    if: ${{ inputs.mode == 'store-apk-download' }}
+    name: Download verified Google Play-signed APK for physical testing
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: passway-play-internal
+    env:
+      PASSWAY_STORE_VERSION_CODE: ${{ inputs.store_version_code }}
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Verify read-only APK selection boundaries
+        run: python3 -m unittest discover -s harness/tests -p test_store_apk_download.py -v
+      - name: Download only the registered Google Play-signed universal APK
+        run: python3 harness/download_store_apk.py --version-code "$PASSWAY_STORE_VERSION_CODE"
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '25'
+      - name: Verify actual Android APK signature and package version
+        run: |
+          tools=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1 | xargs dirname)
+          "$tools/apksigner" verify --verbose --print-certs store-apk-results/passway-store-signed.apk > store-apk-results/apk-signature.txt
+          grep -iq '5f97b4bfe27bdbf3aade7fd1e2e7b323cfdde1cd8d7feaa536ea1db31ef963f2' store-apk-results/apk-signature.txt
+          "$tools/aapt2" dump badging store-apk-results/passway-store-signed.apk > store-apk-results/apk-badging.txt
+          python3 - <<'PYTHON'
+          import hashlib,json,pathlib,sys
+          sys.path.insert(0,'harness')
+          from download_store_apk import verify_badging
+          p=pathlib.Path('store-apk-results')
+          metadata=json.loads((p/'download-verification.json').read_text())
+          assert metadata['package']=='com.passway.app'
+          assert hashlib.sha256((p/'passway-store-signed.apk').read_bytes()).hexdigest()==metadata['sha256']
+          verify_badging((p/'apk-badging.txt').read_text(),metadata['versionCode'])
+          PYTHON
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: google-play-signed-physical-device-apk
+          path: store-apk-results
+          retention-days: 3
+          if-no-files-found: error
+
+  store-release-offline-ui:
+    if: ${{ inputs.mode == 'store-release-offline-ui' }}
+    name: Actual Play-signed APK offline UI acceptance (not Store attestation)
+    permissions:
+      contents: read
+      actions: read
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PASSWAY_RESULTS: ${{ github.workspace }}/store-ui-results
+      PASSWAY_STORE_DOWNLOAD_RUN_ID: ${{ inputs.store_download_run_id }}
+      PASSWAY_STORE_VERSION_CODE: ${{ inputs.store_version_code }}
+      PASSWAY_STORE_APK_SHA256: ${{ inputs.store_apk_sha256 }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Harness unit tests
+        run: python3 -m unittest discover -s harness/tests -v
+      - name: Require trusted completed Play download and exact APK bytes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 harness/acquire_store_evidence.py
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '25'
+      - name: Reverify actual APK signature and compile independent UI probe
+        run: |
+          set -eu
+          tools=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1 | xargs dirname)
+          "$tools/apksigner" verify --verbose --print-certs store-apk-results/passway-store-signed.apk > store-ui-results/actual-apk-signature.txt
+          grep -iq '5f97b4bfe27bdbf3aade7fd1e2e7b323cfdde1cd8d7feaa536ea1db31ef963f2' store-ui-results/actual-apk-signature.txt
+          "$tools/aapt2" dump badging store-apk-results/passway-store-signed.apk > store-ui-results/actual-apk-badging.txt
+          PYTHONPATH=harness python3 - <<'PY'
+          import os
+          from download_store_apk import verify_badging
+          verify_badging(open('store-ui-results/actual-apk-badging.txt').read(),int(os.environ['PASSWAY_STORE_VERSION_CODE']))
+          PY
+          keytool -genkeypair -keystore debug.keystore -storepass android -keypass android -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 30 -dname 'CN=Offline Release UI Probe,O=Internal Test,C=IN'
+          bash harness/probe/build_isolated.sh
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Exercise unchanged signed release offline with accessibility font scales
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
+        with:
+          api-level: 35
+          arch: x86_64
+          target: google_apis
+          profile: pixel_2
+          avd-name: passway-store-offline
+          ram-size: 3072M
+          cores: 2
+          enable-hw-keyboard: false
+          disable-animations: true
+          disable-spellchecker: true
+          emulator-boot-timeout: 480
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot -camera-back none -camera-front none -skin 540x1200 -memory 3072
+          pre-emulator-launch-script: PASSWAY_AVD_NAME=passway-store-offline python3 harness/configure_avd.py
+          script: |
+            set -eu
+            adb install --no-incremental -r store-apk-results/passway-store-signed.apk
+            adb install --no-incremental -r harness/probe/probe.apk
+            adb logcat -c
+            python3 harness/store_release_smoke.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: actual-play-release-offline-ui-evidence
+          path: store-ui-results
+          retention-days: 3
+          if-no-files-found: error
+  internal-sharing-candidate:
+    if: ${{ inputs.mode == 'internal-sharing-candidate' }}
+    name: Private opt-in immutable canary (no release-track change)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: passway-play-internal
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Test strict immutable handoff and private delivery boundaries
+        run: |
+          python3 -m unittest discover -s harness/tests -p 'test*.py' -v
+          node --test harness/tests/sms_acceptance_checks.test.cjs
+      - name: Upload accepted bundle without changing release tracks
+        run: python3 harness/internal_sharing.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: private-internal-sharing-delivery
+          path: |
+            internal-sharing-result.json
+            internal-sharing-delivery.encrypted.json
+            internal-sharing-error.encrypted.json
+          retention-days: 3
+          if-no-files-found: error
+
+  public-release-preflight:
+    if: ${{ inputs.mode == 'public-release-preflight' }}
+    name: Validate public candidate without committing a release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    environment: passway-play-internal
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Verify temporary edit and no publication boundaries
+        run: python3 -m unittest discover -s harness/tests -p test_public_release_preflight.py -v
+      - name: Validate verified existing bundle for public release without commit
+        run: python3 harness/public_release_preflight.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: public-release-preflight
+          path: public-release-preflight.json
+          retention-days: 14
+          if-no-files-found: error
+
+  prepare-public-draft:
+    if: ${{ inputs.mode == 'prepare-public-draft' }}
+    name: Save verified production draft and accurate store text without public rollout
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    environment: passway-play-internal
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Verify exact candidate, draft only and review boundaries
+        run: python3 -m unittest discover -s harness/tests -p 'test_public_release*.py' -v
+      - name: Save owner requested production draft without submitting for review
+        run: python3 harness/public_release_draft.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: public-release-draft
+          path: public-release-draft.json
+          retention-days: 14
+          if-no-files-found: error

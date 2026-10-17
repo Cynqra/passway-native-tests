@@ -1,0 +1,15 @@
+{
+  "sourceCommit": "5f89b86fa1862b8566666de3749bd170aa458436",
+  "scope": "Synthetic preview HTTP requests including cold starts/network/Auth/Firestore; not native or production latency SLO",
+  "requestCount": 67,
+  "p50Milliseconds": 1018,
+  "p95Milliseconds": 2865,
+  "maximumMilliseconds": 3545,
+  "cleanup": {
+    "scope": "Disposable synthetic fixture cleanup only, not production retention code",
+    "milliseconds": 13237,
+    "messageDeleteBatchCount": 3,
+    "maximumWritesPerBatch": 200
+  },
+  "caution": "Synthetic guarded preview only; includes network, cold starts, Firebase and extra allowlist token verification. Not a production/native SLO or causal speedup comparison."
+}
