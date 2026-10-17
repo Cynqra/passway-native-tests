@@ -1,9 +1,9 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "ea06c8e8a75d7f082f99582114c7276710d66db8",
-  "sourceTree": "64bf19c0292dce3507feba88186b2d34682dde07",
-  "archiveSha256": "6fe6086a7bf319fefadbc4a4f66373fa4de9398c80f7be230677d44db606f551",
-  "createdAt": "2026-10-17T20:17:07.924458+00:00",
-  "scope": "Unpublished 0.3.10 code16 adds explicit versioned use-rules acceptance, server-owned idempotent consent and transaction enforcement before pairing/message creation, plus phone verification processing disclosure. Consent-capable client must be available before stricter backend promotion. Fresh signed/native/architecture/static gates pending. Public track remains version15 draft; no public rollout.",
-  "fullTrackedSourceArchive": true
+  "sourceCommit": "736d469c5b7b36be52bc31f2975431c38eb920e4",
+  "sourceTree": "4bf0e62ff9cc6365692c83e374f54489b7ff8340",
+  "archiveSha256": "8aca64d8749b27b1edb866142343ee41e6120a42462f19723d6d27715b1b7abe",
+  "createdAt": "2026-10-17T21:57:58.806542+00:00",
+  "fullTrackedSourceArchive": true,
+  "scope": "Backend-only authorization patch: both-party consent revalidated at redemption/acceptance/recovery; recipient and person-block preflight before moderation, with commit rechecks retained. Client source/config/dependency lockfiles unchanged from signed version16 source ea06c8e8a75d7f082f99582114c7276710d66db8. Existing signed16 bundle is not rebuilt or replaced. Fresh exact-source native/architecture checks pending; production remains managed-publishing hold; no SMS/positive Store attestation claim."
 }
