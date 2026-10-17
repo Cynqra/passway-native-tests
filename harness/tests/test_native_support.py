@@ -2,6 +2,7 @@ import importlib.util
 import pathlib
 import sys
 import types
+import xml.etree.ElementTree as ET
 import unittest
 from contextlib import contextmanager
 from unittest import mock
@@ -14,7 +15,7 @@ def noop_deadline(_seconds):
     yield
 
 
-def load(resolver="No activity found", user="0", activity="mResumedActivity: external.mail/.Composer"):
+def load(resolver="No activity found", user="0", activity="mResumedActivity: external.mail/.Composer", foreground="external.mail"):
     calls, checks = [], []
     def shell(*args):
         calls.append(args)
@@ -27,6 +28,7 @@ def load(resolver="No activity found", user="0", activity="mResumedActivity: ext
         calls.append(("wait", selector))
         return {"text": "Email support at Limerencetechnologies@gmail.com." if selector == "support-error" else "Limerencetechnologies@gmail.com"}
     driver = types.SimpleNamespace(
+        dump=lambda _label="current": ET.fromstring('<hierarchy><node package="'+foreground+'" visible-to-user="true" text="Welcome" /></hierarchy>'),
         shell=shell, tap=lambda value: calls.append(("tap", value)),
         waitfor=waitfor, find=lambda _s: {"enabled": "true"},
         back=lambda: calls.append(("back",)), deadline=noop_deadline,
@@ -58,13 +60,25 @@ class NativeSupportTests(unittest.TestCase):
         self.assertEqual(len(checks), 3)
 
     def test_resolver_alone_is_not_native_handoff_proof(self):
-        module, calls, checks = load("external.mail/.Composer", activity="mResumedActivity: com.passway.app/.MainActivity")
+        module, calls, checks = load("external.mail/.Composer", activity="mResumedActivity: com.passway.app/.MainActivity", foreground="com.passway.app")
         with self.assertRaises(TimeoutError):
             self.run_support(module, checks)
         self.assertFalse(checks)
 
     def test_unrelated_foreground_app_is_not_mail_handoff_proof(self):
-        module, calls, checks = load("external.mail/.Composer", activity="mResumedActivity: unrelated.launcher/.Home")
+        module, calls, checks = load("external.mail/.Composer", activity="mResumedActivity: unrelated.launcher/.Home", foreground="unrelated.launcher")
+        with self.assertRaises(TimeoutError):
+            self.run_support(module, checks)
+        self.assertFalse(checks)
+
+    def test_actual_mail_ui_is_proof_without_legacy_activity_field(self):
+        module, calls, checks = load("com.google.android.gm/.ComposeActivityGmail", activity="topResumedActivity: different field", foreground="com.google.android.gm")
+        self.run_support(module, checks)
+        self.assertTrue(all(ok for _, ok in checks))
+        self.assertFalse(any(args[:1] == ("dumpsys",) for args in calls))
+
+    def test_activity_claim_cannot_override_wrong_visible_package(self):
+        module, calls, checks = load("external.mail/.Composer", foreground="unrelated.launcher")
         with self.assertRaises(TimeoutError):
             self.run_support(module, checks)
         self.assertFalse(checks)

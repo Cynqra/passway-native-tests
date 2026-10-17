@@ -1,7 +1,7 @@
 """Support UI only. Never sends an email or includes real account information."""
 import re
 import time
-from driver import shell, tap, waitfor, find, back, deadline, remaining_timeout
+from driver import shell, tap, waitfor, find, back, dump, deadline, remaining_timeout
 
 EMAIL = "Limerencetechnologies@gmail.com"
 
@@ -30,9 +30,14 @@ def verify_support(ctx):
         # Observe an actual foreground handoff, never infer it from a resolver.
         with deadline(20):
             while True:
-                activity = shell("dumpsys", "activity", "activities")
-                resumed = re.findall(r"mResumedActivity[^\r\n]+", activity)
-                if resumed and expected_package + "/" in resumed[-1]:
+                tree = dump("support-handoff")
+                visible_packages = {
+                    node.get("package") for node in tree.iter("node")
+                    if node.get("visible-to-user") == "true" and node.get("package")
+                }
+                # The native foreground hierarchy is direct evidence. Android
+                # activity dump field names vary across OS releases and users.
+                if expected_package in visible_packages:
                     break
                 time.sleep(remaining_timeout(.5))
         check("Native support mail intent hands off without sending email", True)
