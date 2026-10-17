@@ -10,7 +10,7 @@ def reason_from_error(status,raw):
     try:text=json.loads(raw).get('error',{}).get('message','').lower()
     except (ValueError,AttributeError,TypeError):text=''
     if not isinstance(text,str):text=''
-    groups=[('APP_SETUP_REQUIRED',('only releases with status draft','draft app')),('PRODUCTION_ACCESS_REQUIRED',('production access','access to production')),('PRODUCTION_PERMISSION_REQUIRED',('permission','not authorized','not authorised')),('STORE_DECLARATIONS_REQUIRED',('declaration','privacy policy','data safety','content rating','target audience')),('STORE_LISTING_REQUIRED',('store listing','listing','screenshots','short description','full description')),('REVIEW_REQUIRED',('sent for review','send for review','changesnotsentforreview'))]
+    groups=[('APP_SETUP_REQUIRED',('only releases with status draft','draft app')),('PRODUCTION_ACCESS_REQUIRED',('production access','access to production')),('AUTHORIZATION_OR_ACCOUNT_RESTRICTION',('permission','not authorized','not authorised')),('STORE_DECLARATIONS_REQUIRED',('declaration','privacy policy','data safety','content rating','target audience')),('STORE_LISTING_REQUIRED',('store listing','listing','screenshots','short description','full description')),('REVIEW_REQUIRED',('sent for review','send for review','changesnotsentforreview'))]
     return {'httpStatus':status,'requirement':next((name for name,patterns in groups if any(p in text for p in patterns)),'GOOGLE_VALIDATION_REJECTED')}
 
 def verified_candidate(call,edit):
