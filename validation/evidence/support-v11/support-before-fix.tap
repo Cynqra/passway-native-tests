@@ -1,0 +1,288 @@
+✖ phone disclosure includes authentication and abuse prevention without peer disclosure (1.894402ms)
+✖ both phone and settings screens use the same truthful phone disclosure (2.507703ms)
+✖ support address is the approved public contact (0.328722ms)
+✖ email action contains no phone, UID, logs, or message body (0.295052ms)
+✖ opening support invokes the email application once (0.43957ms)
+✖ missing email application returns useful contact without leaking exception details (0.29878ms)
+✖ native email invocation has a bounded deadline (0.294127ms)
+✖ same-render rapid support taps open only one email intent (116.23361ms)
+✖ failed email intent shows the address and releases for explicit retry (27.372447ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 0
+ℹ fail 9
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 472.832888
+
+✖ failing tests:
+
+test at test/support-disclosure.test.cjs:22:1
+✖ phone disclosure includes authentication and abuse prevention without peer disclosure (1.894402ms)
+  Error: ENOENT: no such file or directory, open 'src/services/support.ts'
+      at Object.readFileSync (node:fs:440:20)
+      at support (/data/passway-release-gates/source/passway-app/test/support-disclosure.test.cjs:10:44)
+      at TestContext.<anonymous> (/data/passway-release-gates/source/passway-app/test/support-disclosure.test.cjs:23:13)
+      at Test.runInAsyncScope (node:async_hooks:228:14)
+      at Test.run (node:internal/test_runner/test:1118:25)
+      at Test.start (node:internal/test_runner/test:1015:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:358:17) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'src/services/support.ts'
+  }
+
+test at test/support-disclosure.test.cjs:28:1
+✖ both phone and settings screens use the same truthful phone disclosure (2.507703ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /\{PHONE_USE_DISCLOSURE\}/. Input:
+  
+  "import { errorMessage } from '../../../services/errors';\n" +
+    "import { useRef, useState } from 'react';\n" +
+    "import { View, Text, StyleSheet } from 'react-native';\n" +
+    "import FormScreen from '../../../components/FormScreen';\n" +
+    "import { useNavigation } from '@react-navigation/native';\n" +
+    "import type { NativeStackNavigationProp } from '@react-navigation/native-stack';\n" +
+    "import type { AuthStackParamList } from '../../../navigation/types';\n" +
+    "import { beginPhoneSignIn, usesTwoFactorSms, type PhoneConfirmation } from '../api/phoneAuth';\n" +
+    "import { colors } from '../../../theme/colors';\n" +
+    "import LabeledField from '../../../components/LabeledField';\n" +
+    "import Button from '../../../components/Button';\n" +
+    "import HeroIllustration from '../../../components/HeroIllustration';\n" +
+    "import TrustLine from '../../../components/TrustLine';\n" +
+    "import Brand from '../../../components/Brand';\n" +
+    "import { diagnosticsEnabled } from '../../../services/diagnostics';\n" +
+    '\n' +
+    '// Passway is only open to Indian numbers for now. Accepts 98765 43210,\n' +
+    '// 098765 43210 or +91 98765 43210 and returns +919876543210.\n' +
+    'export function indianNumber(input: string): string | null {\n' +
+    "  let digits = input.replace(/\\D/g, '');\n" +
+    "  if (digits.length === 12 && digits.startsWith('91')) digits = digits.slice(2);\n" +
+    "  else if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);\n" +
+    '  return /^[6-9]\\d{9}$/.test(digits) ? `+91${digits}` : null;\n' +
+    '}\n' +
+    '\n' +
+    'export default function PhoneAuthScreen() {\n' +
+    '  const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();\n' +
+    "  const [phone, setPhone] = useState('');\n" +
+    "  const [code, setCode] = useState('');\n" +
+    '  const [confirmation, setConfirmation] = useState<PhoneConfirmation | null>(null);\n' +
+    '  const authInFlight = useRef(false);\n' +
+    '  const [loading, setLoading] = useState(false);\n' +
+    '  const [error, setError] = useState<string | null>(null);\n' +
+    '\n' +
+    '  async function handleSendCode() {\n' +
+    '    if (authInFlight.current || loading) return;\n' +
+    '    const number = indianNumber(phone);\n' +
+    '    if (!number) {\n' +
+    "      setError('Enter a 10 digit Indian mobile number');\n" +
+    '      return;\n' +
+    '    }\n' +
+    '    authInFlight.current = true;\n' +
+    '    setLoading(true);\n' +
+    '    setError(null);\n' +
+    '    try {\n' +
+    '      // 2Factor verifies server-side; Firebase SMS remains available by build setting.\n' +
+    '      const result = await beginPhoneSignIn(number);\n' +
+    '      setConfirmation(result);\n' +
+    "      setCode('');\n" +
+    '    } catch (err: unknown) {\n' +
+    "      setError(errorMessage(err, 'Could not send a code. Check the number and try again.'));\n" +
+    '    } finally {\n' +
+    '      authInFlight.current = false;\n' +
+    '      setLoading(false);\n' +
+    '    }\n' +
+    '  }\n' +
+    '\n' +
+    '  async function handleVerifyCode() {\n' +
+    '    if (authInFlight.current || loading) return;\n' +
+    '    if (!confirmation || !/^\\d{6}$/.test(code.trim())) {\n' +
+    "      setError('Enter the 6 digit code');\n" +
+    '      return;\n' +
+    '    }\n' +
+    '    authInFlight.current = true;\n' +
+    '    setLoading(true);\n' +
+    '    setError(null);\n' +
+    '    try {\n' +
+    '      await confirmation.confirm(code.trim());\n' +
+    '      // Auth state flips on success, RootNavigator is listening and\n' +
+    '      // swaps this screen out for the main stack on its own.\n' +
+    '    } catch (err: unknown) {\n' +
+    "      setError(errorMessage(err, 'That code did not match. Try again.'));\n" +
+    '    } finally {\n' +
+    '      authInFlight.current = false;\n' +
+    '      setLoading(false);\n' +
+    '    }\n' +
+    '  }\n' +
+    '\n' +
+    '  return (\n' +
+    '    <FormScreen header={<View style={styles.top}><Brand /></View>}>\n' +
+    '        <HeroIllustration scene="choose" compact />\n' +
+    '        {!confirmation ? (\n' +
+    '          <>\n' +
+    '            <Text style={styles.title} accessibilityRole="header">Your phone number</Text>\n' +
+    '            <Text style={styles.helper}>Used only to sign in. It is never shown to anyone you connect with.</Text>\n' +
+    '            {diagnosticsEnabled && <Text style={styles.hint}>Internal diagnostic build: crash reports and screen/keyboard timing help investigate freezing. Phone numbers and chat text are not added to diagnostic logs.</Text>}\n' +
+    "            {!usesTwoFactorSms && process.env.EXPO_PUBLIC_SHOW_TEST_NUMBERS === '1' && (\n" +
+    `              <Text style={styles.hint} testID="test-numbers">{'Trying the preview? Use 99999 00001 or 99999 00002 with the code 123456.'}</Text>\n` +
+    '            )}\n' +
+    '            <LabeledField label="Indian mobile number (+91)" placeholder="98765 43210" keyboardType="phone-pad" textContentType="telephoneNumber" autoComplete="tel" returnKeyType="done" onSubmitEditing={handleSendCode} testID="phone-input" value={phone} onChangeText={setPhone} />\n' +
+    '            {error && <Text accessibilityRole="alert" style={styles.error}>{error}</Text>}\n' +
+    '            <Button label="Send code" onPress={handleSendCode} loading={loading} testID="send-code" />\n' +
+    '            <TrustLine label="Never shown to people you connect with." />\n' +
+    '            <Text style={styles.notice}>Passway is for people aged 18 and over.</Text>\n' +
+    `            <Button label="How Passway works" variant="ghost" onPress={() => navigation.navigate('Welcome')} testID="how-it-works" />\n` +
+    '          </>\n' +
+    '        ) : (\n' +
+    '          <>\n' +
+    '            <Text style={styles.title} accessibilityRole="header">Enter the code</Text>\n' +
+    '            <Text style={styles.helper}>{`We sent a 6 digit code to ${phone.trim()}`}</Text>\n' +
+    `            <LabeledField label="verification code" placeholder="123456" keyboardType="number-pad" textContentType="oneTimeCode" autoComplete="sms-otp" returnKeyType="done" onSubmitEditing={handleVerifyCode} testID="verify-input" value={code} onChangeText={(v) => setCode(v.replace(/\\D/g, ''))} maxLength={6} />\n` +
+    '            {error && <Text accessibilityRole="alert" style={styles.error}>{error}</Text>}\n' +
+    '            <Button label="Verify" onPress={handleVerifyCode} loading={loading} testID="verify" />\n' +
+    '            <Button label="Send another code" variant="secondary" onPress={handleSendCode} disabled={loading} />\n' +
+    `            <Button label="Use another number" variant="ghost" disabled={loading} onPress={() => { if (authInFlight.current) return; setConfirmation(null); setCode(''); setError(null); }} />\n` +
+    '          </>\n' +
+    '        )}\n' +
+    '    </FormScreen>\n' +
+    '  );\n' +
+    '}\n' +
+    '\n' +
+    'const styles = StyleSheet.create({\n' +
+    "  top: { minHeight: 44, justifyContent: 'center' },\n" +
+    "  title: { fontFamily: 'Passway-Bold', fontSize: 32, color: colors.textPrimary, textAlign: 'left', letterSpacing: -0.8 },\n" +
+    "  helper: { fontFamily: 'Passway-Regular', fontSize: 15, color: colors.textSecondary, textAlign: 'left', maxWidth: 420, lineHeight: 22, marginBottom: 8 },\n" +
+    "  hint: { fontFamily: 'Passway-Regular', fontSize: 14, color: colors.gold, textAlign: 'left', maxWidth: 420, lineHeight: 19, backgroundColor: colors.accentBg, padding: 12, borderRadius: 12, overflow: 'hidden' },\n" +
+    "  error: { fontFamily: 'Passway-Regular', fontSize: 14, color: colors.danger, alignSelf: 'flex-start' },\n" +
+    "  notice: { fontFamily: 'Passway-Regular', fontSize: 14, color: colors.textMuted, textAlign: 'left' },\n" +
+    '});\n'
+  
+      at TestContext.<anonymous> (/data/passway-release-gates/source/passway-app/test/support-disclosure.test.cjs:31:12)
+      at Test.runInAsyncScope (node:async_hooks:228:14)
+      at Test.run (node:internal/test_runner/test:1118:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:787:18)
+      at Test.postRun (node:internal/test_runner/test:1247:19)
+      at Test.run (node:internal/test_runner/test:1175:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'import { errorMessage } from \'../../../services/errors\';\nimport { useRef, useState } from \'react\';\nimport { View, Text, StyleSheet } from \'react-native\';\nimport FormScreen from \'../../../components/FormScreen\';\nimport { useNavigation } from \'@react-navigation/native\';\nimport type { NativeStackNavigationProp } from \'@react-navigation/native-stack\';\nimport type { AuthStackParamList } from \'../../../navigation/types\';\nimport { beginPhoneSignIn, usesTwoFactorSms, type PhoneConfirmation } from \'../api/phoneAuth\';\nimport { colors } from \'../../../theme/colors\';\nimport LabeledField from \'../../../components/LabeledField\';\nimport Button from \'../../../components/Button\';\nimport HeroIllustration from \'../../../components/HeroIllustration\';\nimport TrustLine from \'../../../components/TrustLine\';\nimport Brand from \'../../../components/Brand\';\nimport { diagnosticsEnabled } from \'../../../services/diagnostics\';\n\n// Passway is only open to Indian numbers for now. Accepts 98765 43210,\n// 098765 43210 or +91 98765 43210 and returns +919876543210.\nexport function indianNumber(input: string): string | null {\n  let digits = input.replace(/\\D/g, \'\');\n  if (digits.length === 12 && digits.startsWith(\'91\')) digits = digits.slice(2);\n  else if (digits.length === 11 && digits.startsWith(\'0\')) digits = digits.slice(1);\n  return /^[6-9]\\d{9}$/.test(digits) ? `+91${digits}` : null;\n}\n\nexport default function PhoneAuthScreen() {\n  const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();\n  const [phone, setPhone] = useState(\'\');\n  const [code, setCode] = useState(\'\');\n  const [confirmation, setConfirmation] = useState<PhoneConfirmation | null>(null);\n  const authInFlight = useRef(false);\n  const [loading, setLoading] = useState(false);\n  const [error, setError] = useState<string | null>(null);\n\n  async function handleSendCode() {\n    if (authInFlight.current || loading) return;\n    const number = indianNumber(phone);\n    if (!number) {\n      setError(\'Enter a 10 digit Indian mobile number\');\n      return;\n    }\n    authInFlight.current = true;\n    setLoading(true);\n    setError(null);\n    try {\n      // 2Factor verifies server-side; Firebase SMS remains available by build setting.\n      const result = await beginPhoneSignIn(number);\n      setConfirmation(result);\n      setCode(\'\');\n    } catch (err: unknown) {\n      setError(errorMessage(err, \'Could not send a code. Check the number and try again.\'));\n    } finally {\n      authInFlight.current = false;\n      setLoading(false);\n    }\n  }\n\n  async function handleVerifyCode() {\n    if (authInFlight.current || loading) return;\n    if (!confirmation || !/^\\d{6}$/.test(code.trim())) {\n      setError(\'Enter the 6 digit code\');\n      return;\n    }\n    authInFlight.current = true;\n    setLoading(true);\n    setError(null);\n    try {\n      await confirmation.confirm(code.trim());\n      // Auth state flips on success, RootNavigator is listening and\n      // swaps this screen out for the main stack on its own.\n    } catch (err: unknown) {\n      setError(errorMessage(err, \'That code did not match. Try again.\'));\n    } finally {\n      authInFlight.current = false;\n      setLoading(false);\n    }\n  }\n\n  return (\n    <FormScreen header={<View style={styles.top}><Brand /></View>}>\n        <HeroIllustration scene="choose" compact />\n        {!confirmation ? (\n          <>\n            <Text style={styles.title} accessibilityRole="header">Your phone number</Text>\n            <Text style={styles.helper}>Used only to sign in. It is never shown to anyone you connect with.</Text>\n            {diagnosticsEnabled && <Text style={styles.hint}>Internal diagnostic build: crash reports and screen/keyboard timing help investigate freezing. Phone numbers and chat text are not added to diagnostic logs.</Text>}\n            {!usesTwoFactorSms && process.env.EXPO_PUBLIC_SHOW_TEST_NUMBERS === \'1\' && (\n              <Text style={styles.hint} testID="test-numbers">{\'Trying the preview? Use 99999 00001 or 99999 00002 with the code 123456.\'}</Text>\n            )}\n            <LabeledField label="Indian mobile number (+91)" placeholder="98765 43210" keyboardType="phone-pad" textContentType="telephoneNumber" autoComplete="tel" returnKeyType="done" onSubmitEditing={handleSendCode} testID="phone-input" value={phone} onChangeText={setPhone} />\n            {error && <Text accessibilityRole="alert" style={styles.error}>{error}</Text>}\n            <Button label="Send code" onPress={handleSendCode} loading={loading} testID="send-code" />\n            <TrustLine label="Never shown to people you connect with." />\n            <Text style={styles.notice}>Passway is for people aged 18 and over.</Text>\n            <Button label="How Passway works" variant="ghost" onPress={() => navigation.navigate(\'Welcome\')} testID="how-it-works" />\n          </>\n        ) : (\n          <>\n            <Text style={styles.title} accessibilityRole="header">Enter the code</Text>\n            <Text style={styles.helper}>{`We sent a 6 digit code to ${phone.trim()}`}</Text>\n            <LabeledField label="verification code" placeholder="123456" keyboardType="number-pad" textContentType="oneTimeCode" autoComplete="sms-otp" returnKeyType="done" onSubmitEditing={handleVerifyCode} testID="verify-input" value={code} onChangeText={(v) => setCode(v.replace(/\\D/g, \'\'))} maxLength={6} />\n            {error && <Text accessibilityRole="alert" style={styles.error}>{error}</Text>}\n            <Button label="Verify" onPress={handleVerifyCode} loading={loading} testID="verify" />\n            <Button label="Send another code" variant="secondary" onPress={handleSendCode} disabled={loading} />\n            <Button label="Use another number" variant="ghost" disabled={loading} onPress={() => { if (authInFlight.current) return; setConfirmation(null); setCode(\'\'); setError(null); }} />\n          </>\n        )}\n    </FormScreen>\n  );\n}\n\nconst styles = StyleSheet.create({\n  top: { minHeight: 44, justifyContent: \'center\' },\n  title: { fontFamily: \'Passway-Bold\', fontSize: 32, color: colors.textPrimary, textAlign: \'left\', letterSpacing: -0.8 },\n  helper: { fontFamily: \'Passway-Regular\', fontSize: 15, color: colors.textSecondary, textAlign: \'left\', maxWidth: 420, lineHeight: 22, marginBottom: 8 },\n  hint: { fontFamily: \'Passway-Regular\', fontSize: 14, color: colors.gold, textAlign: \'left\', maxWidth: 420, lineHeight: 19, backgroundColor: colors.accentBg, padding: 12, borderRadius: 12, overflow: \'hidden\' },\n  error: { fontFamily: \'Passway-Regular\', fontSize: 14, color: colors.danger, alignSelf: \'flex-start\' },\n  notice: { fontFamily: \'Passway-Regular\', fontSize: 14, color: colors.textMuted, textAlign: \'left\' },\n});\n',
+    expected: /\{PHONE_USE_DISCLOSURE\}/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at test/support-disclosure.test.cjs:35:1
+✖ support address is the approved public contact (0.328722ms)
+  Error: ENOENT: no such file or directory, open 'src/services/support.ts'
+      at Object.readFileSync (node:fs:440:20)
+      at support (/data/passway-release-gates/source/passway-app/test/support-disclosure.test.cjs:10:44)
+      at TestContext.<anonymous> (/data/passway-release-gates/source/passway-app/test/support-disclosure.test.cjs:36:16)
+      at Test.runInAsyncScope (node:async_hooks:228:14)
+      at Test.run (node:internal/test_runner/test:1118:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:787:18)
+      at Test.postRun (node:internal/test_runner/test:1247:19)
+      at Test.run (node:internal/test_runner/test:1175:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'src/services/support.ts'
+  }
+
+test at test/support-disclosure.test.cjs:38:1
+✖ email action contains no phone, UID, logs, or message body (0.295052ms)
+  Error: ENOENT: no such file or directory, open 'src/services/support.ts'
+      at Object.readFileSync (node:fs:440:20)
+      at support (/data/passway-release-gates/source/passway-app/test/support-disclosure.test.cjs:10:44)
+      at TestContext.<anonymous> (/data/passway-release-gates/source/passway-app/test/support-disclosure.test.cjs:39:13)
+      at Test.runInAsyncScope (node:async_hooks:228:14)
+      at Test.run (node:internal/test_runner/test:1118:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:787:18)
+      at Test.postRun (node:internal/test_runner/test:1247:19)
+      at Test.run (node:internal/test_runner/test:1175:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'src/services/support.ts'
+  }
+
+test at test/support-disclosure.test.cjs:45:1
+✖ opening support invokes the email application once (0.43957ms)
+  Error: ENOENT: no such file or directory, open 'src/services/support.ts'
+      at Object.readFileSync (node:fs:440:20)
+      at support (/data/passway-release-gates/source/passway-app/test/support-disclosure.test.cjs:10:44)
+      at TestContext.<anonymous> (/data/passway-release-gates/source/passway-app/test/support-disclosure.test.cjs:46:13)
+      at Test.runInAsyncScope (node:async_hooks:228:14)
+      at Test.run (node:internal/test_runner/test:1118:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:787:18)
+      at Test.postRun (node:internal/test_runner/test:1247:19)
+      at Test.run (node:internal/test_runner/test:1175:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'src/services/support.ts'
+  }
+
+test at test/support-disclosure.test.cjs:51:1
+✖ missing email application returns useful contact without leaking exception details (0.29878ms)
+  Error: ENOENT: no such file or directory, open 'src/services/support.ts'
+      at Object.readFileSync (node:fs:440:20)
+      at support (/data/passway-release-gates/source/passway-app/test/support-disclosure.test.cjs:10:44)
+      at TestContext.<anonymous> (/data/passway-release-gates/source/passway-app/test/support-disclosure.test.cjs:52:13)
+      at Test.runInAsyncScope (node:async_hooks:228:14)
+      at Test.run (node:internal/test_runner/test:1118:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:787:18)
+      at Test.postRun (node:internal/test_runner/test:1247:19)
+      at Test.run (node:internal/test_runner/test:1175:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'src/services/support.ts'
+  }
+
+test at test/support-disclosure.test.cjs:58:1
+✖ native email invocation has a bounded deadline (0.294127ms)
+  Error: ENOENT: no such file or directory, open 'src/services/support.ts'
+      at Object.readFileSync (node:fs:440:20)
+      at support (/data/passway-release-gates/source/passway-app/test/support-disclosure.test.cjs:10:44)
+      at TestContext.<anonymous> (/data/passway-release-gates/source/passway-app/test/support-disclosure.test.cjs:60:13)
+      at Test.runInAsyncScope (node:async_hooks:228:14)
+      at Test.run (node:internal/test_runner/test:1118:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:787:18)
+      at Test.postRun (node:internal/test_runner/test:1247:19)
+      at Test.run (node:internal/test_runner/test:1175:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'src/services/support.ts'
+  }
+
+test at test/support-disclosure.test.cjs:69:1
+✖ same-render rapid support taps open only one email intent (116.23361ms)
+  Error: Missing visible testID email-support
+      at Object.find (/data/passway-release-gates/source/passway-app/test/helpers/screen-actions.cjs:18:85)
+      at TestContext.<anonymous> (/data/passway-release-gates/source/passway-app/test/support-disclosure.test.cjs:77:19)
+      at Test.runInAsyncScope (node:async_hooks:228:14)
+      at Test.run (node:internal/test_runner/test:1118:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:787:18)
+      at Test.postRun (node:internal/test_runner/test:1247:19)
+      at Test.run (node:internal/test_runner/test:1175:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7)
+
+test at test/support-disclosure.test.cjs:84:1
+✖ failed email intent shows the address and releases for explicit retry (27.372447ms)
+  Error: Missing visible testID email-support
+      at Object.find (/data/passway-release-gates/source/passway-app/test/helpers/screen-actions.cjs:18:85)
+      at TestContext.<anonymous> (/data/passway-release-gates/source/passway-app/test/support-disclosure.test.cjs:92:11)
+      at Test.runInAsyncScope (node:async_hooks:228:14)
+      at Test.run (node:internal/test_runner/test:1118:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:787:18)
+      at Test.postRun (node:internal/test_runner/test:1247:19)
+      at Test.run (node:internal/test_runner/test:1175:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7)

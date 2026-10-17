@@ -1,0 +1,45 @@
+✔ request consent: concurrent accept/decline submits only the first intent (79.983165ms)
+✔ request failure releases the synchronous guard for an explicit retry (18.384191ms)
+✔ code cancel button and system back share one immediate operation (18.516656ms)
+✔ redeem same-render rapid taps perform one location lookup and one API call (22.427073ms)
+✔ lost redemption acknowledgement retries the same intent key; edited input rotates it (15.254133ms)
+✔ SMS send and keyboard submit share one immediate operation (12.068463ms)
+✔ verification and resend cannot execute competing same-render intents (16.407342ms)
+✔ message rapid send invokes one API request, not duplicate transport attempts (76.941382ms)
+✔ end and block share a synchronous destructive-action guard (37.522649ms)
+✔ report rapid submit writes one report and navigates once (54.597933ms)
+✔ private-note save suppresses repeated same-render writes (35.676096ms)
+✔ age continue and keyboard submit perform one eligibility request (6.897022ms)
+✔ deletion recovery does not run overlapping paginated deletion loops (7.467657ms)
+✔ profile save is a single same-render operation (10.259536ms)
+✔ settings sign-out failure is caught and rendered rather than unhandled (10.372736ms)
+✔ failed End connection releases the safety guard for an explicit retry (24.778876ms)
+✔ failed Block and end connection releases the safety guard for an explicit retry (29.262358ms)
+✔ failed Spam or a bot releases the safety guard for an explicit retry (22.124632ms)
+✔ failed message send releases guard but retains the same idempotent message identity (26.208229ms)
+✔ starting a safety action suppresses a stale send callback immediately (24.700439ms)
+✔ failed note write leaves its draft available for one explicit retry (33.916759ms)
+✔ failed SMS send releases the lock and invalid number does not consume it (6.174456ms)
+✔ resending an OTP clears the superseded code and blocks stale verification while sending (6.692946ms)
+✔ failed deletion recovery can be retried without overlapping loops (3.712735ms)
+✔ repeated Delete taps open one dialog and duplicate confirmation runs one deletion (9.648296ms)
+✔ cancelled delete confirmation releases dialog ownership without deleting anything (9.295385ms)
+✔ failed settings sign-out can retry without leaving account controls stuck (7.964209ms)
+✔ age sign-out failure is handled and eligibility guard is released (5.961693ms)
+✔ phone disclosure includes authentication and abuse prevention without peer disclosure (47.82255ms)
+✔ both phone and settings screens use the same truthful phone disclosure (0.308751ms)
+✔ support address is the approved public contact (6.976883ms)
+✔ email action contains no phone, UID, logs, or message body (5.436282ms)
+✔ opening support invokes the email application once (4.44854ms)
+✔ missing email application returns useful contact without leaking exception details (6.773639ms)
+✔ native email invocation has a bounded deadline (3.672575ms)
+✔ same-render rapid support taps open only one email intent (31.916229ms)
+✔ failed email intent shows the address and releases for explicit retry (16.681091ms)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 37
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1212.041679

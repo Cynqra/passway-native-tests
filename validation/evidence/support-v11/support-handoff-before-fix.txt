@@ -1,0 +1,34 @@
+FE.......
+======================================================================
+ERROR: test_actual_mail_ui_is_proof_without_legacy_activity_field (test_native_support.NativeSupportTests.test_actual_mail_ui_is_proof_without_legacy_activity_field)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/data/passway-release-gates/harness/harness/tests/test_native_support.py", line 76, in test_actual_mail_ui_is_proof_without_legacy_activity_field
+    self.run_support(module, checks)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/data/passway-release-gates/harness/harness/tests/test_native_support.py", line 46, in run_support
+    module.verify_support({"check": lambda name, ok: checks.append((name, ok)), "snap": lambda _label: None})
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/passway-release-gates/harness/harness/native_support_journey.py", line 37, in verify_support
+    time.sleep(remaining_timeout(.5))
+               ~~~~~~~~~~~~~~~~~^^^^
+  File "/data/passway-release-gates/harness/harness/tests/test_native_support.py", line 35, in <lambda>
+    remaining_timeout=lambda _seconds: (_ for _ in ()).throw(TimeoutError("bounded handoff")),
+                                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/passway-release-gates/harness/harness/tests/test_native_support.py", line 35, in <genexpr>
+    remaining_timeout=lambda _seconds: (_ for _ in ()).throw(TimeoutError("bounded handoff")),
+TimeoutError: bounded handoff
+
+======================================================================
+FAIL: test_activity_claim_cannot_override_wrong_visible_package (test_native_support.NativeSupportTests.test_activity_claim_cannot_override_wrong_visible_package)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/data/passway-release-gates/harness/harness/tests/test_native_support.py", line 82, in test_activity_claim_cannot_override_wrong_visible_package
+    with self.assertRaises(TimeoutError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+AssertionError: TimeoutError not raised
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.004s
+
+FAILED (failures=1, errors=1)
