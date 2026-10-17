@@ -14,7 +14,10 @@ class PublicDraftTests(unittest.TestCase):
    if url.endswith('/bundles'):return {'bundles':[{'versionCode':13,'sha256':'wrong' if variant=='hash' else BUNDLE_SHA}]}
    if url.endswith('/details'):return {'defaultLanguage':'bad/locale' if variant=='locale' else 'en-US'}
    if url.endswith('/listings'):return {'listings':[]}
-   if '/images/' in url:return {'images':[]}
+   if '/images/' in url:
+    if variant=='official-schema':raise SafeError('Synthetic official schema 404')
+    return {'images':[]}
+   if any(url.endswith('/listings/en-US/'+kind) for kind in ['icon','featureGraphic','phoneScreenshots']):return {'images':[]}
    if '/listings/en-US' in url and method=='PUT':
     if variant=='listing-error':raise SafeError('Synthetic listing failure')
     return {}
@@ -47,3 +50,8 @@ class PublicDraftTests(unittest.TestCase):
   r,c=self.execute('commit');self.assertFalse(r['draftCommitted']);self.assertFalse(r['publicProductionRollout']);self.assertEqual(sum(':commit' in x[0] for x in c),1)
  def test_store_copy_is_bounded_and_does_not_invent_security_guarantees(self):
   self.assertLessEqual(len(m.SHORT),80);self.assertLessEqual(len(m.FULL),4000);self.assertIn('up to 72 hours',m.FULL);self.assertIn('reported content',m.FULL);self.assertIn('Limerencetechnologies@gmail.com',m.FULL);self.assertNotIn('end to end encrypted',m.FULL.lower());self.assertNotIn('bug free',m.FULL.lower())
+
+ def test_image_inventory_uses_official_discovery_routes(self):
+  r,c=self.execute('official-schema');self.assertTrue(r['draftCommitted'])
+  observed=[u for u,method,body in c if method=='GET' and any(k in u for k in ['icon','featureGraphic','phoneScreenshots'])]
+  self.assertEqual(observed,[m.PUBLISHER+'/123/listings/en-US/'+k for k in ['icon','featureGraphic','phoneScreenshots']])
