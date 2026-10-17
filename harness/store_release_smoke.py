@@ -2,12 +2,11 @@
 import hashlib
 import json
 import pathlib
+import os
 import re
 import time
 
 PACKAGE = 'com.passway.app'
-VERSION = 8
-DIGEST = '6bcc69919bed10d4e1178ff96abd9eda52cdc84a9f708bee8637567b92f4e63c'
 
 
 class StartupEnvironmentBlocked(RuntimeError):
@@ -63,24 +62,79 @@ def wait_for_release_onboarding(read_tree, locate, read_process_log, seconds=60,
     raise TimeoutError('Actual Play release did not reach onboarding within its deadline')
 
 
-def verify_download(directory, expected_digest=DIGEST):
-    directory = pathlib.Path(directory)
-    metadata = json.loads((directory / 'download-verification.json').read_text())
-    apk = directory / 'passway-store-signed.apk'
-    if (metadata.get('package') != PACKAGE
-        or type(metadata.get('versionCode')) is not int
-        or metadata['versionCode'] != VERSION
-        or metadata.get('sha256') != expected_digest
-        or hashlib.sha256(apk.read_bytes()).hexdigest() != expected_digest
-        or metadata.get('bytes') != apk.stat().st_size):
-        raise ValueError('Actual Play release artifact binding failed')
-    return metadata
 
+def validate_store_inputs(run_id, version, digest):
+    if (not isinstance(run_id, str) or not re.fullmatch(r"[1-9][0-9]{0,19}", run_id)
+        or not isinstance(version, str) or not re.fullmatch(r"[1-9][0-9]{0,9}", version)
+        or int(version) > 2100000000
+        or not isinstance(digest, str) or not re.fullmatch(r"[a-f0-9]{64}", digest)):
+        raise ValueError("Explicit numeric download run, version and exact SHA256 required")
+    return run_id, int(version), digest
+
+
+def verify_download_run(run, current_sha):
+    if (not isinstance(run, dict) or not isinstance(current_sha, str)
+        or not re.fullmatch(r"[a-f0-9]{40}", current_sha)
+        or run.get('status') != 'completed' or run.get('conclusion') != 'success'
+        or run.get('event') != 'workflow_dispatch' or run.get('head_sha') != current_sha
+        or run.get('head_branch') != 'validation/isolated-current-native'
+        or run.get('path') != '.github/workflows/passway-fresh-native-smoke.yml'
+        or run.get('head_repository', {}).get('full_name') != 'Cynqra/passway-native-tests'):
+        raise ValueError("Play download must match trusted completed workflow and current revision")
+
+
+def verify_download(directory, expected_digest, expected_version):
+    directory = pathlib.Path(directory)
+    metadata_path = directory / "download-verification.json"
+    apk_path = directory / "passway-store-signed.apk"
+
+    if not isinstance(expected_digest, str) or not re.fullmatch(r"[0-9a-f]{64}", expected_digest):
+        raise ValueError("expected_digest must be a lowercase SHA256 hex string")
+    if type(expected_version) is not int or not (1 <= expected_version <= 2100000000):
+        raise ValueError("expected_version must be a real int in 1..2100000000")
+
+    try:
+        metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        raise ValueError("failed to read metadata") from exc
+
+    if not isinstance(metadata, dict):
+        raise ValueError("metadata must be an object")
+    if metadata.get("package") != "com.passway.app":
+        raise ValueError("metadata package mismatch")
+
+    meta_version = metadata.get("versionCode")
+    if type(meta_version) is not int or meta_version != expected_version:
+        raise ValueError("metadata versionCode mismatch")
+
+    meta_digest = metadata.get("sha256")
+    if not isinstance(meta_digest, str) or meta_digest != expected_digest:
+        raise ValueError("metadata sha256 mismatch")
+
+    meta_size = metadata.get("bytes")
+    if type(meta_size) is not int or meta_size <= 0:
+        raise ValueError("metadata bytes must be a positive real int")
+
+    actual_size = apk_path.stat().st_size
+    if not 0 < actual_size <= 150 * 1024 * 1024:
+        raise ValueError("APK size outside accepted bound")
+    actual_digest = hashlib.sha256(apk_path.read_bytes()).hexdigest()
+    if actual_digest != expected_digest:
+        raise ValueError("APK sha256 mismatch")
+
+    if meta_size != actual_size:
+        raise ValueError("metadata bytes does not match actual APK size")
+
+    return metadata
 
 def main():
     # Importing test helpers must never start a phone interaction.
     from driver import ROOT, adb, shell, dump, find, tap, fill, waitfor, shot, record, deadline
-    verify_download('store-apk-results')
+    _, expected_version, expected_digest = validate_store_inputs(
+        os.environ.get('PASSWAY_STORE_DOWNLOAD_RUN_ID', ''),
+        os.environ.get('PASSWAY_STORE_VERSION_CODE', ''),
+        os.environ.get('PASSWAY_STORE_APK_SHA256', ''))
+    verify_download('store-apk-results', expected_digest, expected_version)
     (ROOT / 'store-release-complete.json').unlink(missing_ok=True)
     (ROOT / 'startup-environment-blocker.json').unlink(missing_ok=True)
     passed = False
@@ -146,8 +200,8 @@ def main():
                   bool(shell('pidof', PACKAGE).strip()))
         passed = True
         (ROOT / 'store-release-complete.json').write_text(json.dumps({
-            'passed': True, 'package': PACKAGE, 'versionCode': VERSION,
-            'apkSha256': DIGEST, 'fontScales': [1.0, 1.3, 2.0],
+            'passed': True, 'package': PACKAGE, 'versionCode': expected_version,
+            'apkSha256': expected_digest, 'fontScales': [1.0, 1.3, 2.0],
             'scope': 'Actual unmodified Play-signed APK installed by ADB on an offline emulator',
             'storeInstallationVerified': False, 'positiveAttestationVerified': False,
             'authenticatedTwoUserFlowTested': False, 'realSmsSent': False,
