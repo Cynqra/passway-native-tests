@@ -23,3 +23,13 @@ The attempted merge was blocked by an unresolved review conversation, not failin
 Version11 has NOT been merged or published. All 9b426fc native/signed results are now superseded acceptance for the changed source, preserved here as historical evidence rather than inherited. Corrected-source fresh runs: Android14 39012090085, Android16 39012091066, signed39012092202, architecture39012093928, static39012095861. They use harness b11fefb and the archive recorded in final-app-provenance.json.
 
 Independent production rejection probes passed26/26. Latest registry tags are still node-forge1.4.0 and braces3.0.3, with no newer official releases observed. The raw audit reports21 high package findings derived from the two exact reviewed advisories; local file-hash-bound remediation and complete upstream conformance pass. This is not a clean registry audit. Backend production audit reports zero vulnerabilities.
+
+## Corrected candidate accepted and published internally
+
+Corrected source f8d734a passed fresh Android14 run39012090085 and Android16 run39012091066,84/84 native assertions on each OS, single immutable attempt each. Native coordinator durations were910.71s and974.70s. Local isolated Firebase and original candidate HTTP handlers were used; these are not production native attestation or SMS tests.
+
+Architecture39012093928 and static security39012095861 passed. The exact signed bundle39012092202 passed with actual SHA256 f9ac5215cf86cf2e2df1104a351462c11bb6bde67083063e0dd1c41a1b9310b8. Source PR16 merged normally as de905467a1fcb12cbddb5f0ae7b0717c307e96e1, after resolving the addressed review conversation. The merged tree equals the accepted candidate tree. Required merged-main checks39013726793 passed. No branch protections were bypassed or weakened.
+
+Protected keyless internal publication39013727117 SUCCEEDED. Version11 /0.3.5 is on INTERNAL testing only with the verified bundle hash. This is not a public production rollout. Read-only Google Play-signed APK download39013926618 is pending.
+
+Release remains blocked on genuine licensed Play-installed positive attestation and physical/native production acceptance, current real-SMS acceptance and remaining factual Play policy declarations. Browser private-input availability failed before credential submission; repeating credentials is not a diagnosed fix. Raw upstream build-tool advisories remain visible despite tested installed-code mitigations; do not describe registry audit as clean. No new SMS was sent, no email was sent, no paid plan was enabled.

@@ -1,0 +1,8 @@
+{
+  "package": "com.passway.app",
+  "versionCode": 11,
+  "versionName": "0.3.5",
+  "sourceCommit": "f8d734a73e10757d4f48aa8c080b52ba3910ccdb",
+  "sourceArchiveSha256": "cef6da2f7de51df27c24b1575977e5f9c8983a274bdb488cd7c821db86baf6fb",
+  "scope": "Signed candidate only; no store installation, attestation or rollout proof"
+}
