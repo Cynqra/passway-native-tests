@@ -4,10 +4,14 @@ on:
   push:
     paths:
       - 'harness/**'
+      - 'validation/architecture-source*'
+      - 'validation/architecture-provenance.json'
       - '.github/workflows/passway-harness-unit.yml'
   pull_request:
     paths:
       - 'harness/**'
+      - 'validation/architecture-source*'
+      - 'validation/architecture-provenance.json'
       - '.github/workflows/passway-harness-unit.yml'
 permissions:
   contents: read
