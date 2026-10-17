@@ -31,3 +31,23 @@ class BoundedWorkloadGuardTests(unittest.TestCase):
 
     def test_application_default_credentials_rejected(self):
         self.rejects({"GOOGLE_APPLICATION_CREDENTIALS": "/nonexistent/test-key.json"})
+class BoundedVerifiedPhoneFixtureTests(unittest.TestCase):
+    def test_fixture_claims_are_valid_unique_and_bounded(self):
+        source = SCRIPT.read_text()
+        start = source.index('const syntheticPhone=')
+        end = source.index('const call=', start)
+        script = source[start:end] + """
+const assert=require('node:assert/strict');
+const phones=[];
+for(let i=0;i<16;i++)for(const side of ['a','b'])phones.push(syntheticPhone('bounded-'+side+i));
+assert.equal(new Set(phones).size,32);
+for(const phone of phones)assert.match(phone,/^\\+[1-9]\\d{1,14}$/);
+assert.throws(()=>syntheticPhone('production-user'),/Unknown workload fixture/);
+"""
+        result = subprocess.run(['node', '-e', script], capture_output=True, text=True, timeout=5)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_workload_supplies_explicit_synthetic_verified_phone_context(self):
+        source = SCRIPT.read_text()
+        self.assertIn('auth:{uid,token:{phone_number:syntheticPhone(uid)}}', source)
+        self.assertLess(source.index('Local demo-only guard failed'), source.index('const syntheticPhone='))

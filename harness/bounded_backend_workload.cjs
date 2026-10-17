@@ -10,7 +10,9 @@ const {sendMessage,getMessages}=require(app+'/lib/handlers/messages');
 const {blockUser}=require(app+'/lib/handlers/reports');
 const {deleteAccount}=require(app+'/lib/handlers/accounts');
 const {getApps}=req('firebase-admin/app');const {performance}=require('node:perf_hooks');
-const call=(fn,uid,data)=>fn.run({auth:{uid},data});const db=firebase.db;
+// Synthetic verified-phone fixtures exist only behind the strict local demo guard above.
+const syntheticPhone=uid=>{const m=/^bounded-([ab])(\d+)$/.exec(uid);if(!m)throw Error('Unknown workload fixture');return '+1555555'+String(Number(m[2])*2+(m[1]==='b'?1:0)).padStart(4,'0');};
+const call=(fn,uid,data)=>fn.run({auth:{uid,token:{phone_number:syntheticPhone(uid)}},data});const db=firebase.db;
 const out={sourceCommit:source.sourceCommit,scope:'Bounded in-process handler workload against local Firestore emulator. Not HTTP, native-device, production capacity, SMS or attestation proof.',pairs:16,syntheticParticipants:32,uniqueMessageIntents:160,sendCallsIncludingReplays:320,checks:[],latencyMs:{}};
 function check(name,condition){assert.ok(condition,name);out.checks.push({name,pass:true});}
 function quantiles(xs){xs.sort((a,b)=>a-b);return{samples:xs.length,p50:Math.round(xs[Math.ceil(xs.length*.5)-1]*100)/100,p95:Math.round(xs[Math.ceil(xs.length*.95)-1]*100)/100,max:Math.round(xs[xs.length-1]*100)/100};}

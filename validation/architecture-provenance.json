@@ -1,8 +1,9 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "be255691b121653db0b0b6840378a54cc46c2d68",
-  "archiveSha256": "e0e91ddfe01b23bf668950dd58b8dad7b22389c4744c003ea83fdeaa4b6847ab",
-  "createdAt": "2026-10-17T11:58:57.352574+00:00",
-  "scope": "Gemini Argon High bounded optional startup resume fix; authoritative account gating unchanged. Four regression failures before,29startup and231mobile tests pass after. Native verification pending.",
+  "sourceCommit": "78db0cbaaa35b4be27db354947073a43f2434445",
+  "sourceTree": "f0d16573c547d13198110f21ca08326a8201579d",
+  "archiveSha256": "885f025ba0eb39142472867cf6a3e4cd73d918b12f3205c33d9414be195189bb",
+  "createdAt": "2026-10-17T14:00:12.635432+00:00",
+  "scope": "Current verified phone policy enforcement; four failing reproductions fixed; 109 new unit cases and ten real transaction regressions. Local and source CI pass. Native acceptance pending.",
   "fullTrackedSourceArchive": true
 }
