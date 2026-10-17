@@ -14,6 +14,14 @@ def run(ctx, peer):
  user, ready, hide, snap, check = (ctx[x] for x in ['user','ready_generate','hide_keyboard','snap','check'])
  previous={uid:shell('settings','--user',uid,'get','system','font_scale').strip() for uid in [0,peer]}
  try:
+  for cycle in range(3):
+   shell('wm','size','reset')
+   for uid in [0,peer]:shell('settings','--user',uid,'put','system','font_scale','1.0')
+   user(0);ready()
+   shell('wm','size','440x880')
+   for uid in [0,peer]:shell('settings','--user',uid,'put','system','font_scale','2.0')
+   user(0);ready()
+   record(f'Configuration cycle {cycle+1} completed','PASS','Cycle validated')
   shell('wm','size','440x880')
   for uid in [0,peer]:shell('settings','--user',uid,'put','system','font_scale','2.0')
   observed=shell('wm','size');(ROOT/'accessibility-display.txt').write_text(observed)
