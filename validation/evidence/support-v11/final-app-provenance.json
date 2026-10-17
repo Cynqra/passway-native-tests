@@ -1,0 +1,8 @@
+{
+  "sourceRepository": "naveenbharti310/Paasway",
+  "sourceCommit": "f8d734a73e10757d4f48aa8c080b52ba3910ccdb",
+  "archiveSha256": "cef6da2f7de51df27c24b1575977e5f9c8983a274bdb488cd7c821db86baf6fb",
+  "createdAt": "2026-10-17T07:01:29.801479+00:00",
+  "scope": "Version0.3.5/code11 support and complete phone-use purposes, including age eligibility. Supersedes 9b426fc; all fresh native/signed/source gates required. No production SMS or attestation proof.",
+  "fullTrackedSourceArchive": true
+}

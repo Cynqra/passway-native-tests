@@ -1,0 +1,43 @@
+✔ phone disclosure includes authentication and abuse prevention without peer disclosure (66.216702ms)
+✖ phone-derived eligibility enforcement is disclosed before a number is supplied (8.056266ms)
+✔ both phone and settings screens use the same truthful phone disclosure (0.399752ms)
+✔ support address is the approved public contact (6.280357ms)
+✔ email action contains no phone, UID, logs, or message body (9.846766ms)
+✔ opening support invokes the email application once (6.047961ms)
+✔ missing email application returns useful contact without leaking exception details (5.693307ms)
+✔ native email invocation has a bounded deadline (8.440556ms)
+✔ same-render rapid support taps open only one email intent (40.073414ms)
+✔ failed email intent shows the address and releases for explicit retry (21.867726ms)
+✔ actual settings handler reaches native Linking through the real support helper (28.688693ms)
+✔ native Linking rejection is caught through the real screen and helper (30.67353ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 11
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 581.833549
+
+✖ failing tests:
+
+test at test/support-disclosure.test.cjs:28:1
+✖ phone-derived eligibility enforcement is disclosed before a number is supplied (8.056266ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /enforce age eligibility/. Input:
+  
+  'Your phone number is used to sign in and help prevent abuse. It is not shown to people you connect with.'
+  
+      at TestContext.<anonymous> (/data/passway-release-gates/source/passway-app/test/support-disclosure.test.cjs:29:10)
+      at Test.runInAsyncScope (node:async_hooks:228:14)
+      at Test.run (node:internal/test_runner/test:1118:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:787:18)
+      at Test.postRun (node:internal/test_runner/test:1247:19)
+      at Test.run (node:internal/test_runner/test:1175:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'Your phone number is used to sign in and help prevent abuse. It is not shown to people you connect with.',
+    expected: /enforce age eligibility/,
+    operator: 'match',
+    diff: 'simple'
+  }

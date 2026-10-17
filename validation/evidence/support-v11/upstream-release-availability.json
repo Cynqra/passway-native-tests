@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-17T06:51:09.556Z",
+  "rows": [
+    {
+      "package": "node-forge",
+      "latest": "1.4.0"
+    },
+    {
+      "package": "braces",
+      "latest": "3.0.3"
+    }
+  ],
+  "scope": "Public npm dist-tags only. No official patched release inferred. Local hash-bound remediations and raw advisories remain separately recorded."
+}
