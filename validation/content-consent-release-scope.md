@@ -1,0 +1,7 @@
+# Version 16 validation boundary
+
+Candidate 0.3.10 code16 is the exact source pinned in architecture-provenance.json. It adds affirmative versioned use-rules acceptance and server-owned consent metadata. The isolated API exposes the original consent handler. Service preflight proves unaccepted pairing is denied, then accepts through the original authenticated handler. Native automation must tap the actual acceptance control and independently read back the saved version and timestamp. It does not forge acceptance through Admin writes. The parallel workload also accepts through the actual handler before sending.
+
+Source CI passed mobile, backend, Firestore rules and real transaction regressions, dependency remediation and export checks before merging. Raw npm advisory state is not claimed clean. Earlier version15 API34/API35/API36 results are compatibility evidence for version15 only, not native evidence for this candidate.
+
+Fresh version16 signed, native, architecture and static-security gates are required. Keep the previous backend live until the consent-capable internal client is available. A new protected backend candidate must pass negative security probes before promotion. Public release remains blocked until all genuine platform and positive production acceptance requirements are satisfied. No emulator security bypass, real SMS, global release, paid subscription or billing change is authorized by this harness update.

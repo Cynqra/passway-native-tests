@@ -69,6 +69,10 @@ def ready_generate():
          'We store your eligibility result.' in texts(t) and 'we also keep the date you turn 18.' in texts(t))
    snap('native-age-disclosure')
    fill('age-day','01');fill('age-month','01');fill('age-year','1990');hide_keyboard();tap('age-continue')
+  elif find('Passway use rules',t) is not None or find('accept-use-rules',t) is not None:
+   check('Native content gate appears before connecting',find('generate',t) is None and find('message-input',t) is None)
+   snap('native-use-rules-before-acceptance')
+   tap('accept-use-rules')
   elif find('new-connection',t) is not None:tap('new-connection')
   elif find('chat-back',t) is not None:tap('chat-back')
   elif find('Go back',t) is not None:tap('Go back')
@@ -78,12 +82,18 @@ def ready_generate():
   else:time.sleep(2)
  raise RuntimeError('Generate form not reached')
 
+def verify_policy_saved(phone):
+ from native_extended_journeys import fixture
+ profile=fixture([phone])['profiles'][0]
+ check('Native accepted content policy persists for fictional identity '+phone[-1],
+       profile['contentPolicyVersion']=='2026-10-17.1' and isinstance(profile['contentPolicyAcceptedAt'],(int,float)) and profile['contentPolicyAcceptedAt']>0)
+
 def login(uid,phone,audit=False):
  user(uid)
  until=time.monotonic()+90
  while time.monotonic()<until:
   t=dump()
-  if any(find(k,t) is not None for k in ['welcome-next','phone-input','new-connection','generate','age-day','code-box-0','message-input','cancel-code']):break
+  if any(find(k,t) is not None for k in ['welcome-next','phone-input','new-connection','generate','age-day','Passway use rules','accept-use-rules','code-box-0','message-input','cancel-code']):break
   time.sleep(2)
  else:raise RuntimeError('Native cold-start timeout')
  if find('phone-input',t) is None and find('welcome-next',t) is None:
@@ -105,7 +115,7 @@ def login(uid,phone,audit=False):
   fill('verify-input','000000' if emulator_otp(phone)!='000000' else '111111');hide_keyboard();tap('verify');time.sleep(3);t=snap('wrong-otp')
   check('Native wrong OTP rejected',find('verify-input',t) is not None and ('did not match' in texts(t).lower() or 'invalid' in texts(t).lower()),texts(t))
  fill('verify-input',emulator_otp(phone));hide_keyboard();tap('verify');time.sleep(4)
- ready_generate();snap('user'+str(uid)+'-signed-in');record('Native Firebase sign-in user'+str(uid),'PASS')
+ ready_generate();verify_policy_saved(phone);snap('user'+str(uid)+'-signed-in');record('Native Firebase sign-in user'+str(uid),'PASS')
 
 try:
  import threading

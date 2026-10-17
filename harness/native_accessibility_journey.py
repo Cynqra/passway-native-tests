@@ -35,6 +35,13 @@ def run(ctx, peer):
   check('Native full four-character code stays on one visible line',visible_single_line(tree,'code-text',120))
   user(peer);ready();tap('have-code');waitfor('code-box-0');fill('code-box-0',code);fill('name-input','Accessibility Peer Very Long');hide();tap('connect');waitfor('Waiting for them to accept',45)
   user(0)
+  identity_tree=snap('accessibility-large-request-identity')
+  identity=find('Accessibility Peer Very Long',identity_tree)
+  heading=find('Request',identity_tree)
+  ib=list(map(int,re.findall(r'-?\d+',identity.get('bounds','')))) if identity else []
+  hb=list(map(int,re.findall(r'-?\d+',heading.get('bounds','')))) if heading else []
+  check('Native large-text full requester identity is visible before decision scrolling',
+        identity is not None and identity.get('visible-to-user')=='true' and len(ib)==4 and len(hb)==4 and 0<=ib[0]<ib[2]<=440 and hb[3]<=ib[1]<ib[3]<=880)
   for _ in range(8):
    tree=dump();node=find('accept',tree)
    if node is not None and node.get('visible-to-user')=='true' and node.get('enabled')=='true':break
