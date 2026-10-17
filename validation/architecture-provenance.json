@@ -1,9 +1,9 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "fd9baeb7aa44cc0c17e683e8a68cdb2ea4c18c5e",
-  "sourceTree": "2a49a203a641a79d3b043686f7ed36970659498e",
-  "archiveSha256": "99944daf8756d0a6bc58001b2a1b12ecf8a3d77d451867fcd81c494ea9972e57",
-  "createdAt": "2026-10-17T14:32:47.826804+00:00",
-  "scope": "Unpublished version 0.3.7 code 13; merged verified phone participation policy and rendered account-scoped safety disclosure. Fresh native and signed acceptance pending.",
+  "sourceCommit": "afb759a6d441a24a40d8eb0c70e9199f05025e9e",
+  "sourceTree": "e2e7e8a0de446795f9b2ebb8ec388d967ebaddde",
+  "archiveSha256": "872c521b6056ae4ea48c277aeb8ae07d139e11f59b0922704ffeeac15e64115f",
+  "createdAt": "2026-10-17T17:52:09.791030+00:00",
+  "scope": "Unpublished candidate 0.3.8 code14: official Firebase reviewer accounts without disabling release verification. Backend functions unchanged. Fresh native and signed acceptance pending. Existing code13 production draft is not public.",
   "fullTrackedSourceArchive": true
 }
