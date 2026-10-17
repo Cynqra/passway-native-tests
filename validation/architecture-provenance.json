@@ -1,8 +1,8 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "bbdfe0735cedc07c5a401ae147cb9abe76f2e6e1",
-  "archiveSha256": "addea431c5714824d5bc678a3fc3a4f0fde66e9877092305c6384a77a6fb40ed",
-  "createdAt": "2026-10-16T20:01:41.919565+00:00",
-  "scope": "Shared maintenance lease, immediate failure retry, abandoned owner recovery, real transaction regressions. Prior Android and signed artifacts are not acceptance for this revision.",
+  "sourceCommit": "9b426fcc7e86efc5876a439286b431ac05467896",
+  "archiveSha256": "601c5ff00298b055e3d0071cb3b6630589687fd7ad91249e8e2865a9df5dd9bd",
+  "createdAt": "2026-10-17T06:08:16.090127+00:00",
+  "scope": "Version0.3.5/code11 truthful phone-use disclosure and bounded support contact. Requires fresh native and signed acceptance; prior version10 results are historical only. No production attestation or real SMS proof.",
   "fullTrackedSourceArchive": true
 }

@@ -69,6 +69,8 @@ def run(ctx, peer):
           fixture([a])["profiles"][0]["displayName"] == "Native Persisted Name")
     tap("Connect"); ready(); tap("You"); waitfor("settings-name")
     check("Native profile rename survives navigation", find("settings-name")["text"] == "Native Persisted Name")
+    from native_support_journey import verify_support
+    verify_support(ctx)
     tap("Connect"); ready()
 
     code = generate(); tap("cancel-code"); waitfor("generate", 30)
