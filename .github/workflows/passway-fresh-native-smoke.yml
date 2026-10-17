@@ -12,6 +12,7 @@ on:
           - isolated-extended
           - signed-release
           - play-api-check
+          - public-release-preflight
           - internal-candidate
           - internal-sharing-candidate
           - store-apk-download
@@ -542,4 +543,29 @@ jobs:
             internal-sharing-delivery.encrypted.json
             internal-sharing-error.encrypted.json
           retention-days: 3
+          if-no-files-found: error
+
+  public-release-preflight:
+    if: ${{ inputs.mode == 'public-release-preflight' }}
+    name: Validate public candidate without committing a release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    environment: passway-play-internal
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Verify temporary edit and no publication boundaries
+        run: python3 -m unittest discover -s harness/tests -p test_public_release_preflight.py -v
+      - name: Validate verified existing bundle for public release without commit
+        run: python3 harness/public_release_preflight.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: public-release-preflight
+          path: public-release-preflight.json
+          retention-days: 14
           if-no-files-found: error
