@@ -43,7 +43,7 @@ def prepare_draft(token,request=send):
         path=PUBLISHER+'/'+edit+'/listings/'+urllib.parse.quote(locale,safe='')
         call(path,method='PUT',body={'language':locale,'title':'Passway','shortDescription':SHORT,'fullDescription':FULL})
         report['listingLanguage']=locale
-        report['imageCounts']={kind:len(call(path+'/images/'+kind).get('images',[])) for kind in ['icon','featureGraphic','phoneScreenshots']}
+        report['imageCounts']={kind:len(call(path+'/'+kind).get('images',[])) for kind in ['icon','featureGraphic','phoneScreenshots']}
         call(PUBLISHER+'/'+edit+'/tracks/production',method='PUT',body={'track':'production','releases':[{'name':'0.3.7 (13)','versionCodes':[str(VERSION)],'status':'draft'}]})
         call(PUBLISHER+'/'+edit+':validate',method='POST',body={})
         report['validated']=True
