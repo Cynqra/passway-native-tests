@@ -7,8 +7,8 @@ import time
 from driver import ROOT, nodes, find, dump, tapnode, shell, record, waitfor, fill, tap, back
 
 
-def fixture(phones, tid=None, expire=False):
-    data = {"action": "expire" if expire else "snapshot", "phones": phones}
+def fixture(phones, tid=None, expire=False, isolate=False):
+    data = {"action": "isolate-extra-fixture" if isolate else "expire" if expire else "snapshot", "phones": phones}
     if tid:
         data["tid"] = tid
     r = subprocess.run(
@@ -61,6 +61,9 @@ def run(ctx, peer):
     def change_peer(phone):
         user(peer); ready(); tap("You"); waitfor("settings-name")
         tap("sign-out"); waitfor("phone-input", 45); ctx["login"](peer, phone)
+        state = fixture([phone], isolate=True)
+        check("Native extra fictional identity remains in isolated cohort " + phone[-1],
+              state["profiles"][0]["testCohortMarker"])
 
     # Saving and returning to a screen is checked against Firestore, not a toast alone.
     user(0); ready(); tap("You"); waitfor("settings-name")
@@ -149,6 +152,8 @@ def run(ctx, peer):
     check("Native re-registration after deletion receives a new eligible Firebase identity",
           recreated["authExists"] and recreated["profileExists"]
           and recreated["uid"] != old_uid and recreated["profileStatus"] == "active")
+    check("Native recreated reviewer retains reserved server phone binding without UID test flag",
+          recreated["reservedReviewerBinding"] and not recreated["testCohortMarker"])
     snap("extended-reregistered")
     record("Extended native destructive journeys completed", "PASS",
            "Four fictional Firebase identities on two Android users; local services only; no block reset or production mutation")
