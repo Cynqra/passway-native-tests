@@ -9,6 +9,8 @@ const firebase=require(app+'/lib/lib/firebase');
 const {sendMessage,getMessages}=require(app+'/lib/handlers/messages');
 const {blockUser}=require(app+'/lib/handlers/reports');
 const {deleteAccount}=require(app+'/lib/handlers/accounts');
+const {acceptContentPolicy}=require(app+'/lib/handlers/contentPolicy');
+const {CONTENT_POLICY_VERSION:policyVersion}=require(app+'/lib/lib/contentPolicy');
 const {getApps}=req('firebase-admin/app');const {performance}=require('node:perf_hooks');
 // Synthetic verified-phone fixtures exist only behind the strict local demo guard above.
 const syntheticPhone=uid=>{const m=/^bounded-([ab])(\d+)$/.exec(uid);if(!m)throw Error('Unknown workload fixture');return '+1555555'+String(Number(m[2])*2+(m[1]==='b'?1:0)).padStart(4,'0');};
@@ -20,7 +22,7 @@ function quantiles(xs){xs.sort((a,b)=>a-b);return{samples:xs.length,p50:Math.rou
  const start=performance.now(),batch=db.batch(),now=Date.now();
  const pairs=Array.from({length:16},(_,i)=>({a:'bounded-a'+i,b:'bounded-b'+i,c:'bounded-chat'+i}));
  for(const p of pairs){for(const uid of[p.a,p.b])batch.create(db.collection('users').doc(uid),{userId:uid,status:'active',ageConfirmedAt:now,createdAt:now,automatedTest:true});batch.create(db.collection('connections').doc(p.c),{connectionId:p.c,userA:p.a,userB:p.b,status:'active',createdAt:now,lastActivityAt:now});}
- await batch.commit();const sends=[],reads=[];
+ await batch.commit();await Promise.all(pairs.flatMap(p=>[p.a,p.b].map(uid=>call(acceptContentPolicy,uid,{version:policyVersion,accept:true}))));check('All synthetic workload identities explicitly accept the current server policy',true);const sends=[],reads=[];
  await Promise.all(pairs.map(async p=>{
   for(let n=0;n<10;n++){const uid=n%2?p.b:p.a,data={connectionId:p.c,content:'Bounded synthetic intent '+n,clientMessageId:'bounded-intent-'+p.c+'-'+String(n).padStart(4,'0')};const t=performance.now();const first=await call(sendMessage,uid,data);const replay=await call(sendMessage,uid,data);assert.deepEqual(replay,first);sends.push(performance.now()-t);}
   for(const uid of[p.a,p.b]){const t=performance.now(),r=await call(getMessages,uid,{connectionId:p.c});reads.push(performance.now()-t);assert.equal(r.messages.length,10);assert.equal(new Set(r.messages.map(m=>m.messageId)).size,10);}

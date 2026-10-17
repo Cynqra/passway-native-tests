@@ -53,7 +53,7 @@ const millis = v => v && typeof v.toMillis === 'function' ? v.toMillis() : null;
     }
     const deletion = uid ? await db.collection('accountDeletions').doc(uid).get() : null;
     profiles.push({ phone, uid: uid || null, authExists: !!user, profileExists: !!profile?.exists,
-      profileStatus: profile?.data()?.status || null, testCohortMarker: profile?.data()?.automatedTest === true,
+      profileStatus: profile?.data()?.status || null, contentPolicyVersion: profile?.data()?.contentPolicyVersion || null, contentPolicyAcceptedAt: profile?.data()?.contentPolicyAcceptedAt || null, testCohortMarker: profile?.data()?.automatedTest === true,
       reservedReviewerBinding: ['9999900001', '9999900002'].includes(phone) && profile?.data()?.phoneHash ===
         require('node:crypto').createHash('sha256').update('passway:phone:+91' + phone).digest('hex'), displayName: profile?.data()?.displayName || null,
       deletionStatus: deletion?.data()?.status || null });

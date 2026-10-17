@@ -48,3 +48,20 @@ class AvdConfigurationTests(unittest.TestCase):
  def test_unsafe_avd_name_is_rejected(self):
   with self.assertRaises(ValueError):self.load_configure()('/tmp','../other')
 if __name__=='__main__':unittest.main()
+
+class ContentConsentContractTests(unittest.TestCase):
+ def test_local_api_exposes_consent_without_relaxing_isolation(self):
+  source=(ROOT/'harness/isolated_api.cjs').read_text()
+  self.assertIn("'acceptContentPolicy'",source)
+  self.assertIn("FIRESTORE_EMULATOR_HOST!=='127.0.0.1:8080'",source)
+ def test_preflight_accepts_through_handler_not_admin_forged_metadata(self):
+  source=(ROOT/'harness/isolated_services_preflight.cjs').read_text()
+  self.assertIn("rpc('acceptContentPolicy',{version,accept:true},i)",source)
+  self.assertIn("await assert.rejects(rpc('generateTid'",source)
+  self.assertNotIn('contentPolicyAcceptedAt:',source)
+ def test_native_consent_requires_actual_tap_and_separate_persistence_audit(self):
+  source=(ROOT/'harness/native_isolated_e2e.py').read_text()
+  self.assertIn("tap('accept-use-rules')",source)
+  self.assertIn("verify_policy_saved(phone)",source)
+  self.assertIn("profile['contentPolicyVersion']=='2026-10-17.1'",source)
+  self.assertNotIn('contentPolicyAcceptedAt:',source)

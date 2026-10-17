@@ -1,9 +1,9 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "6561bc59fd785f832695b75ed60e28b064e4a389",
-  "sourceTree": "8d71ca375811f383048c7ab07c3bdbc77321a04d",
-  "archiveSha256": "6fa2f15409694f880c4ab2f4754afba09a4b1749e4d88760e3b06b5656391cde",
-  "createdAt": "2026-10-17T18:55:22.579876+00:00",
-  "scope": "Unpublished 0.3.9 code15 includes public privacy links and durable reserved-reviewer isolation across deletion/re-registration. Backend now changed and not yet deployed. Fresh native/signed acceptance pending. Earlier code15 jobs superseded, not reuseable. Production remains code13 draft. No public rollout.",
+  "sourceCommit": "ea06c8e8a75d7f082f99582114c7276710d66db8",
+  "sourceTree": "64bf19c0292dce3507feba88186b2d34682dde07",
+  "archiveSha256": "6fe6086a7bf319fefadbc4a4f66373fa4de9398c80f7be230677d44db606f551",
+  "createdAt": "2026-10-17T20:17:07.924458+00:00",
+  "scope": "Unpublished 0.3.10 code16 adds explicit versioned use-rules acceptance, server-owned idempotent consent and transaction enforcement before pairing/message creation, plus phone verification processing disclosure. Consent-capable client must be available before stricter backend promotion. Fresh signed/native/architecture/static gates pending. Public track remains version15 draft; no public rollout.",
   "fullTrackedSourceArchive": true
 }
