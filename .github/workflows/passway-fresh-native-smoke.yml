@@ -14,6 +14,7 @@ on:
           - play-api-check
           - public-release-preflight
           - prepare-public-draft
+          - diagnose-public-release
           - internal-candidate
           - internal-sharing-candidate
           - store-apk-download
@@ -592,6 +593,29 @@ jobs:
         if: always()
         with:
           name: public-release-draft
+          path: public-release-draft.json
+          retention-days: 14
+          if-no-files-found: error
+
+  diagnose-public-release:
+    if: ${{ inputs.mode == 'diagnose-public-release' }}
+    name: Diagnose exact public release failure without committing changes
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    environment: passway-play-internal
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - run: python3 -m unittest discover -s harness/tests -p 'test_public_release*.py' -v
+      - run: python3 harness/public_release_draft.py --diagnose
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: public-release-diagnostic
           path: public-release-draft.json
           retention-days: 14
           if-no-files-found: error

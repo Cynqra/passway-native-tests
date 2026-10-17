@@ -34,6 +34,6 @@ class PublicPreflightTests(unittest.TestCase):
  def test_validation_error_still_cleans_up(self):
   r,c=self.execute('validation-error');self.assertFalse(r['validated']);self.assertEqual(c[-1][1],'DELETE')
  def test_provider_text_and_tokens_are_never_retained(self):
-  r=m.reason_from_error(403,json.dumps({'error':{'message':'Permission denied synthetic-secret-user@example.invalid'}}).encode());self.assertEqual(r,{'httpStatus':403,'requirement':'PRODUCTION_PERMISSION_REQUIRED'});self.assertNotIn('synthetic-secret',str(r))
+  r=m.reason_from_error(403,json.dumps({'error':{'message':'Permission denied synthetic-secret-user@example.invalid'}}).encode());self.assertEqual(r,{'httpStatus':403,'requirement':'AUTHORIZATION_OR_ACCOUNT_RESTRICTION'});self.assertNotIn('synthetic-secret',str(r))
  def test_unknown_provider_message_is_not_guessed(self):
   self.assertEqual(m.reason_from_error(400,b'not-json')['requirement'],'GOOGLE_VALIDATION_REJECTED')

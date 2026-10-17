@@ -4,7 +4,7 @@ import public_release_draft as m
 from public_release_preflight import BUNDLE_SHA
 from play_api_access import SafeError
 class PublicDraftTests(unittest.TestCase):
- def execute(self,variant=None):
+ def execute(self,variant=None,commit=True):
   calls=[]
   def request(url,method='GET',headers=None,body=None,error_observer=None):
    calls.append((url,method,body));self.assertNotIn('/upload/',url)
@@ -31,7 +31,7 @@ class PublicDraftTests(unittest.TestCase):
     if variant=='commit':raise SafeError('Synthetic ambiguous commit failure')
     return {}
    self.fail('Unexpected operation')
-  return m.prepare_draft('synthetic-token',request),calls
+  return m.prepare_draft('synthetic-token',request,commit=commit),calls
  def test_only_exact_verified_draft_and_factual_copy_are_saved(self):
   r,c=self.execute();self.assertTrue(r['draftCommitted']);self.assertTrue(r['listingTextSaved']);self.assertFalse(r['publicProductionRollout']);self.assertFalse(r['reviewSubmitted']);self.assertEqual(sum(':commit' in x[0] for x in c),1);self.assertFalse(any(x[1]=='DELETE' for x in c))
  def test_hash_mismatch_stops_before_listing_or_release_writes(self):
@@ -55,3 +55,14 @@ class PublicDraftTests(unittest.TestCase):
   r,c=self.execute('official-schema');self.assertTrue(r['draftCommitted'])
   observed=[u for u,method,body in c if method=='GET' and any(k in u for k in ['icon','featureGraphic','phoneScreenshots'])]
   self.assertEqual(observed,[m.PUBLISHER+'/123/listings/en-US/'+k for k in ['icon','featureGraphic','phoneScreenshots']])
+ def test_google_error_records_exact_operation_without_secrets(self):
+  import json
+  value=m.sanitized_google_error(403,json.dumps({'error':{'status':'PERMISSION_DENIED','message':'Permission denied for synthetic@example.invalid Bearer synthetic-token'}}).encode(),'validate_draft_edit')
+  self.assertEqual(value['operation'],'validate_draft_edit');self.assertEqual(value['status'],'PERMISSION_DENIED');self.assertNotIn('synthetic@example.invalid',str(value));self.assertNotIn('synthetic-token',str(value))
+ def test_generic_denial_does_not_infer_a_missing_production_role(self):
+  import json
+  from public_release_preflight import reason_from_error
+  self.assertEqual(reason_from_error(403,json.dumps({'error':{'message':'Permission denied'}}).encode())['requirement'],'AUTHORIZATION_OR_ACCOUNT_RESTRICTION')
+ def test_diagnostic_only_mode_never_commits_even_when_validation_passes(self):
+  r,c=self.execute(commit=False)
+  self.assertTrue(r['validated']);self.assertTrue(r['diagnosticOnly']);self.assertFalse(r['draftCommitted']);self.assertTrue(r['temporaryEditDeleted']);self.assertFalse(any(':commit' in x[0] for x in c))
