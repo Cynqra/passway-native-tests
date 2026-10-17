@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-17T03:47:22.807768+00:00",
+  "scope": "Read-only interpretation of registered provider configuration, not positive attestation proof. No provider settings changed.",
+  "packageMatchesExpected": true,
+  "playAppSigningSha256Registered": true,
+  "uploadSignerSha256Registered": true,
+  "effectivePolicy": {
+    "allowUnrecognizedVersion": false,
+    "requireLicensed": false,
+    "minDeviceRecognitionLevel": "NO_INTEGRITY",
+    "tokenTtl": "3600s"
+  },
+  "officialSchema": "https://firebaseappcheck.googleapis.com/$discovery/rest?version=v1",
+  "interpretation": "NO_INTEGRITY is the documented default explicit device threshold, not proof that app integrity is disabled. Default allowUnrecognizedVersion=false still requires PLAY_RECOGNIZED. License enforcement defaults false. No unsupported claim that a genuine device or license verdict has been observed."
+}

@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-10-17T03:48:20.931Z",
+  "scope": "Negative maintenance authorization only. No valid cron credential, cleanup sweep or user mutation requested.",
+  "pass": true,
+  "rows": [
+    {
+      "authorization": "missing",
+      "httpStatus": 401,
+      "pass": true
+    },
+    {
+      "authorization": "invalid",
+      "httpStatus": 401,
+      "pass": true
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+{"administratorEnforcement":true,"allowDeletions":false,"allowForcePushes":false,"checks":["regression","dependency-security"],"strict":true}

@@ -40,3 +40,11 @@ Play read-only access: https://github.com/Cynqra/passway-native-tests/actions/ru
 ## Remaining release gates
 
 Genuine Play-installed positive native attestation and physical-device release acceptance remain unverified. Store privacy/deletion process, reviewer access, rating, target audience and Data Safety still require completion and factual validation. Latest registry versions are still braces3.0.3 and node-forge1.4.0; upstream advisories were not declared resolved. Existing reviewed build-tool remediation gates are separate from a clean raw registry audit. No paid plan, public production rollout or permanent IAM privilege increase.
+
+## Final source and provider checks
+
+PR15 merged through successful required checks as e78759090dad915af2df495b113da931acc20068. Main still requires strict regression and dependency-security checks, including administrators; force pushes and deletion remain disabled. Runtime-source comparison against accepted bbdfe07 changes only operator scripts, tests, package scripts, docs and workflows; no application/native handler changes. Post-merge main CI is recorded separately and must finish successfully, not be inferred from PR checks.
+
+Read-only Firebase configuration confirms package com.passway.app and both Play app-signing and upload SHA256 certificates registered. Official provider defaults still require PLAY_RECOGNIZED even with NO_INTEGRITY as the explicit device threshold. License enforcement defaults false. No provider policy was changed and no genuine device verdict is claimed.
+
+The live maintenance endpoint separately rejected missing and invalid credentials2/2. No authorized sweep, deletion job execution or cleanup SLA was exercised by those negative checks.
