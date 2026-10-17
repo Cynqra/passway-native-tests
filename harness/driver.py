@@ -2,9 +2,24 @@ import subprocess,time,xml.etree.ElementTree as ET,re,json,pathlib,os,base64
 ROOT=pathlib.Path(os.environ.get('PASSWAY_RESULTS','native-results'));ROOT.mkdir(exist_ok=True)
 for d in ['screens','xml']:(ROOT/d).mkdir(exist_ok=True)
 import shutil
+from contextlib import contextmanager
+from contextvars import ContextVar
+_DEADLINE = ContextVar("native_deadline",default=None)
+def remaining_timeout(limit):
+ end=_DEADLINE.get()
+ if end is None:return limit
+ remaining=end-time.monotonic()
+ if remaining<=0:raise TimeoutError("Native operation exceeded its deadline")
+ return min(limit,remaining)
+@contextmanager
+def deadline(seconds):
+ previous=_DEADLINE.get()
+ token=_DEADLINE.set(min(previous,time.monotonic()+seconds) if previous is not None else time.monotonic()+seconds)
+ try:yield
+ finally:_DEADLINE.reset(token)
 A=shutil.which('adb') or 'adb'
 def adb(*args,timeout=90):
- t=time.monotonic();r=subprocess.run([A,*map(str,args)],capture_output=True,timeout=timeout)
+ t=time.monotonic();r=subprocess.run([A,*map(str,args)],capture_output=True,timeout=remaining_timeout(timeout))
  if r.returncode:raise RuntimeError('adb '+str(args[:3])+': '+r.stderr.decode(errors='replace')[:500])
  return r.stdout.decode(errors='replace')
 def shell(*args):return adb('shell',*args)
@@ -19,12 +34,13 @@ def probe(selector=None,action=None,value=''):
  if not m or (action and 'action_result=performed' not in out):raise RuntimeError('Native probe failed at '+str(selector)+': '+out[:1200])
  raw=base64.b64decode(m.group(1)).decode();return ET.fromstring(raw),raw
 def dump(label='current'):
- for attempt in range(5):
-  tree,raw=probe()
-  if len(list(tree.iter('node')))>2:
-   (ROOT/'xml'/f'{label}.xml').write_text(raw);return tree
-  time.sleep(.4)
- raise RuntimeError('Native UI tree remained empty after five fresh inspections')
+ with deadline(30):
+  for attempt in range(5):
+   tree,raw=probe()
+   if len(list(tree.iter('node')))>2:
+    (ROOT/'xml'/f'{label}.xml').write_text(raw);return tree
+   time.sleep(min(.4,remaining_timeout(.4)))
+  raise RuntimeError('Native UI tree remained empty after five fresh inspections')
 def nodes(t):return [dict(n.attrib) for n in t.iter('node')]
 def match(n,s):return n.get('resource-id')==s or n.get('resource-id','').endswith(':id/'+s) or n.get('text')==s or n.get('content-desc')==s
 def find(s,tree=None):
@@ -49,17 +65,18 @@ def fill(s,value):
  raise RuntimeError('Native input readback mismatch at '+s+' after four fresh snapshots')
 def back():shell('input','keyevent','KEYCODE_BACK');time.sleep(.7)
 def shot(name):
- p=ROOT/'screens'/f'{name}.png';r=subprocess.run([A,'exec-out','screencap','-p'],capture_output=True,timeout=30)
+ p=ROOT/'screens'/f'{name}.png';r=subprocess.run([A,'exec-out','screencap','-p'],capture_output=True,timeout=remaining_timeout(30))
  if r.returncode or not r.stdout.startswith(b'\x89PNG'):raise RuntimeError('Screenshot failed')
  p.write_bytes(r.stdout);return str(p)
 def waitfor(s,seconds=90):
- until=time.monotonic()+seconds
- while time.monotonic()<until:
-  tree=dump();n=find(s,tree)
-  if n is not None:return n
-  if s=='code-text' and find('Something went wrong. Try again.',tree) is not None:raise RuntimeError('Native generation returned app error: Something went wrong. Try again.')
-  time.sleep(2)
- shot('timeout-'+re.sub('[^a-zA-Z0-9]','-',s));raise RuntimeError('Timed out waiting for '+s)
+ # Nested ADB/probe calls share this budget; an inner 45s timeout must not
+ # extend a caller's 5s/20s wait into minutes. Preserve original exceptions.
+ with deadline(seconds):
+  while True:
+   tree=dump();n=find(s,tree)
+   if n is not None and n.get('visible-to-user')=='true':return n
+   if s=='code-text' and find('Something went wrong. Try again.',tree) is not None:raise RuntimeError('Native generation returned app error: Something went wrong. Try again.')
+   time.sleep(remaining_timeout(2))
 def record(name,status,detail=''):
  p=ROOT/'results.json';rs=json.loads(p.read_text()) if p.exists() else [];rs.append({'test':name,'status':status,'detail':detail,'at':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())});p.write_text(json.dumps(rs,indent=2));print(name,status,detail,flush=True)
  from status import publish
