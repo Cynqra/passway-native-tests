@@ -1,9 +1,9 @@
-"""Save accurate listing copy and a nonpublic production draft of verified code 13."""
+"""Save accurate listing copy and a nonpublic production draft of verified code 15."""
 import argparse,json,os,re,urllib.parse
 from pathlib import Path
 from play_api_access import access_token,SafeError,PUBLISHER
 from internal_release import send
-from public_release_preflight import VERSION,verified_candidate,reason_from_error
+from public_release_preflight import VERSION,VERSION_NAME,verified_candidate,reason_from_error
 SHORT='Meet in person. Keep chatting without sharing your phone number.'
 FULL='''A real hello can become a private chat.
 
@@ -59,7 +59,7 @@ def prepare_draft(token,request=send,commit=True,allow_automatic_review=False,in
         edit=call(PUBLISHER,method='POST',body={}).get('id')
         if not isinstance(edit,str) or not edit.isdigit():raise SafeError('Invalid temporary edit identifier')
         report['operation']='verify_candidate_and_read_store_metadata'
-        details,listings=verified_candidate(call,edit)
+        details,listings=verified_candidate(call,edit,allow_owned_draft=True)
         locale=details.get('defaultLanguage','')
         if not isinstance(locale,str) or not re.fullmatch(r'[a-zA-Z]{2,3}(?:-[a-zA-Z0-9]{2,8}){0,2}',locale):raise SafeError('Default listing language unavailable')
         if not (1<=len(SHORT)<=80 and 80<=len(FULL)<=4000):raise SafeError('Listing copy outside Play bounds')
@@ -78,7 +78,7 @@ def prepare_draft(token,request=send,commit=True,allow_automatic_review=False,in
                 if [x.get('sha256','').lower() for x in readback[kind]]!=[r['sha256'] for r,d in assets if r['kind']==kind]:raise SafeError('Store artwork readback mismatch')
             report['imageCounts']={kind:len(images) for kind,images in readback.items()}
         report['operation']='stage_production_draft'
-        call(PUBLISHER+'/'+edit+'/tracks/production',method='PUT',body={'track':'production','releases':[{'name':'0.3.7 (13)','versionCodes':[str(VERSION)],'status':'draft'}]})
+        call(PUBLISHER+'/'+edit+'/tracks/production',method='PUT',body={'track':'production','releases':[{'name':f'{VERSION_NAME} ({VERSION})','versionCodes':[str(VERSION)],'status':'draft'}]})
         report['operation']='validate_draft_edit'
         call(PUBLISHER+'/'+edit+':validate',method='POST',body={})
         report['validated']=True

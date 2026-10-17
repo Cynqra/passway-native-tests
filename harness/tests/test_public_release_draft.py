@@ -4,14 +4,14 @@ import public_release_draft as m
 from public_release_preflight import BUNDLE_SHA
 from play_api_access import SafeError
 class PublicDraftTests(unittest.TestCase):
- def execute(self,variant=None,commit=True,allow_automatic_review=False,include_assets=False):
+ def execute(self,variant=None,commit=True,allow_automatic_review=False,include_assets=False,production_release=None,prior_hash=None):
   calls=[];images={k:[] for k in ['icon','featureGraphic','phoneScreenshots']}
   def request(url,method='GET',headers=None,body=None,error_observer=None):
    calls.append((url,method,body));self.assertNotIn('/upload/',url)
    if url==m.PUBLISHER:return {'id':'123'}
    if method=='DELETE':return {}
-   if url.endswith('/tracks'):return {'tracks':[{'track':'internal','releases':[{'status':'completed','versionCodes':['12' if variant=='internal' else '13']}]},{'track':'production','releases':[{'status':'completed','versionCodes':['12']}] if variant=='production' else []}]}
-   if url.endswith('/bundles'):return {'bundles':[{'versionCode':13,'sha256':'wrong' if variant=='hash' else BUNDLE_SHA}]}
+   if url.endswith('/tracks'):return {'tracks':[{'track':'internal','releases':[{'status':'completed','versionCodes':['12' if variant=='internal' else '15']}]},{'track':'production','releases':production_release if production_release is not None else ([{'status':'completed','versionCodes':['12']}] if variant=='production' else [])}]}
+   if url.endswith('/bundles'):return {'bundles':[{'versionCode':15,'sha256':'wrong' if variant=='hash' else BUNDLE_SHA}]+([{'versionCode':13,'sha256':prior_hash}] if prior_hash else [])}
    if url.endswith('/details'):return {'defaultLanguage':'bad/locale' if variant=='locale' else 'en-US'}
    if url.endswith('/listings'):return {'listings':[]}
    if '/images/' in url:
@@ -22,7 +22,7 @@ class PublicDraftTests(unittest.TestCase):
     if variant=='listing-error':raise SafeError('Synthetic listing failure')
     return {}
    if url.endswith('/tracks/production'):
-    self.assertEqual(body['releases'][0]['status'],'draft');self.assertEqual(body['releases'][0]['versionCodes'],['13']);return {}
+    self.assertEqual(body['releases'][0]['status'],'draft');self.assertEqual(body['releases'][0]['versionCodes'],['15']);return {}
    if url.endswith(':validate'):
     if variant=='validation':raise SafeError('Synthetic validation failure')
     return {}
@@ -90,3 +90,33 @@ class PublicDraftTests(unittest.TestCase):
  def test_complete_artwork_is_read_back_before_authorized_commit(self):
   r,c=self.execute('google-automatic-review',allow_automatic_review=True,include_assets=True)
   self.assertTrue(r['draftCommitted']);self.assertEqual(r['imageCounts'],dict(icon=1,featureGraphic=1,phoneScreenshots=6));self.assertEqual(len(r['artworkUploaded']),8)
+
+ def test_exact_owned_prior_draft_can_be_replaced_after_hash_verification(self):
+  from public_release_preflight import PRIOR_DRAFT_SHA,PRIOR_DRAFT_NAME
+  r,c=self.execute(production_release=[{'status':'draft','versionCodes':['13'],'name':PRIOR_DRAFT_NAME}],prior_hash=PRIOR_DRAFT_SHA)
+  self.assertTrue(r['draftCommitted']);self.assertFalse(r['publicProductionRollout']);self.assertEqual(r['versionCode'],15)
+ def test_existing_exact_new_draft_is_idempotently_supported(self):
+  r,c=self.execute(production_release=[{'status':'draft','versionCodes':['15'],'name':'0.3.9 (15)'}])
+  self.assertTrue(r['draftCommitted'])
+ def test_owned_prior_draft_with_wrong_hash_never_writes(self):
+  r,c=self.execute(production_release=[{'status':'draft','versionCodes':['13']}],prior_hash='wrong')
+  self.assertFalse(r['draftCommitted']);self.assertFalse(any(x[1]=='PUT' for x in c));self.assertTrue(r['temporaryEditDeleted'])
+ def test_owned_bundle_already_completed_never_overwritten(self):
+  from public_release_preflight import PRIOR_DRAFT_SHA
+  r,c=self.execute(production_release=[{'status':'completed','versionCodes':['13']}],prior_hash=PRIOR_DRAFT_SHA)
+  self.assertFalse(r['draftCommitted']);self.assertFalse(any(x[1]=='PUT' for x in c))
+ def test_unknown_or_mixed_or_modified_drafts_never_overwritten(self):
+  from public_release_preflight import PRIOR_DRAFT_SHA
+  variants=[
+   [{'status':'draft','versionCodes':['14']}],
+   [{'status':'draft','versionCodes':['13']},{'status':'draft','versionCodes':['15']}],
+   [{'status':'draft','versionCodes':['13'],'name':'Unrelated manual draft'}],
+   [{'status':'draft','versionCodes':['13'],'releaseNotes':[{'language':'en-US','text':'manual'}]}],
+   [{'status':'draft','versionCodes':['13'],'userFraction':0.1}],
+   [{'status':'inProgress','versionCodes':['13']}],
+   [{'status':'draft','versionCodes':['13','15']}],
+  ]
+  for releases in variants:
+   with self.subTest(releases=releases):
+    r,c=self.execute(production_release=releases,prior_hash=PRIOR_DRAFT_SHA)
+    self.assertFalse(r['draftCommitted']);self.assertFalse(any(x[1]=='PUT' for x in c))

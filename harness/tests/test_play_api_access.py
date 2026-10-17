@@ -155,13 +155,13 @@ class PlayAccessTests(unittest.TestCase):
 
     def test_independent_store_readback_checks_exact_candidate_and_assets(self):
         from public_store_assets import load_assets
-        from public_release_preflight import BUNDLE_SHA
+        from public_release_preflight import BUNDLE_SHA,VERSION
         from public_release_draft import FULL,SHORT
         calls=[];assets=load_assets()
         def send(url, **kwargs):
             calls.append(kwargs.get("method","GET"))
             if url==m.PUBLISHER:return {"id":"123"}
-            if url.endswith("/bundles"):return {"bundles":[{"versionCode":13,"sha256":BUNDLE_SHA}]}
+            if url.endswith("/bundles"):return {"bundles":[{"versionCode":VERSION,"sha256":BUNDLE_SHA}]}
             if url.endswith("/listings/en-US"):return {"title":"Passway","shortDescription":SHORT,"fullDescription":FULL}
             for kind in ("icon","featureGraphic","phoneScreenshots"):
                 if url.endswith("/"+kind):return {"images":[{"sha256":r["sha256"]} for r,d in assets if r["kind"]==kind]}

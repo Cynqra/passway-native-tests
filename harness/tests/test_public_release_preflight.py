@@ -9,13 +9,13 @@ class PublicPreflightTests(unittest.TestCase):
    calls.append((url,method,body));self.assertNotIn(':commit',url);self.assertNotIn('/upload/',url)
    if url==m.PUBLISHER:return {'id':'123'}
    if method=='DELETE':return {}
-   if url.endswith('/tracks'):return {'tracks':[{'track':'internal','releases':[{'status':'completed','versionCodes':['12' if variant=='changed-internal' else '13']}]},{'track':'production','releases':[{'status':'completed'}] if variant=='existing-production' else []}]}
-   if url.endswith('/bundles'):return {'bundles':[{'versionCode':13,'sha256':'wrong' if variant=='wrong-hash' else m.BUNDLE_SHA}]}
+   if url.endswith('/tracks'):return {'tracks':[{'track':'internal','releases':[{'status':'completed','versionCodes':['12' if variant=='changed-internal' else '15']}]},{'track':'production','releases':[{'status':'completed'}] if variant=='existing-production' else []}]}
+   if url.endswith('/bundles'):return {'bundles':[{'versionCode':15,'sha256':'wrong' if variant=='wrong-hash' else m.BUNDLE_SHA}]}
    if url.endswith('/details'):return {'defaultLanguage':'en-US','contactEmail':'synthetic@example.invalid'}
    if url.endswith('/listings'):return {'listings':[{'title':'Passway','shortDescription':'Synthetic','fullDescription':'Synthetic'}]}
    if url.endswith('/tracks/production'):
     if variant=='google-draft-block':error_observer(400,json.dumps({'error':{'message':'Only releases with status draft may be created on draft app.'}}).encode());raise SafeError('Play capability check rejected request (HTTP 400)')
-    self.assertEqual(body['releases'][0]['versionCodes'],['13']);return {}
+    self.assertEqual(body['releases'][0]['versionCodes'],['15']);return {}
    if url.endswith(':validate'):
     if variant=='validation-error':raise SafeError('Synthetic validation failure')
     return {}
