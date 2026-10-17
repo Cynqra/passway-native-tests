@@ -343,7 +343,7 @@ jobs:
       - name: Test keyless authentication and cleanup boundaries
         run: python3 -m unittest discover -s harness/tests -p 'test_play_api_access.py' -v
       - name: Verify keyless Play access without uploading or changing a release
-        run: python3 harness/play_api_access.py --output play-api-access.json
+        run: python3 harness/play_api_access.py --output play-api-access.json --store-readback
       - name: Upload sanitized access evidence only
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
