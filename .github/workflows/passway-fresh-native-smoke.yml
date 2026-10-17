@@ -574,7 +574,7 @@ jobs:
 
   prepare-public-draft:
     if: ${{ inputs.mode == 'prepare-public-draft' }}
-    name: Save verified production draft and accurate store text without public rollout
+    name: Save verified production draft allowing Google automatic metadata review
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     environment: passway-play-internal
@@ -587,8 +587,8 @@ jobs:
           persist-credentials: false
       - name: Verify exact candidate, draft only and review boundaries
         run: python3 -m unittest discover -s harness/tests -p 'test_public_release*.py' -v
-      - name: Save owner requested production draft without submitting for review
-        run: python3 harness/public_release_draft.py
+      - name: Save owner requested draft allowing required automatic review
+        run: python3 harness/public_release_draft.py --allow-automatic-review --store-assets
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:

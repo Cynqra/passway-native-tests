@@ -41,10 +41,14 @@ def sanitized_google_error(status,raw,operation):
     return {'httpStatus':status,'operation':operation,'status':enum if isinstance(enum,str) and re.fullmatch(r'[A-Z_]{1,48}',enum) else '','message':message[:1000]}
 
 
-def prepare_draft(token,request=send,commit=True):
+def prepare_draft(token,request=send,commit=True,allow_automatic_review=False,include_assets=False,upload=None):
+    from public_store_assets import load_assets,stage_assets,upload_png
+    assets=load_assets() if include_assets else []
     headers={'Authorization':'Bearer '+token};edit=None;committed=False
     report={'package':'com.passway.app','versionCode':VERSION,'publicProductionRollout':False,'reviewSubmitted':False,'scope':'Production track DRAFT and factual store text only; no public availability, review approval, privacy declarations, real SMS or positive attestation claimed'}
     report['diagnosticOnly']=not commit
+    report['automaticReviewAllowed']=allow_automatic_review
+    report['reviewAcceptanceConfirmed']=False
     def observed(status,raw):
         if 'googleError' not in report:
             report['googleRequirement']=reason_from_error(status,raw)
@@ -64,7 +68,15 @@ def prepare_draft(token,request=send,commit=True):
         call(path,method='PUT',body={'language':locale,'title':'Passway','shortDescription':SHORT,'fullDescription':FULL})
         report['listingLanguage']=locale
         report['operation']='read_image_inventory'
-        report['imageCounts']={kind:len(call(path+'/'+kind).get('images',[])) for kind in ['icon','featureGraphic','phoneScreenshots']}
+        inventory={kind:call(path+'/'+kind).get('images',[]) for kind in ['icon','featureGraphic','phoneScreenshots']}
+        report['imageCounts']={kind:len(images) for kind,images in inventory.items()}
+        if include_assets:
+            report['operation']='stage_approved_store_assets'
+            report['artworkUploaded']=stage_assets(path,inventory,assets,headers,upload=upload or upload_png,error_observer=observed)
+            readback={kind:call(path+'/'+kind).get('images',[]) for kind in inventory}
+            for kind in inventory:
+                if [x.get('sha256','').lower() for x in readback[kind]]!=[r['sha256'] for r,d in assets if r['kind']==kind]:raise SafeError('Store artwork readback mismatch')
+            report['imageCounts']={kind:len(images) for kind,images in readback.items()}
         report['operation']='stage_production_draft'
         call(PUBLISHER+'/'+edit+'/tracks/production',method='PUT',body={'track':'production','releases':[{'name':'0.3.7 (13)','versionCodes':[str(VERSION)],'status':'draft'}]})
         report['operation']='validate_draft_edit'
@@ -73,9 +85,13 @@ def prepare_draft(token,request=send,commit=True):
         if not commit:
             report['draftCommitted']=False
             return report
-        report['operation']='commit_draft_without_review'
+        report['operation']='commit_draft_with_automatic_review' if allow_automatic_review else 'commit_draft_without_review'
         report['commitAttempted']=True
-        call(PUBLISHER+'/'+edit+':commit?changesNotSentForReview=true',method='POST',body={})
+        # Google explicitly requires omitting this parameter for this draft app.
+        # No automatic fallback or repeated commit after an ambiguous response.
+        suffix='' if allow_automatic_review else '?changesNotSentForReview=true'
+        call(PUBLISHER+'/'+edit+':commit'+suffix,method='POST',body={})
+        report['automaticReviewMayHaveStarted']=allow_automatic_review
         committed=True;report['draftCommitted']=True;report['listingTextSaved']=True
     except Exception as e:
         report['draftCommitted']=False;report['error']=str(e) if isinstance(e,SafeError) else type(e).__name__
@@ -85,7 +101,7 @@ def prepare_draft(token,request=send,commit=True):
             except Exception:report['cleanupFailed']=True
     return report
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('--diagnose',action='store_true');args=parser.parse_args()
-    try:result=prepare_draft(access_token(os.environ),commit=not args.diagnose)
+    parser=argparse.ArgumentParser();parser.add_argument('--diagnose',action='store_true');parser.add_argument('--allow-automatic-review',action='store_true');parser.add_argument('--store-assets',action='store_true');args=parser.parse_args()
+    try:result=prepare_draft(access_token(os.environ),commit=not args.diagnose,allow_automatic_review=args.allow_automatic_review,include_assets=args.store_assets)
     except Exception as e:result={'draftCommitted':False,'publicProductionRollout':False,'error':str(e) if isinstance(e,SafeError) else type(e).__name__}
     Path('public-release-draft.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result));raise SystemExit(0 if result.get('draftCommitted') or (args.diagnose and result.get('validated') and result.get('temporaryEditDeleted')) else 1)
