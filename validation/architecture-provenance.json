@@ -1,9 +1,9 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "78db0cbaaa35b4be27db354947073a43f2434445",
-  "sourceTree": "f0d16573c547d13198110f21ca08326a8201579d",
-  "archiveSha256": "885f025ba0eb39142472867cf6a3e4cd73d918b12f3205c33d9414be195189bb",
-  "createdAt": "2026-10-17T14:00:12.635432+00:00",
-  "scope": "Current verified phone policy enforcement; four failing reproductions fixed; 109 new unit cases and ten real transaction regressions. Local and source CI pass. Native acceptance pending.",
+  "sourceCommit": "fd9baeb7aa44cc0c17e683e8a68cdb2ea4c18c5e",
+  "sourceTree": "2a49a203a641a79d3b043686f7ed36970659498e",
+  "archiveSha256": "99944daf8756d0a6bc58001b2a1b12ecf8a3d77d451867fcd81c494ea9972e57",
+  "createdAt": "2026-10-17T14:32:47.826804+00:00",
+  "scope": "Unpublished version 0.3.7 code 13; merged verified phone participation policy and rendered account-scoped safety disclosure. Fresh native and signed acceptance pending.",
   "fullTrackedSourceArchive": true
 }
