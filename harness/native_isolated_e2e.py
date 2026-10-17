@@ -61,6 +61,8 @@ def ready_generate():
  until=time.monotonic()+100
  while time.monotonic()<until:
   t=dump()
+  if find('startup-error',t) is not None:
+   raise RuntimeError('Startup failed: startup-error visible')
   if find('name-input',t) is not None and find('generate',t) is not None:return
   if find('age-day',t) is not None:
    check('Native age disclosure explains retained eligibility date',

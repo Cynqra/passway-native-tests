@@ -1,8 +1,8 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "703881fec332421c8a43ea691dc4105a6c5645d8",
-  "archiveSha256": "486395e8ae0f5c42c293e3462184ded5bf5c506030da71a3390d4a533ed1db78",
-  "createdAt": "2026-10-17T09:48:37.682418+00:00",
-  "scope": "Version0.3.6/code12 candidate: Gemini-authored guarded age startup, native consent Back lifecycle and recovered chat-error fixes; fresh exact-source native, signed, architecture and security gates required. Not production SMS, licensed Play attestation or rollout proof.",
+  "sourceCommit": "77c601887ea81a05565c8f524ef60aa861cc606b",
+  "archiveSha256": "a33ba7c82293d14028bef94f56dc7573542fb77c652cfcf1d3b59b05ede055c0",
+  "createdAt": "2026-10-17T10:30:01.350040+00:00",
+  "scope": "Diagnostic followup to failed build12 API34 configuration-change startup. Gemini-authored fixed startup phase instrumentation and tests; unchanged20second timeout; no runtime fix or production release claim.",
   "fullTrackedSourceArchive": true
 }
