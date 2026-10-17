@@ -3,18 +3,18 @@ import json,os
 from pathlib import Path
 from play_api_access import access_token,SafeError,PUBLISHER
 from internal_release import send
-VERSION=15
-VERSION_NAME='0.3.9'
-PRIOR_DRAFT_VERSION=13
-PRIOR_DRAFT_NAME='0.3.7 (13)'
-PRIOR_DRAFT_SHA='209d204b75a9e5f8d4041ca29a6a06adb61f9d604d162a62050d5a657528711f'
-BUNDLE_SHA='eb0815d89398bd2cf6e344ad687ffa2f9ecabf0b09a500d8db790d2ba80b6e8e'
+VERSION=16
+VERSION_NAME='0.3.10'
+PRIOR_DRAFT_VERSION=15
+PRIOR_DRAFT_NAME='0.3.9 (15)'
+PRIOR_DRAFT_SHA='eb0815d89398bd2cf6e344ad687ffa2f9ecabf0b09a500d8db790d2ba80b6e8e'
+BUNDLE_SHA='271ae895d37ffc943fac49a2dd662a1d2af229bcd58157ee1574d685316d7c02'
 
 def reason_from_error(status,raw):
     try:text=json.loads(raw).get('error',{}).get('message','').lower()
     except (ValueError,AttributeError,TypeError):text=''
     if not isinstance(text,str):text=''
-    groups=[('APP_SETUP_REQUIRED',('only releases with status draft','draft app')),('PRODUCTION_ACCESS_REQUIRED',('production access','access to production')),('AUTHORIZATION_OR_ACCOUNT_RESTRICTION',('permission','not authorized','not authorised')),('STORE_DECLARATIONS_REQUIRED',('declaration','privacy policy','data safety','content rating','target audience')),('STORE_LISTING_REQUIRED',('store listing','listing','screenshots','short description','full description')),('REVIEW_REQUIRED',('sent for review','send for review','changesnotsentforreview'))]
+    groups=[('DRAFT_APP_REQUIRES_CONSOLE_COMPLETION',('only releases with status draft',)),('APP_SETUP_REQUIRED',('draft app',)),('PRODUCTION_ACCESS_REQUIRED',('production access','access to production')),('AUTHORIZATION_OR_ACCOUNT_RESTRICTION',('permission','not authorized','not authorised')),('STORE_DECLARATIONS_REQUIRED',('declaration','privacy policy','data safety','content rating','target audience')),('STORE_LISTING_REQUIRED',('store listing','listing','screenshots','short description','full description')),('REVIEW_REQUIRED',('sent for review','send for review','changesnotsentforreview'))]
     return {'httpStatus':status,'requirement':next((name for name,patterns in groups if any(p in text for p in patterns)),'GOOGLE_VALIDATION_REJECTED')}
 
 def is_owned_draft(releases,bundles):
