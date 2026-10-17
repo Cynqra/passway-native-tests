@@ -9,13 +9,17 @@ if (process.env.GCLOUD_PROJECT !== 'demo-passway' ||
 }
 const input = JSON.parse(process.argv[2] || '{}');
 const allowedPhones = ['9999900001', '9999900002', '9999900003', '9999900004'];
-if (!['snapshot', 'expire'].includes(input.action) ||
+if (!['snapshot', 'expire', 'isolate-extra-fixture'].includes(input.action) ||
     !Array.isArray(input.phones) || !input.phones.length ||
     input.phones.some(p => !allowedPhones.includes(p)) ||
     (input.tid !== undefined && !/^[A-Z0-9]{4}$/.test(input.tid))) {
   throw Error('Unsupported fixture command');
 }
 if (input.action === 'expire' && !input.tid) throw Error('Expiry requires an owned code');
+if (input.action === 'isolate-extra-fixture' &&
+    (input.tid !== undefined || input.phones.length !== 1 || !['9999900003', '9999900004'].includes(input.phones[0]))) {
+  throw Error('Unsupported fixture cohort command');
+}
 process.env.METADATA_SERVER_DETECTION = 'none';
 const { createRequire } = require('node:module');
 const req = createRequire(path.resolve('validation-source/passway-app/functions/package.json'));
@@ -37,10 +41,21 @@ const millis = v => v && typeof v.toMillis === 'function' ? v.toMillis() : null;
     if (user) identities[phone] = user.uid;
     const uid = identities[phone];
     if (uid && !/^[A-Za-z0-9_-]{1,128}$/.test(uid)) throw Error('Invalid saved fixture identity');
-    const profile = uid ? await db.collection('users').doc(uid).get() : null;
+    let profile = uid ? await db.collection('users').doc(uid).get() : null;
+    if (input.action === 'isolate-extra-fixture') {
+      if (!user || !profile?.exists || !['active', 'reported'].includes(profile.data()?.status) ||
+          !(typeof profile.data()?.ageConfirmedAt === 'number' && profile.data().ageConfirmedAt > 0)) {
+        throw Error('Only an existing eligible local fictional profile can be isolated');
+      }
+      await profile.ref.update({ automatedTest: true });
+      profile = await profile.ref.get();
+      if (profile.data()?.automatedTest !== true) throw Error('Fixture cohort readback failed');
+    }
     const deletion = uid ? await db.collection('accountDeletions').doc(uid).get() : null;
     profiles.push({ phone, uid: uid || null, authExists: !!user, profileExists: !!profile?.exists,
-      profileStatus: profile?.data()?.status || null, displayName: profile?.data()?.displayName || null,
+      profileStatus: profile?.data()?.status || null, testCohortMarker: profile?.data()?.automatedTest === true,
+      reservedReviewerBinding: ['9999900001', '9999900002'].includes(phone) && profile?.data()?.phoneHash ===
+        require('node:crypto').createHash('sha256').update('passway:phone:+91' + phone).digest('hex'), displayName: profile?.data()?.displayName || null,
       deletionStatus: deletion?.data()?.status || null });
   }
   fs.writeFileSync(mapPath, JSON.stringify(identities, null, 2));
@@ -73,6 +88,6 @@ const millis = v => v && typeof v.toMillis === 'function' ? v.toMillis() : null;
     for (const other of uids) if (uid !== other && (await db.collection('blocks').doc(uid + ':' + other).get()).exists) blocks.push(uid + ':' + other);
   }
   console.log(JSON.stringify({ profiles, code, connections, requests, reports, blocks, now: Date.now(),
-    scope: input.action === 'expire' ? 'Owned emulator code expiry injected; no device-clock or production change' : 'Read-only selected fictional fixture state' }));
+    scope: input.action === 'expire' ? 'Owned emulator code expiry injected; no device-clock or production change' : input.action === 'isolate-extra-fixture' ? 'Only selected third/fourth local fictional profile marked isolated; no production change' : 'Read-only selected fictional fixture state' }));
 })().catch(e => { console.error(e.code || e.message); process.exitCode = 1; })
   .finally(async () => { await db.terminate(); await Promise.all(getApps().map(a => a.delete())); });

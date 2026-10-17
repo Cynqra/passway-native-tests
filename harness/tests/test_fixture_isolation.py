@@ -44,3 +44,18 @@ class FixtureIsolationTests(unittest.TestCase):
         r = self.call({"action": "clear-database", "phones": ["9999900001"]})
         self.assertNotEqual(r.returncode, 0)
         self.assertIn("Unsupported fixture command", r.stderr)
+
+    def test_extra_fixture_cohort_action_rejects_reserved_or_unrelated_phones(self):
+        for phones in [["9999900001"], ["9999900002"], ["0000000000"], ["9999900003", "9999900004"]]:
+            with self.subTest(phones=phones):
+                r = self.call({"action":"isolate-extra-fixture", "phones":phones})
+                self.assertNotEqual(r.returncode, 0)
+                self.assertIn("Unsupported fixture", r.stderr)
+
+    def test_cohort_fixture_action_rejects_code_mutation_and_real_environment(self):
+        r = self.call({"action":"isolate-extra-fixture", "phones":["9999900003"], "tid":"AB12"})
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("Unsupported fixture cohort command", r.stderr)
+        r = self.call({"action":"isolate-extra-fixture", "phones":["9999900003"]}, {"GCLOUD_PROJECT":"passway-2ddc8"})
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("Strict fixture isolation guard failed", r.stderr)
