@@ -30,6 +30,14 @@ on:
         description: Successful same-revision extended native run (internal-candidate only)
         type: string
         required: false
+      store_download_run_id:
+        description: Successful same-revision authenticated Play APK download run (offline UI only)
+        type: string
+        required: false
+      store_apk_sha256:
+        description: Exact authenticated Play download APK SHA256 (offline UI only)
+        type: string
+        required: false
       store_version_code:
         description: Published internal version to download (read-only; numeric validation enforced)
         type: string
@@ -433,6 +441,9 @@ jobs:
     timeout-minutes: 20
     env:
       PASSWAY_RESULTS: ${{ github.workspace }}/store-ui-results
+      PASSWAY_STORE_DOWNLOAD_RUN_ID: ${{ inputs.store_download_run_id }}
+      PASSWAY_STORE_VERSION_CODE: ${{ inputs.store_version_code }}
+      PASSWAY_STORE_APK_SHA256: ${{ inputs.store_apk_sha256 }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -442,21 +453,7 @@ jobs:
       - name: Require trusted completed Play download and exact APK bytes
         env:
           GH_TOKEN: ${{ github.token }}
-        run: |
-          set -eu
-          mkdir store-ui-results
-          gh api repos/Cynqra/passway-native-tests/actions/runs/38898141494 > store-ui-results/download-run.json
-          python3 - <<'PY'
-          import json
-          r=json.load(open('store-ui-results/download-run.json'))
-          assert r['head_sha']=='d9450fddf19c4e80866698f8858a4a6cdbb9cd3c'
-          assert r['head_branch']=='validation/isolated-current-native'
-          assert r['head_repository']['full_name']=='Cynqra/passway-native-tests'
-          assert r['path']=='.github/workflows/passway-fresh-native-smoke.yml'
-          assert r['event']=='workflow_dispatch' and r['status']=='completed' and r['conclusion']=='success'
-          PY
-          gh run download 38898141494 -R Cynqra/passway-native-tests -n google-play-signed-physical-device-apk -D store-apk-results
-          PYTHONPATH=harness python3 -c "from store_release_smoke import verify_download; verify_download('store-apk-results')"
+        run: python3 harness/acquire_store_evidence.py
       - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
         with:
           distribution: temurin
@@ -469,8 +466,9 @@ jobs:
           grep -iq '5f97b4bfe27bdbf3aade7fd1e2e7b323cfdde1cd8d7feaa536ea1db31ef963f2' store-ui-results/actual-apk-signature.txt
           "$tools/aapt2" dump badging store-apk-results/passway-store-signed.apk > store-ui-results/actual-apk-badging.txt
           PYTHONPATH=harness python3 - <<'PY'
+          import os
           from download_store_apk import verify_badging
-          verify_badging(open('store-ui-results/actual-apk-badging.txt').read(),8)
+          verify_badging(open('store-ui-results/actual-apk-badging.txt').read(),int(os.environ['PASSWAY_STORE_VERSION_CODE']))
           PY
           keytool -genkeypair -keystore debug.keystore -storepass android -keypass android -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 30 -dname 'CN=Offline Release UI Probe,O=Internal Test,C=IN'
           bash harness/probe/build_isolated.sh

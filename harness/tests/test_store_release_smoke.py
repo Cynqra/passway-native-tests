@@ -27,7 +27,7 @@ class StoreReleaseArtifactBindingTests(unittest.TestCase):
         (self.directory / 'download-verification.json').write_text(json.dumps(self.metadata))
 
     def test_exact_artifact_is_accepted_without_device_interaction(self):
-        self.assertEqual(smoke.verify_download(self.directory, self.digest), self.metadata)
+        self.assertEqual(smoke.verify_download(self.directory, self.digest, 8), self.metadata)
 
     def test_package_version_type_and_size_must_match(self):
         for key, value in [('package', 'other.app'), ('versionCode', 7),
@@ -37,7 +37,7 @@ class StoreReleaseArtifactBindingTests(unittest.TestCase):
                 self.metadata[key] = value
                 self.write()
                 with self.assertRaises(ValueError):
-                    smoke.verify_download(self.directory, self.digest)
+                    smoke.verify_download(self.directory, self.digest, 8)
                 self.metadata = original
                 self.write()
 
@@ -47,8 +47,8 @@ class StoreReleaseArtifactBindingTests(unittest.TestCase):
                              bytes=self.apk.stat().st_size)
         self.write()
         with self.assertRaises(ValueError):
-            smoke.verify_download(self.directory, self.digest)
+            smoke.verify_download(self.directory, self.digest, 8)
 
     def test_default_is_bound_to_verified_play_release_not_fixture(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             smoke.verify_download(self.directory)
