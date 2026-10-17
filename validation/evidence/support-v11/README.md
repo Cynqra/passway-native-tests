@@ -33,3 +33,9 @@ Architecture39012093928 and static security39012095861 passed. The exact signed 
 Protected keyless internal publication39013727117 SUCCEEDED. Version11 /0.3.5 is on INTERNAL testing only with the verified bundle hash. This is not a public production rollout. Read-only Google Play-signed APK download39013926618 is pending.
 
 Release remains blocked on genuine licensed Play-installed positive attestation and physical/native production acceptance, current real-SMS acceptance and remaining factual Play policy declarations. Browser private-input availability failed before credential submission; repeating credentials is not a diagnosed fix. Raw upstream build-tool advisories remain visible despite tested installed-code mitigations; do not describe registry audit as clean. No new SMS was sent, no email was sent, no paid plan was enabled.
+
+## Google Play-signed artifact verified
+
+Run39013926618 passed. Downloaded version11 was verified with actual Google Play app-signing certificate, package/version and SHA256. The local downloaded bytes also match that hash. This is artifact/signature verification, not Play installation, licensing, positive attestation or native production behavior. Do not treat sideloading this APK as equivalent to installing through Play. No additional Google sign-in or paid service was required for this keyless download.
+
+Evidence publication minimization: raw apksigner output triggered generic secret heuristics on signer metadata. The publication stopped before commit. Raw output remains in the original CI artifact; only the verified certificate fingerprint, package/version, hash and explicit verification scope are published here. No credential finding is silently waived and the scanner was rerun after minimization.

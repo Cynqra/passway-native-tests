@@ -1,0 +1,13 @@
+{
+  "workflowRun": 39013926618,
+  "package": "com.passway.app",
+  "versionCode": 11,
+  "apkSha256": "c00a3ecb3da1544a25622cac3f050d4ab3f22c7786205d337cc8497e256ea192",
+  "googlePlaySigningCertificateSha256": "5F97B4BFE27BDBF3AADE7FD1E2E7B323CFDDE1CD8D7FEAA536EA1DB31EF963F2",
+  "registeredCertificateObservedInActualApksignerOutput": true,
+  "signatureVerificationWorkflowPassed": true,
+  "packageVersionVerificationWorkflowPassed": true,
+  "localDownloadedFileHashVerified": true,
+  "storeInstallationOrPositiveAttestationVerified": false,
+  "rawSignatureMetadataRetainedInWorkflowArtifact": true
+}
