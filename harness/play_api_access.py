@@ -164,7 +164,7 @@ def access_token(env, send=request):
     return required_token(delegated, "accessToken")
 
 
-def probe(token, send=request):
+def probe(token, send=request, store_readback=False):
     headers = {"Authorization": "Bearer " + token}
     edit = send(PUBLISHER, method="POST", headers=headers, body={}).get("id")
     if not isinstance(edit, str) or not edit.isdigit():
@@ -189,10 +189,36 @@ def probe(token, send=request):
             }
             for release in internal.get("releases", [])
         ]
+        production = next((x for x in tracks.get("tracks", []) if x.get("track") == "production"), {})
+        report["productionReleases"] = [
+            {"status": r.get("status"), "versionCodes": r.get("versionCodes", [])}
+            for r in production.get("releases", [])
+        ]
         report["publicProductionReleasePresent"] = any(
-            x.get("track") == "production" and bool(x.get("releases"))
-            for x in tracks.get("tracks", [])
+            r.get("status") in ("completed", "inProgress") for r in production.get("releases", [])
         )
+        report["publicAvailabilityIndependentlyVerified"] = False
+        if store_readback:
+            from public_store_assets import load_assets
+            from public_release_draft import FULL, SHORT
+            from public_release_preflight import BUNDLE_SHA, VERSION
+            bundles = send(PUBLISHER + "/" + edit + "/bundles", headers=headers).get("bundles", [])
+            if not any(b.get("versionCode") == VERSION and b.get("sha256", "").lower() == BUNDLE_SHA for b in bundles):
+                raise SafeError("Saved candidate bundle identity mismatch")
+            path = PUBLISHER + "/" + edit + "/listings/en-US"
+            listing = send(path, headers=headers)
+            report["listingTextVerified"] = all(listing.get(k) == v for k,v in
+                {"title":"Passway", "shortDescription":SHORT, "fullDescription":FULL}.items())
+            assets = load_assets()
+            report["imageCounts"] = {}
+            for kind in ("icon", "featureGraphic", "phoneScreenshots"):
+                images = send(path + "/" + kind, headers=headers).get("images", [])
+                if [x.get("sha256", "").lower() for x in images] != [r["sha256"] for r,d in assets if r["kind"] == kind]:
+                    raise SafeError("Saved store artwork identity mismatch")
+                report["imageCounts"][kind] = len(images)
+            if not report["listingTextVerified"]:raise SafeError("Saved listing text mismatch")
+            report["bundleSha256Verified"] = BUNDLE_SHA
+            report["storeAssetsReadbackVerified"] = True
     finally:
         send(PUBLISHER + "/" + edit, method="DELETE", headers=headers)
     report["temporaryEditDeleted"] = True
@@ -202,9 +228,10 @@ def probe(token, send=request):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", default="play-api-access.json")
+    parser.add_argument("--store-readback", action="store_true")
     args = parser.parse_args()
     try:
-        report = probe(access_token(os.environ))
+        report = probe(access_token(os.environ), store_readback=args.store_readback)
     except Exception as exc:
         # Deliberately never stringify arbitrary exceptions or HTTP response bodies.
         report = {
