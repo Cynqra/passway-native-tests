@@ -1,9 +1,9 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "736d469c5b7b36be52bc31f2975431c38eb920e4",
-  "sourceTree": "4bf0e62ff9cc6365692c83e374f54489b7ff8340",
-  "archiveSha256": "8aca64d8749b27b1edb866142343ee41e6120a42462f19723d6d27715b1b7abe",
-  "createdAt": "2026-10-17T21:57:58.806542+00:00",
-  "fullTrackedSourceArchive": true,
-  "scope": "Backend-only authorization patch: both-party consent revalidated at redemption/acceptance/recovery; recipient and person-block preflight before moderation, with commit rechecks retained. Client source/config/dependency lockfiles unchanged from signed version16 source ea06c8e8a75d7f082f99582114c7276710d66db8. Existing signed16 bundle is not rebuilt or replaced. Fresh exact-source native/architecture checks pending; production remains managed-publishing hold; no SMS/positive Store attestation claim."
+  "sourceCommit": "881d0d26e4f80fbd3a20718e3ba381aea1ee2989",
+  "archiveSha256": "7ef7c1187012b63fa51137f72f5d64bee588aca40c732bb5792dcd95892e0643",
+  "createdAt": "2026-10-18T14:47:43.829426+00:00",
+  "scope": "Candidate for reported production pairing/message latency and stale chat: 287 mobile and 505 backend regressions pass locally. Fresh native test only, no inherited pass, no production SMS or attestation claim.",
+  "sourceTree": "57430b34fc9b2d0f8ba4200b19368e9ff5a6ef7f",
+  "fullTrackedSourceArchive": true
 }
