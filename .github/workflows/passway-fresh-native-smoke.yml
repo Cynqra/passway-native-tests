@@ -19,6 +19,8 @@ on:
           - internal-sharing-candidate
           - store-apk-download
           - store-release-offline-ui
+          - open-testing17-inspect
+          - open-testing17-submit
       android_api_level:
         description: Android API for isolated native tests only; release modes ignore it
         type: choice
@@ -617,5 +619,34 @@ jobs:
         with:
           name: public-release-diagnostic
           path: public-release-draft.json
+          retention-days: 14
+          if-no-files-found: error
+
+  open-testing17:
+    if: ${{ inputs.mode == 'open-testing17-inspect' || inputs.mode == 'open-testing17-submit' }}
+    name: Verify or submit existing version17 to public testing only
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    environment: passway-play-internal
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PASSWAY_OPEN_TESTING_ACTION: ${{ inputs.mode == 'open-testing17-submit' && 'submit' || 'inspect' }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Verify testing-only release boundaries
+        run: python3 -m unittest discover -s harness/tests -p test_open_testing17.py -v
+      - name: Verify immutable release evidence and act only on beta
+        run: python3 harness/open_testing17.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: open-testing17-result
+          path: open-testing17-result.json
           retention-days: 14
           if-no-files-found: error
