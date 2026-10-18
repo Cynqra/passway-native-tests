@@ -10,7 +10,7 @@ const fixtures = Object.freeze({
   ...Object.fromEntries([
     'generateTid', 'redeemTid', 'deactivateTid', 'respondToRequest',
     'endConnection', 'sendMessage', 'getMessages', 'fileReport', 'blockUser',
-    'confirmAge', 'deleteAccount',
+    'confirmAge', 'deleteAccount', 'acceptContentPolicy',
   ].map(name => [name, Object.freeze({ data: Object.freeze({}) })])),
 });
 
@@ -62,8 +62,8 @@ async function runChecks({ target = PRODUCTION_URL, bypass, fetchImpl = fetch, n
   if (bypass && origin === PRODUCTION_URL) {
     throw new Error('A preview-protection credential must not be sent to production.');
   }
-  // 26 probes with at most four in flight: seven 15-second waves fit the
-  // three-minute CI job budget, unlike a serial 390-second worst case. Requests
+  // 28 probes with at most four in flight: seven 15-second waves fit the
+  // three-minute CI job budget, unlike a serial 420-second worst case. Requests
   // are never retried; an unavailable route stays failed and visible.
   const probes = Object.entries(fixtures).flatMap(([route, body]) =>
     ['missing', 'invalid'].map(token => ({ route, body, token })));
@@ -86,7 +86,7 @@ async function runChecks({ target = PRODUCTION_URL, bypass, fetchImpl = fetch, n
         });
         status = response.status;
         const result = await readBoundedJson(response);
-        pass = status === 401 &&
+        pass = status === 401 && response.headers.get('cache-control') === 'no-store' &&
           result?.error?.status === 'UNAUTHENTICATED' &&
           result?.error?.message === APP_CHECK_ERROR;
       } catch {
