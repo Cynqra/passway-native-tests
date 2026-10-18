@@ -1,0 +1,8 @@
+// No Firebase Admin key is needed or accepted. Both Admin services are local.
+const http=require('node:http'),path=require('node:path');
+if(process.env.GCLOUD_PROJECT!=='demo-passway'||process.env.FIRESTORE_EMULATOR_HOST!=='127.0.0.1:8080'||process.env.FIREBASE_AUTH_EMULATOR_HOST!=='127.0.0.1:9099'||process.env.GOOGLE_APPLICATION_CREDENTIALS||process.env.FIREBASE_SERVICE_ACCOUNT)throw Error('Strict emulator isolation guard failed');
+process.env.METADATA_SERVER_DETECTION='none';
+process.env.ENFORCE_APP_CHECK='false';process.env.MODERATION_PROVIDER='rules';
+const {handleCallable}=require(path.resolve('validation-source/passway-app/functions/lib/http/server.js'));
+const allowed=new Set(['generateTid','redeemTid','deactivateTid','respondToRequest','sendMessage','getMessages','blockUser','fileReport','endConnection','confirmAge','deleteAccount','acceptContentPolicy']);
+http.createServer(async(req,res)=>{try{if(req.method==='GET'&&req.url==='/healthz'){res.end('isolated-demo-passway');return;}const match=/^\/api\/([A-Za-z]+)$/.exec(req.url||'');if(req.method!=='POST'||!match||!allowed.has(match[1])){res.writeHead(404);res.end();return;}let size=0;const chunks=[];for await(const chunk of req){size+=chunk.length;if(size>4096){res.writeHead(413);res.end();return;}chunks.push(chunk);}const r=await handleCallable(new Request('http://127.0.0.1:8787'+req.url,{method:'POST',headers:req.headers,body:Buffer.concat(chunks)}),match[1]);res.writeHead(r.status,Object.fromEntries(r.headers));res.end(await r.text());}catch{res.writeHead(500);res.end('Isolated test request failed');}}).listen(8787,'127.0.0.1',()=>console.log('Isolated candidate API ready; demo-passway only'));

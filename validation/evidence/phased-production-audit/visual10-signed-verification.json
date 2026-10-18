@@ -1,0 +1,16 @@
+{
+  "run": 38935337937,
+  "metadata": {
+    "package": "com.passway.app",
+    "versionCode": 10,
+    "versionName": "0.3.4",
+    "sourceCommit": "2ffec5fd702824ec5d4f1b200ac28102fd8b2a4b",
+    "sourceArchiveSha256": "38b34906d1dcf6b5b0fa61cbc9cdd9ffed7a60534f741fd3cfd1151aca4ea048",
+    "scope": "Signed candidate only; no store installation, attestation or rollout proof"
+  },
+  "sha256": "4c96361db14e6e4b11edf97e1b3785e508031cc60532132a1ee8e41068a0d5ae",
+  "allowBackup": false,
+  "debuggable": false,
+  "usesCleartextTraffic": false,
+  "scope": "Upload-signed AAB only; no Play signing, installation, positive attestation or rollout acceptance."
+}

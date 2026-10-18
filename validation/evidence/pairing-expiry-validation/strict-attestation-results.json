@@ -1,0 +1,46 @@
+{
+  "sourceCommit": "5f89b86fa1862b8566666de3749bd170aa458436",
+  "scope": "Negative-only attestation rejection on exact-source guarded preview. Inert SMS provider key, empty data, no authentication, maintenance disabled; not positive store attestation.",
+  "target": "https://passway-h8il7ps2v-naveenbharti310s-projects.vercel.app",
+  "pass": true,
+  "sourceFilesVerified": 27,
+  "wrapperSha256": "f70cd1e038201cabe56f4b30b997a5a521ffc4ce8534cf40cf8638a6ea4cfe7d",
+  "checks": [
+    {
+      "route": "otpSend",
+      "token": "missing",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "otpSend",
+      "token": "invalid",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "otpVerify",
+      "token": "missing",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "otpVerify",
+      "token": "invalid",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "generateTid",
+      "token": "missing",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "generateTid",
+      "token": "invalid",
+      "status": 401,
+      "pass": true
+    }
+  ]
+}

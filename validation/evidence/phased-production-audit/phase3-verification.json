@@ -1,0 +1,22 @@
+{
+  "sourceRepository": "naveenbharti310/Paasway",
+  "sourceCommit": "bc3a4020520d9c779a698bea7681d416ae2d69d0",
+  "archiveSha256": "e23ae75ae35b08294ae591a794cfb4ac87b617770a5b65f46642e9254b67fbac",
+  "createdAt": "2026-10-16T15:53:18.725500+00:00",
+  "scope": "Bounded pending-pairing deletion, eight local regression cases and three real-Firestore lifecycle/race cases. No new native or production acceptance.",
+  "fullTrackedSourceArchive": true,
+  "sourceRun": 38927528187,
+  "centralRun": 38927562560,
+  "staticRun": 38927565958,
+  "suiteTotals": {
+    "policy": 4,
+    "mobile": 152,
+    "backend": 275,
+    "rules": 35,
+    "Firestore": 83,
+    "AuthBridge": 4
+  },
+  "assertionsPerRun": 553,
+  "allConclusions": "success",
+  "staticSarifFindings": 0
+}

@@ -1,0 +1,22 @@
+{
+  "sourceCommit": "5f89b86fa1862b8566666de3749bd170aa458436",
+  "runId": 38885268149,
+  "passed": false,
+  "completedMarkersPresent": false,
+  "coordinator": {
+    "exit_code": 1,
+    "duration_seconds": 338.17,
+    "passed": false,
+    "scope": "current-source isolated emulators; one attempt; no live patching"
+  },
+  "recordedChecks": 17,
+  "passedChecks": 16,
+  "failure": {
+    "test": "Native end-to-end run",
+    "status": "FAIL",
+    "detail": "Command '['/usr/local/lib/android/sdk/platform-tools/adb', 'shell', 'am', 'instrument', '-w', '--user', '10', 'com.passway.nativeprobe/.Probe']' timed out after 0.02765656799988392 seconds",
+    "at": "2026-10-16T10:26:17Z"
+  },
+  "capturedScreen": "Connection ended; peer composer absent after acceptance and first sender message",
+  "diagnosis": "Actual screen components reproducibly treat cache-only absent snapshots as authoritative closure. Consistent mechanism; full corrected native rerun is required."
+}

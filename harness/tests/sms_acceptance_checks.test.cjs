@@ -1,0 +1,12 @@
+const test=require('node:test'),assert=require('node:assert/strict');const{verifiedSessionChecks:checks}=require('../sms_acceptance_checks.cjs');
+const state=()=>({tokenVerified:true,claims:{uid:'fictional-user',phone_number:'+919876543210',aud:'fictional-project',firebase:{sign_in_provider:'custom'}},persisted:{uid:'fictional-user',phone:'+919876543210'},account:{uid:'fictional-user',phoneNumber:'+919876543210'},phone:'+919876543210',projectId:'fictional-project'});
+test('valid custom-token sign-in does not require REST localId (not part of that API contract)',()=>assert.ok(Object.values(checks(state())).every(Boolean)));
+test('unverified token cannot pass even with matching claims',()=>assert.equal(checks({...state(),tokenVerified:false}).firebaseSignatureExpiryAndRevocationValid,false));
+test('persisted and verified UID mismatch denied',()=>assert.equal(checks({...state(),persisted:{...state().persisted,uid:'different'}}).storedUidMatchesVerifiedSubject,false));
+test('verified phone mismatch denied',()=>assert.equal(checks({...state(),claims:{...state().claims,phone_number:'+919999999999'}}).verifiedPhoneMatchesRequested,false));
+test('persisted phone mismatch denied',()=>assert.equal(checks({...state(),persisted:{...state().persisted,phone:'+919999999999'}}).storedPhoneMatchesRequested,false));
+test('phone account identity mismatch denied',()=>assert.equal(checks({...state(),account:{...state().account,uid:'different'}}).existingPhoneAccountMatchesVerifiedSubject,false));
+test('cross-project audience denied',()=>assert.equal(checks({...state(),claims:{...state().claims,aud:'different'}}).projectAudienceMatches,false));
+test('different authentication provider is not accepted as this SMS bridge',()=>assert.equal(checks({...state(),claims:{...state().claims,firebase:{sign_in_provider:'password'}}}).customTokenProviderConfirmed,false));
+test('missing fields fail closed',()=>assert.ok(Object.values(checks({})).every(v=>v===false)));
+test('evidence contains booleans only, never token, UID or phone values',()=>{const x=checks(state());assert.ok(Object.values(x).every(v=>typeof v==='boolean'));assert.ok(!JSON.stringify(x).includes(state().phone));assert.ok(!JSON.stringify(x).includes(state().claims.uid));});

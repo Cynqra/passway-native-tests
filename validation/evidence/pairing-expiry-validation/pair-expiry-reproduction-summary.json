@@ -1,0 +1,26 @@
+{
+  "scope": "Before-fix reproducible server-owned persisted pairing expiry robustness failures; not a normal-client forged-write exploit",
+  "baseSourceCommit": "bc5a5918719cb22ea6e915e09c5d7281a5d15ca7",
+  "unit": {
+    "total": 15,
+    "passed": 0,
+    "failed": 15
+  },
+  "realFirestore": {
+    "total": 15,
+    "passed": 0,
+    "failed": 15
+  },
+  "malformedRepresentations": [
+    "NaN",
+    "Infinity",
+    "missing",
+    "future numeric string",
+    "map"
+  ],
+  "affectedTransitions": [
+    "code redemption",
+    "request acceptance with malformed request expiry",
+    "request acceptance with malformed matching code expiry"
+  ]
+}

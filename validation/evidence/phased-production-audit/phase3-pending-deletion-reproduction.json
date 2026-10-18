@@ -1,0 +1,11 @@
+{
+  "source": "7f460ed",
+  "result": {
+    "pending": false
+  },
+  "deletionJob": "complete",
+  "requestAfterAccountDeletion": "pending",
+  "codeAfterAccountDeletion": "pending",
+  "profileExists": false,
+  "finding": "Account completes deletion while pending request and matching pending code remain pending. Account guards prevent later acceptance; lifecycle/UI consistency gap, not demonstrated auth bypass."
+}

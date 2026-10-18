@@ -2,7 +2,7 @@ name: Passway Android 14 startup-recovery E2E
 on:
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 concurrency:
   group: passway-android16-e2e
   cancel-in-progress: false
@@ -12,12 +12,15 @@ jobs:
     timeout-minutes: 35
     env:
       PASSWAY_RESULTS: ${{ github.workspace }}/native-results
-      GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Native harness unit tests
+        run: python3 -m unittest discover -s harness/tests -v
       - name: Publish setup status
         run: python3 harness/status.py setup
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
         with:
           distribution: temurin
           java-version: '17'
@@ -30,7 +33,7 @@ jobs:
           sudo udevadm trigger --name-match=kvm
           free -m
           df -h /
-      - uses: actions/cache@v4
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
         with:
           path: native-cache
           key: passway-aab-061364fa-bundletool-1.18.3
@@ -54,7 +57,7 @@ jobs:
           bash harness/probe/build.sh
           python3 harness/status.py emulator_setup
       - name: Native Android connection and chat test
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
         with:
           api-level: 34
           arch: x86_64
@@ -90,7 +93,7 @@ jobs:
             for row in rows:f.write('- **'+row['status']+'** '+row['test']+': '+row.get('detail','')+'\n')
             f.write('\n**Native critical flow PASSED**\n' if pathlib.Path('native-results/complete.json').exists() else '\n**Native E2E NOT PASSED**\n')
           PY
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
           name: passway-native-evidence

@@ -1,0 +1,20 @@
+{
+  "sourceCommit": "7f460ed01dc8b19f239a214bc718764bb1f889bf",
+  "archiveSha256": "fc955f2e2a4bc1215e1927c064b3bd1bc729d9dca72a0a1841771f8260f0047f",
+  "harnessCommit": "bde19a355f2d1eabbc6c3a64cfd65c9b0fc8e34a",
+  "sourceRun": 38926511232,
+  "centralRun": 38926610673,
+  "staticRun": 38926614406,
+  "suiteTotals": {
+    "workflowPolicy": 4,
+    "mobile": 152,
+    "backend": 267,
+    "rules": 35,
+    "realFirestoreIntegration": 80,
+    "realAuthBridge": 4
+  },
+  "assertionsPerRun": 542,
+  "allRunsConclusion": "success",
+  "staticSarifFindings": 0,
+  "scope": "Actual HTTP auth matrix and local Auth/Firestore OTP bridge; SMS provider stubbed, not production SMS/crypto/store acceptance. Phone claim concern not reproduced. Raw dependency audit still NOT CLEAN."
+}

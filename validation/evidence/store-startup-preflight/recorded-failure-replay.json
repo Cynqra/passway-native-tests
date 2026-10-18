@@ -1,0 +1,16 @@
+{
+  "recordedRun": 38904704772,
+  "diagnostic": {
+    "kind": "environment-blocked",
+    "signals": [
+      "wrong-installer",
+      "play-services-outdated",
+      "licensing-service-denied"
+    ],
+    "passed": false,
+    "storeInstallationOrAttestationVerified": false,
+    "requiredEnvironment": "Supported Play environment with genuine installation",
+    "securityBypassAttempted": false
+  },
+  "scope": "Replay of recorded native hierarchy and process logs, not a new device test"
+}

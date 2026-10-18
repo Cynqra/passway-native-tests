@@ -1,0 +1,28 @@
+{
+  "baselineNativeRun": 38920011786,
+  "source": "abd9ae23df7261bbb446c0484545492c63bbafcc",
+  "nativeCoordinatorSeconds": 774.94,
+  "probeTotalSeconds": 510.46,
+  "probeCount": 716,
+  "probeBreakdown": {
+    "read": {
+      "calls": 479,
+      "totalSeconds": 248.3,
+      "medianSeconds": 0.46,
+      "maxSeconds": 3.44
+    },
+    "touch": {
+      "calls": 174,
+      "totalSeconds": 199.25,
+      "medianSeconds": 1.09,
+      "maxSeconds": 4.83
+    },
+    "setText": {
+      "calls": 63,
+      "totalSeconds": 62.91,
+      "medianSeconds": 0.96,
+      "maxSeconds": 1.71
+    }
+  },
+  "scope": "Measured baseline isolated native automation overhead, not app request latency or production/device benchmark. Each probe launches instrumentation and captures an actual fresh hierarchy. No assertion removed or source patch made to inflate performance."
+}

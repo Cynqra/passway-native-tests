@@ -1,0 +1,30 @@
+{
+  "sourceCommit": "bc5a5918719cb22ea6e915e09c5d7281a5d15ca7",
+  "liveBackend": {
+    "passed": 42,
+    "total": 42,
+    "scope": "Restricted preview, original handlers, real Firebase custom-token fixture authentication, disposable automated accounts; no real SMS/native/positive attestation"
+  },
+  "previewBoundaryAndCleanup": {
+    "passed": 3,
+    "total": 3
+  },
+  "strictPreviewNegativeAttestation": {
+    "passed": 6,
+    "total": 6
+  },
+  "currentProductionNegativeAttestation": {
+    "passed": 0,
+    "total": 6,
+    "pass": false
+  },
+  "playAccessRun": "38881307717",
+  "internalClientVersion": 7,
+  "publicProductionRelease": false,
+  "productionReady": false,
+  "remaining": [
+    "Store-installed positive Play Integrity and production two-user acceptance",
+    "Coordinated strict backend/client/rules cutover",
+    "Raw registry audit remains advisory-positive despite verified local remediation"
+  ]
+}

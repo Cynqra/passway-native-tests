@@ -1,0 +1,140 @@
+{
+  "sourceCommit": "2ffec5fd702824ec5d4f1b200ac28102fd8b2a4b",
+  "archiveSha256": "38b34906d1dcf6b5b0fa61cbc9cdd9ffed7a60534f741fd3cfd1151aca4ea048",
+  "cleanAndSigningHarness": "10a4db2ec1672154ac57c2a333ce9293b3072c45",
+  "nativeHarness": "60e2e35b60f29f07ba2bb77a2150599441999ed4",
+  "cleanRuns": {
+    "source": {
+      "run": 38935318797,
+      "suiteTotals": {
+        "workflowPolicy": 4,
+        "mobile": 168,
+        "backend": 282,
+        "rules": 35,
+        "realFirestore": 83,
+        "realAuthBridge": 4
+      },
+      "totalCases": 576,
+      "failureCounts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "central": {
+      "run": 38935320479,
+      "suiteTotals": {
+        "workflowPolicy": 4,
+        "mobile": 168,
+        "backend": 282,
+        "rules": 35,
+        "realFirestore": 83,
+        "realAuthBridge": 4
+      },
+      "totalCases": 576,
+      "failureCounts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "static": {
+    "run": 38935325182,
+    "sarifFindings": 0
+  },
+  "rawAudit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 21,
+    "critical": 0,
+    "total": 21
+  },
+  "installedRemediation": {
+    "status": "locally-remediated-build-tools; registry audit is NOT clean",
+    "remediatedAdvisories": [
+      "https://github.com/advisories/GHSA-86w9-cpqp-85rv",
+      "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm"
+    ],
+    "registryVulnerabilityCounts": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 21,
+      "critical": 0,
+      "total": 21
+    },
+    "installedFileHashesVerified": true,
+    "exploitRegressionsPassed": true,
+    "dependencyVersionsRewritten": false,
+    "fixes": [
+      {
+        "package": "node-forge",
+        "version": "1.4.0",
+        "advisory": "GHSA-86w9-cpqp-85rv",
+        "registryAdvisory": {
+          "source": 1240912,
+          "name": "node-forge",
+          "dependency": "node-forge",
+          "title": "node-forge RSA PKCS#1 v1.5 signature verification accepts extra nested DigestAlgorithm elements",
+          "url": "https://github.com/advisories/GHSA-86w9-cpqp-85rv",
+          "severity": "high",
+          "cwe": [
+            "CWE-347"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+          },
+          "range": "<=1.4.0"
+        },
+        "location": "node_modules/node-forge"
+      },
+      {
+        "package": "braces",
+        "version": "3.0.3",
+        "advisory": "GHSA-vfj7-8cjw-p6xm",
+        "registryAdvisory": {
+          "source": 1240992,
+          "name": "braces",
+          "dependency": "braces",
+          "title": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+          "url": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+          "severity": "high",
+          "cwe": [
+            "CWE-674"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": "<=3.0.3"
+        },
+        "location": "node_modules/braces"
+      }
+    ]
+  },
+  "conformance": {
+    "forge": {
+      "passed": 829,
+      "failed": 0,
+      "pending": 4
+    },
+    "braces": {
+      "passed": 899,
+      "failed": 0,
+      "pending": 0
+    }
+  },
+  "productionAccepted": false,
+  "nativeAcceptance": "API34/API36 each81/81; details in visual10-native-verification.json",
+  "signedBuild": "Verified exact-source hardened0.3.4/code10 AAB; details in visual10-signed-verification.json",
+  "secretScanMatches": 0
+}

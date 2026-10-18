@@ -1,0 +1,62 @@
+name: Passway exact-source static security analysis
+on:
+  workflow_dispatch:
+  push:
+    branches: [validation/message-transit-expiry, validation/block-boundary]
+    paths: ['.github/workflows/passway-static-security.yml']
+permissions:
+  contents: read
+concurrency:
+  group: static-security-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  static-security:
+    # CodeQL CLI scanning is free for public repositories. Never enable a paid
+    # private-repository security service from this test workflow.
+    if: github.event.repository.private == false
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Verify exact source snapshot
+        run: |
+          sha256sum -c validation/architecture-source.sha256
+          mkdir validation-source
+          tar -xzf validation/architecture-source.tar.gz -C validation-source
+          cat validation/architecture-provenance.json >> "$GITHUB_STEP_SUMMARY"
+      - name: Initialize extended JavaScript and TypeScript analysis
+        uses: github/codeql-action/init@24c54180a607b1449ed407dd24f251e4e9147c8d
+        with:
+          languages: javascript-typescript
+          build-mode: none
+          queries: security-extended
+          source-root: validation-source/passway-app
+      - name: Analyze without publishing a source database
+        uses: github/codeql-action/analyze@24c54180a607b1449ed407dd24f251e4e9147c8d
+        with:
+          output: static-results
+          upload: never
+          upload-database: false
+      - name: Require findings to be reviewed
+        run: |
+          python3 - <<'PYCODE'
+          import json,pathlib,os
+          files=list(pathlib.Path('static-results').glob('*.sarif'))
+          if not files:raise SystemExit('No SARIF evidence produced')
+          results=[]
+          for p in files:
+            for run in json.loads(p.read_text()).get('runs',[]):
+              results.extend(run.get('results',[]))
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+            f.write('\nStatic security findings requiring review: '+str(len(results))+'\n')
+            for r in results:f.write('- '+r.get('ruleId','unknown')+': '+r.get('message',{}).get('text','')+'\n')
+          if results:raise SystemExit('Static security findings require investigation; see SARIF evidence')
+          PYCODE
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: exact-source-static-security
+          path: static-results
+          retention-days: 3

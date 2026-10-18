@@ -1,0 +1,20 @@
+{
+  "scope": "Fresh synthetic nonallowlisted Auth identity plus independent read-only cleanup verification",
+  "rows": [
+    {
+      "name": "Valid nonallowlisted identity denied generateTid",
+      "pass": true,
+      "detail": "HTTP 404"
+    },
+    {
+      "name": "Valid nonallowlisted identity denied getMessages",
+      "pass": true,
+      "detail": "HTTP 404"
+    },
+    {
+      "name": "Independent disposable fixture absence verification",
+      "pass": true,
+      "detail": "Auth, profiles, deletion jobs, participant graphs, generated codes/requests, known counters and both block directions"
+    }
+  ]
+}

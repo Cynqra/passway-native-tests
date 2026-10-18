@@ -1,0 +1,69 @@
+{
+  "sourceCommit": "54b72953b0a9f3ea0748b3323631227b1d88f7b4",
+  "reproducedAgainstParent": "5f89b86fa1862b8566666de3749bd170aa458436",
+  "focusedOriginal": {
+    "tests": 14,
+    "passed": 5,
+    "failed": 9
+  },
+  "focusedCorrected": {
+    "tests": 14,
+    "passed": 14,
+    "failed": 0
+  },
+  "completeLocalGate": {
+    "exitCode": 0,
+    "mobile": 127,
+    "backendUnitHttp": 223,
+    "rules": 35,
+    "realFirestoreIntegration": 80,
+    "total": 465,
+    "typechecks": [
+      "client",
+      "backend"
+    ],
+    "platformExports": [
+      "android",
+      "ios",
+      "web"
+    ]
+  },
+  "independentRuns": {
+    "regression": 38887942046,
+    "staticSecurity": 38887944663,
+    "nativeExtended": 38887947192
+  },
+  "productionAcceptance": false,
+  "caution": "No zero-bug/production-readiness claim. Prior backend checks apply by unchanged Functions tree and source hashes; no production rollout.",
+  "independentRegression": {
+    "runId": 38887942046,
+    "passed": true,
+    "total": 465,
+    "counts": [
+      127,
+      223,
+      35,
+      80
+    ],
+    "exports": [
+      "android",
+      "ios",
+      "web"
+    ]
+  },
+  "independentStaticSecurity": {
+    "runId": 38887944663,
+    "passed": true,
+    "sarifFindings": 0
+  },
+  "nativeExtended": {
+    "runId": 38887947192,
+    "passed": true,
+    "assertions": 75,
+    "coordinatorExitCode": 0,
+    "bothFreshCompletionMarkersVerified": true,
+    "durationSeconds": 979.3,
+    "scope": "Isolated Android API36 plus local Auth/Firestore; not SMS or positive Play attestation"
+  },
+  "verifiedAt": "2026-10-16T10:59:59.906650+00:00"
+}

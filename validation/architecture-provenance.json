@@ -1,8 +1,9 @@
 {
-  "source_repo": "naveenbharti310/Paasway",
-  "source_commit": "fc8d436d6f1896245a06e5f947d0456aaf601fd9",
-  "archive_sha256": "4cab05310a072d39a4d20776e2a5d9ebc10d39ea0798bf862b2c4529b08dfd82",
-  "application_tree": "5852ac692a58ada3f2584ac438043c70044c4b8f",
-  "native_application_source": "4e46a19f5a6f075ed300ebcc57d33e6ec11885fc",
-  "scope": "CI-routing-only source change; app tree unchanged; no deployment or SMS"
+  "sourceRepository": "naveenbharti310/Paasway",
+  "sourceCommit": "736d469c5b7b36be52bc31f2975431c38eb920e4",
+  "sourceTree": "4bf0e62ff9cc6365692c83e374f54489b7ff8340",
+  "archiveSha256": "8aca64d8749b27b1edb866142343ee41e6120a42462f19723d6d27715b1b7abe",
+  "createdAt": "2026-10-17T21:57:58.806542+00:00",
+  "fullTrackedSourceArchive": true,
+  "scope": "Backend-only authorization patch: both-party consent revalidated at redemption/acceptance/recovery; recipient and person-block preflight before moderation, with commit rechecks retained. Client source/config/dependency lockfiles unchanged from signed version16 source ea06c8e8a75d7f082f99582114c7276710d66db8. Existing signed16 bundle is not rebuilt or replaced. Fresh exact-source native/architecture checks pending; production remains managed-publishing hold; no SMS/positive Store attestation claim."
 }
