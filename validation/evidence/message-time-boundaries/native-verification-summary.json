@@ -1,0 +1,15 @@
+{
+  "sourceCommit": "bc5a5918719cb22ea6e915e09c5d7281a5d15ca7",
+  "run": "38872233392",
+  "assertions": 75,
+  "passed": 75,
+  "coordinator": {
+    "exit_code": 0,
+    "duration_seconds": 1065.97,
+    "passed": true,
+    "scope": "current-source isolated emulators; one attempt; no live patching"
+  },
+  "coreCompletionMarker": true,
+  "extendedCompletionMarker": true,
+  "scope": "Isolated native two-user emulator testing, not production/store attestation"
+}

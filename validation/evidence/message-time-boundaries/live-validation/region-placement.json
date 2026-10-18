@@ -1,0 +1,10 @@
+{
+  "scope": "Read-only database placement audit",
+  "status": 200,
+  "databaseLocation": "asia-south1",
+  "databaseType": "FIRESTORE_NATIVE",
+  "candidateFunctionRegion": "asia-south1",
+  "vercelRegion": [
+    "bom1"
+  ]
+}

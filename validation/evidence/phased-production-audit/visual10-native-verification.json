@@ -1,0 +1,95 @@
+{
+  "sourceCommit": "2ffec5fd702824ec5d4f1b200ac28102fd8b2a4b",
+  "archiveSha256": "38b34906d1dcf6b5b0fa61cbc9cdd9ffed7a60534f741fd3cfd1151aca4ea048",
+  "nativeHarnessCommit": "60e2e35b60f29f07ba2bb77a2150599441999ed4",
+  "at": "2026-10-16T17:19:08.208874+00:00",
+  "nativeRuns": [
+    {
+      "api": 34,
+      "run": 38935487439,
+      "checksPassed": 81,
+      "checksFailed": 0,
+      "coordinator": {
+        "exit_code": 0,
+        "duration_seconds": 967.06,
+        "passed": true,
+        "scope": "current-source isolated emulators; one attempt; no live patching"
+      },
+      "markers": {
+        "complete.json": {
+          "status": "passed",
+          "android_sdk": "34",
+          "coverage": "Fresh candidate-source Android build with a test-only local emulator routing overlay; two isolated Android users; local Firebase Auth/Firestore and candidate HTTP handlers; keyboard occlusion and startup recovery; no production, real SMS, store attestation or physical-device certification"
+        },
+        "extended-complete.json": {
+          "passed": true,
+          "scope": "Native UI plus independently read Auth/Firestore emulator state",
+          "fixturePhones": [
+            "9999900001",
+            "9999900002",
+            "9999900003",
+            "9999900004"
+          ],
+          "productionChanged": false,
+          "realSmsTested": false,
+          "storeAttestationTested": false,
+          "expiry": "Owned demo server record fault injection, not an accelerated five-minute UI timer"
+        },
+        "accessibility-complete.json": {
+          "passed": true,
+          "displayOverride": "440x880",
+          "fontScale": 2.0,
+          "scope": "One observed emulator layout and actual pairing; not physical-device, TalkBack or exhaustive accessibility certification"
+        }
+      },
+      "preDispatchReacquisitions": [],
+      "probeCount": 759,
+      "probeTotalSeconds": 630.12,
+      "scope": "Actual native UI, two Android users, four fictional identities, original candidate HTTP handlers and local Auth/Firestore. No production SMS, Store attestation, physical-device or production capacity proof."
+    },
+    {
+      "api": 36,
+      "run": 38935492565,
+      "checksPassed": 81,
+      "checksFailed": 0,
+      "coordinator": {
+        "exit_code": 0,
+        "duration_seconds": 984.22,
+        "passed": true,
+        "scope": "current-source isolated emulators; one attempt; no live patching"
+      },
+      "markers": {
+        "complete.json": {
+          "status": "passed",
+          "android_sdk": "36",
+          "coverage": "Fresh candidate-source Android build with a test-only local emulator routing overlay; two isolated Android users; local Firebase Auth/Firestore and candidate HTTP handlers; keyboard occlusion and startup recovery; no production, real SMS, store attestation or physical-device certification"
+        },
+        "extended-complete.json": {
+          "passed": true,
+          "scope": "Native UI plus independently read Auth/Firestore emulator state",
+          "fixturePhones": [
+            "9999900001",
+            "9999900002",
+            "9999900003",
+            "9999900004"
+          ],
+          "productionChanged": false,
+          "realSmsTested": false,
+          "storeAttestationTested": false,
+          "expiry": "Owned demo server record fault injection, not an accelerated five-minute UI timer"
+        },
+        "accessibility-complete.json": {
+          "passed": true,
+          "displayOverride": "440x880",
+          "fontScale": 2.0,
+          "scope": "One observed emulator layout and actual pairing; not physical-device, TalkBack or exhaustive accessibility certification"
+        }
+      },
+      "preDispatchReacquisitions": [],
+      "probeCount": 759,
+      "probeTotalSeconds": 666.52,
+      "scope": "Actual native UI, two Android users, four fictional identities, original candidate HTTP handlers and local Auth/Firestore. No production SMS, Store attestation, physical-device or production capacity proof."
+    }
+  ],
+  "productionAccepted": false
+}

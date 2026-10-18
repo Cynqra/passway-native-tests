@@ -1,0 +1,29 @@
+{
+  "scope": "Read-only control-plane configuration audit; not an attestation token or store-installed device test",
+  "rows": [
+    {
+      "check": "Android Play Integrity configuration",
+      "status": 200,
+      "available": true,
+      "configurationKeys": [
+        "name",
+        "tokenTtl",
+        "deviceIntegrity"
+      ],
+      "tokenTtl": "3600s"
+    },
+    {
+      "check": "Android registered certificate fingerprints",
+      "status": 200,
+      "available": true,
+      "configurationKeys": [
+        "certificates"
+      ],
+      "certificateCount": 4,
+      "certificateTypes": [
+        "SHA_1",
+        "SHA_256"
+      ]
+    }
+  ]
+}

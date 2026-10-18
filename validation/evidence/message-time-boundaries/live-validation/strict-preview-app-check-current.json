@@ -1,0 +1,45 @@
+{
+  "scope": "Negative attestation rejection only; no SMS or authenticated mutations.",
+  "target": "https://passway-lyconi6sd-naveenbharti310s-projects.vercel.app",
+  "pass": true,
+  "checks": [
+    {
+      "route": "otpSend",
+      "token": "missing",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "otpSend",
+      "token": "invalid",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "otpVerify",
+      "token": "missing",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "otpVerify",
+      "token": "invalid",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "generateTid",
+      "token": "missing",
+      "status": 401,
+      "pass": true
+    },
+    {
+      "route": "generateTid",
+      "token": "invalid",
+      "status": 401,
+      "pass": true
+    }
+  ],
+  "sourceCommit": "bc5a5918719cb22ea6e915e09c5d7281a5d15ca7",
+  "fixture": "Strict preview ENFORCE_APP_CHECK=true; inert SMS key, invalid payloads only; no maintenance or cron"
+}

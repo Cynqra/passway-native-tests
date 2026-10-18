@@ -1,0 +1,22 @@
+{
+  "scope": "Prior isolated native run 38864503942; instrumentation overhead, not app response SLO",
+  "coordinatorSeconds": 1113.19,
+  "probeCount": 777,
+  "probeTotalSeconds": 703.16,
+  "probeMedianSeconds": 0.65,
+  "probeP95Seconds": 1.88,
+  "byAction": {
+    "read": {
+      "count": 540,
+      "totalSeconds": 376.33
+    },
+    "touch": {
+      "count": 174,
+      "totalSeconds": 244.99
+    },
+    "setText": {
+      "count": 63,
+      "totalSeconds": 81.84
+    }
+  }
+}

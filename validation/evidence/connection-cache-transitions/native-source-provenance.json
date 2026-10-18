@@ -1,0 +1,7 @@
+{
+  "sourceRepository": "naveenbharti310/Paasway",
+  "sourceCommit": "54b72953b0a9f3ea0748b3323631227b1d88f7b4",
+  "archiveSha256": "ebbbf8c8847d2641ac1cffeb67160a18bb0b1a41e768805223cc29e427c4c879",
+  "createdAt": "2026-10-16T10:32:21.038984+00:00",
+  "scope": "Client cached-missing connection/request correction. Original native run failed and 9/14 real-screen component regressions reproduced against parent; all 14 targeted checks pass after fix. Full gates and fresh native remain source-specific; no production acceptance claim."
+}

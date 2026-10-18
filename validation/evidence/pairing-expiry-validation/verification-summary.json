@@ -1,0 +1,54 @@
+{
+  "sourceCommit": "5f89b86fa1862b8566666de3749bd170aa458436",
+  "archiveSha256": "071965eba4906815237128480be33c3216861bc59dea636f453020c6d0c7cde8",
+  "verifiedAt": "2026-10-16T10:17:12.606730+00:00",
+  "independentRegression": {
+    "runId": 38885262132,
+    "passed": true,
+    "mobile": 113,
+    "backend": 223,
+    "rules": 35,
+    "realFirestoreIntegration": 80,
+    "total": 451,
+    "exports": [
+      "android",
+      "ios",
+      "web"
+    ]
+  },
+  "staticSecurity": {
+    "runId": 38885265170,
+    "passed": true,
+    "sarifFindings": 0
+  },
+  "restrictedLiveBackend": {
+    "passed": true,
+    "checks": 57,
+    "includesNewPairExpiryChecks": 15,
+    "scope": "Synthetic custom-token users on exact-source guarded preview and real Firebase. NOT SMS/native UI/positive store attestation."
+  },
+  "independentIsolationAndCleanup": {
+    "passed": true,
+    "checks": 3
+  },
+  "negativeAttestation": {
+    "passed": true,
+    "checks": 6,
+    "scope": "Missing/invalid token rejection only; no real SMS key or SMS dispatch."
+  },
+  "nativeExtended": {
+    "runId": 38885268149,
+    "state": "failure",
+    "passed": false,
+    "scope": "Actual screen components reproducibly treat cache-only absent snapshots as authoritative closure. Consistent mechanism; full corrected native rerun is required."
+  },
+  "productionAcceptance": {
+    "passed": false,
+    "blockers": [
+      "Genuine Play-installed positive attestation and authenticated two-user production acceptance not established.",
+      "Google device CLI currently unauthenticated; ordinary Google sign-in page still awaiting completion.",
+      "Production backend does not yet pass the strict negative-attestation rejection contract; coordinated client/backend/rules rollout is not performed.",
+      "Raw registry audit not clean; two root advisories have reviewed hash-bound installed-code mitigations, not upstream fixed releases."
+    ]
+  }
+}

@@ -1,0 +1,74 @@
+[
+  {
+    "file": "app-icon-512.png",
+    "sha256": "c0d0b1fb1d263ade0e77bf50aec014f4146322b252addb3a50c88c2ac0a986d2",
+    "dimensions": [
+      512,
+      512
+    ],
+    "kind": "icon"
+  },
+  {
+    "file": "feature-graphic-1024x500.png",
+    "sha256": "6fe270d258bb7f65ed92772fff01f61a9697316cae69af565d67cf254e9c22ff",
+    "dimensions": [
+      1024,
+      500
+    ],
+    "kind": "featureGraphic"
+  },
+  {
+    "file": "01-private-hello.png",
+    "sha256": "f894c6c3ba3834088211d337f69266bcabd8e1bf00be78e3d0729a45604532fb",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "kind": "phoneScreenshots"
+  },
+  {
+    "file": "02-five-minute-code.png",
+    "sha256": "0b68a166f74258ec4aff7035ed90d916a5a9d22806cf54dbafd0470b7be9042c",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "kind": "phoneScreenshots"
+  },
+  {
+    "file": "03-your-choice.png",
+    "sha256": "791ac5bb512b30294e3319b276f2689a8922d63c76d3bca7b5ee93da44e4181f",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "kind": "phoneScreenshots"
+  },
+  {
+    "file": "04-conversation.png",
+    "sha256": "5b778248f88ebcd455d6ebfaf6d54291b1015c6735f090be7b7dcfca58b41582",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "kind": "phoneScreenshots"
+  },
+  {
+    "file": "05-private-notes.png",
+    "sha256": "8f31b5c039aaadea50ef9a5c7e950f05af972fe4a0b7fb727535ec0f4de95d81",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "kind": "phoneScreenshots"
+  },
+  {
+    "file": "06-your-boundaries.png",
+    "sha256": "7ced5dfc9dc9d9871e6d919dccbe20202af386c68e3b276034b93246035ed37e",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "kind": "phoneScreenshots"
+  }
+]
