@@ -125,6 +125,8 @@ jobs:
           npm run typecheck --prefix functions
           npm run build --prefix functions
           npx --no-install expo prebuild --platform android --clean --no-install
+          node scripts/check-android-release-optimization.cjs android
+          python3 -m unittest discover -s test -p r8_bundle_test.py -v
       - name: Preinstall pinned Firebase CLI before starting services
         timeout-minutes: 4
         run: npx --yes firebase-tools@15.32.1 --version
@@ -143,9 +145,13 @@ jobs:
         working-directory: validation-source/passway-app/android
         run: |
           chmod +x gradlew
-          ./gradlew :app:assembleRelease --build-cache -PreactNativeArchitectures=x86_64 --max-workers=2 -Dorg.gradle.jvmargs='-Xmx4g -XX:MaxMetaspaceSize=1g' --stacktrace
+          # Emulator-only demo project: preserve local R8 mapping without external Crashlytics upload.
+          ./gradlew :app:assembleRelease -x :app:uploadCrashlyticsMappingFileRelease --build-cache -PreactNativeArchitectures=x86_64 --max-workers=2 -Dorg.gradle.jvmargs='-Xmx4g -XX:MaxMetaspaceSize=1g' --stacktrace
           ./gradlew --stop
           sha256sum app/build/outputs/apk/release/*.apk > ../../../native-results/apk-sha256.txt
+          test -s app/build/outputs/mapping/release/mapping.txt
+          grep -q '^# compiler: R8' app/build/outputs/mapping/release/mapping.txt
+          cp app/build/outputs/mapping/release/mapping.txt ../../../native-results/r8-mapping.txt
       - name: Build native UI probe without historical patch scripts
         run: |
           keytool -genkeypair -keystore debug.keystore -storepass android -keypass android -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 30 -dname 'CN=Passway Isolated Test,O=Internal Test,C=IN'
@@ -275,6 +281,8 @@ jobs:
           npm run typecheck
           npm run typecheck --prefix functions
           npx --no-install expo prebuild --platform android --clean --no-install
+          node scripts/check-android-release-optimization.cjs android
+          python3 -m unittest discover -s test -p r8_bundle_test.py -v
       - name: Bind signed candidate metadata to immutable source
         working-directory: validation-source/passway-app
         run: |
@@ -291,6 +299,7 @@ jobs:
           ./gradlew :app:bundleRelease --no-build-cache --no-configuration-cache --max-workers=2 -Dorg.gradle.jvmargs='-Xmx4g -XX:MaxMetaspaceSize=1g'
           ./gradlew --stop
           cp app/build/outputs/bundle/release/app-release.aab ../../../signed-results/passway-release.aab
+          python3 ../scripts/verify-r8-bundle.py ../../../signed-results/passway-release.aab ../../../signed-results
       - name: Verify signer and compiled native security settings
         run: |
           curl --fail --location --max-time 120 -o "$RUNNER_TEMP/bundletool.jar" https://github.com/google/bundletool/releases/download/1.18.3/bundletool-all-1.18.3.jar

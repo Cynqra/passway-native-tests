@@ -49,6 +49,8 @@ jobs:
       - run: npm ci --prefix functions
       - name: Verify archived source dependency-gate policy
         run: node --test ../.github/tests/dependency-gate.test.cjs
+      - name: Verify R8 artifact gate
+        run: python3 -m unittest discover -s test -p r8_bundle_test.py -v
       - run: npm run test:mobile
       - run: npm run typecheck && npm run typecheck --prefix functions
       - run: npm test --prefix functions
