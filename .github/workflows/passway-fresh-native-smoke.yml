@@ -19,6 +19,8 @@ on:
           - internal-sharing-candidate
           - store-apk-download
           - store-release-offline-ui
+          - production18-inspect
+          - production18-submit
           - open-testing17-inspect
           - open-testing17-submit
       android_api_level:
@@ -657,5 +659,34 @@ jobs:
         with:
           name: open-testing17-result
           path: open-testing17-result.json
+          retention-days: 14
+          if-no-files-found: error
+
+  production18:
+    if: ${{ inputs.mode == 'production18-inspect' || inputs.mode == 'production18-submit' }}
+    name: Submit verified optimized version18 for normal Google review
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    environment: passway-play-internal
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PASSWAY_PRODUCTION18_ACTION: ${{ inputs.mode == 'production18-submit' && 'submit' || 'inspect' }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Verify strict version18 submission boundaries
+        run: python3 -m unittest discover -s harness/tests -p test_production18.py -v
+      - name: Inspect or submit the exact existing optimized bundle
+        run: python3 harness/production18.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: production18-result
+          path: production18-result.json
           retention-days: 14
           if-no-files-found: error
