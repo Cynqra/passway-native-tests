@@ -1,9 +1,9 @@
 {
   "sourceRepository": "naveenbharti310/Paasway",
-  "sourceCommit": "736d469c5b7b36be52bc31f2975431c38eb920e4",
-  "sourceTree": "4bf0e62ff9cc6365692c83e374f54489b7ff8340",
-  "archiveSha256": "8aca64d8749b27b1edb866142343ee41e6120a42462f19723d6d27715b1b7abe",
-  "createdAt": "2026-10-17T21:57:58.806542+00:00",
+  "sourceCommit": "87134a3099697edfbbd22f11eb786265523d9afa",
+  "sourceTree": "2aa4682fd7beebbc646a2e8a0b140b688574151b",
+  "archiveSha256": "ca78103edbba9371bdb20c5f049d8cb565457cae7166bab59f648623e54117f5",
+  "createdAt": "2026-10-18T15:26:22.059956+00:00",
   "fullTrackedSourceArchive": true,
-  "scope": "Backend-only authorization patch: both-party consent revalidated at redemption/acceptance/recovery; recipient and person-block preflight before moderation, with commit rechecks retained. Client source/config/dependency lockfiles unchanged from signed version16 source ea06c8e8a75d7f082f99582114c7276710d66db8. Existing signed16 bundle is not rebuilt or replaced. Fresh exact-source native/architecture checks pending; production remains managed-publishing hold; no SMS/positive Store attestation claim."
+  "scope": "Version 0.3.11 (17) candidate with merged pairing/chat latency and authorization expiry fixes. 291 mobile and 515 backend cases pass locally, PR32 protected checks passed. New exact-source native and signed candidate validation required. Existing public16 remains unchanged; no real SMS or positive Play Integrity claim."
 }
